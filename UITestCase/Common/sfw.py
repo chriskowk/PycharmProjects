@@ -1,7 +1,37 @@
 import os
 import stat
 import sys
+import argparse
 
+def main():
+    if len(sys.argv) < 2:
+        print("Usage: sfw.exe <path> [--quiet]")
+        print("Purpose: Remove file's READONLY attribute recursively descend the directory tree rooted at <path>.")
+        print("PS: 如目标路径存在空格需用双引号括起来！")
+        sys.exit(1)
+
+    parser = argparse.ArgumentParser(description="功能：递归清除<path>指定路径所有文件的只读属性")
+    parser.add_argument('-v', '--version', action='version', version='%(prog)s 版本: V1.0', help='显示程序版本')
+    parser.add_argument('-d', '--debug', action='store_true', help='设置为调试模式运行', default=False)
+    parser.add_argument('-q', '--quiet', action='store_true', help='显示每个对象操作结果', default=False)
+    parser.add_argument("path", type=str, help='指定目标文件路径')
+    args = parser.parse_args()
+    path_ = args.path
+    debug_=args.debug
+    quiet_=args.quiet
+    # print('the path is %s'%(path_))
+    # print('the quiet on is %s'%(quiet_))
+
+    filelist = [os.path.join(path, file_name)
+        for path, _, file_list in os.walk(path_)
+        for file_name in file_list]
+    for fn in filelist:
+        os.chmod(fn, stat.S_IWRITE | stat.S_IRWXU)
+        if not quiet_:
+            print("文件 {} 只读属性已清除".format(fn[len(path_):]))
+    sys.exit(0)
+
+# CMD窗口编译 D:\PycharmProjects\UITestCase\Common>pyinstaller --console --onefile --icon=file.ico sfw.py
 # flags:可用以下选项按位或操作生成， 目录的读权限表示可以获取目录里文件名列表，执行权限表示可以把工作目录切换到此目录，
 # 删除添加目录里的文件必须同时有写和执行权限，文件权限以用户id->组id->其它顺序检验,最先匹配的允许或禁止权限被应用。
 # stat.S_IXOTH: 其他用户有执行权0o001
@@ -21,18 +51,7 @@ import sys
 # stat.S_ISUID: 执行此文件其进程有效用户为文件所有者0o4000
 # stat.S_IREAD: windows下设为只读
 # stat.S_IWRITE: windows下取消只读
-if __name__ == '__main__':
-    if len(sys.argv) != 2:
-        print("Usage: sfw.exe <path>")
-        print("Purpose: Remove file's READONLY attribute recursively descend the directory tree rooted at <path>.")
-        print("PS: 如目标路径存在空格需用双引号括起来！")
-        sys.exit(1)
 
-    root = sys.argv[1]
-    filelist = [os.path.join(path, file_name)
-        for path, _, file_list in os.walk(root)
-        for file_name in file_list]
-    for fn in filelist:
-        os.chmod(fn, stat.S_IWRITE | stat.S_IRWXU)
-        print("文件 {} 只读属性已清除".format(fn[len(root):]))
-    sys.exit(0)
+
+if __name__ == '__main__':
+    main()

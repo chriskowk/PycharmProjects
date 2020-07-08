@@ -10,11 +10,11 @@ def main():
         print("PS: 如目标路径存在空格需用双引号括起来！")
         sys.exit(1)
 
-    parser = argparse.ArgumentParser(description="功能：递归清除<path>路径所有文件的只读属性")
+    parser = argparse.ArgumentParser(description="功能：递归清除<PATH>路径所有文件的只读属性")
     parser.add_argument('-v', '--version', action='version', version='%(prog)s 版本: V1.0', help='显示程序版本')
     parser.add_argument('-d', '--debug', action='store_true', help='调试模式运行(暂未启用)', default=False)
     parser.add_argument('-q', '--quiet', action='store_true', help='静默模式(不显示文件操作结果)', default=False)
-    parser.add_argument("path", type=str, help='指定目标文件路径(如中间有空格需要用双引号括住)')
+    parser.add_argument("path", metavar='PATH', type=str, help='指定目标文件路径(如中间有空格需要用双引号括住)')
     args = parser.parse_args()
     path_ = args.path
     debug_=args.debug

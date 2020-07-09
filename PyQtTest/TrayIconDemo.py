@@ -13,19 +13,21 @@ class TrayIcon(QSystemTrayIcon):
     def showMenu(self):
         # 设计托盘的菜单，这里我实现了一个二级菜单
         self.menu = QMenu()
-        self.menu1 = QMenu()
+        self.menu1 = QMenu("二级菜单")
+        self.menu1.setIcon(QIcon('images/start.png'))
+
         self.showAction1 = QAction("显示消息1", self, triggered=self.showMsg)
         self.showAction2 = QAction("显示消息2", self, triggered=self.showMsg)
-        self.quitAction = QAction("退出", self, triggered=self.quit)
+        self.quitAction = QAction(QIcon('images/exit.png'), "退出", self, triggered=self.quit)
 
         self.menu1.addAction(self.showAction1)
         self.menu1.addAction(self.showAction2)
-        self.menu.addMenu(self.menu1, )
+        self.menu.addMenu(self.menu1)
 
         self.menu.addAction(self.showAction1)
         self.menu.addAction(self.showAction2)
+        self.menu.addSeparator()
         self.menu.addAction(self.quitAction)
-        self.menu1.setTitle("二级菜单")
         self.setContextMenu(self.menu)
 
     def other(self):

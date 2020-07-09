@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="e19a6eff-6a34-4310-b052-283c2436aea5" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/Common/sfw.py" beforeDir="false" afterPath="$PROJECT_DIR$/Common/sfw.py" afterDir="false" />
-    </list>
+    <list default="true" id="e19a6eff-6a34-4310-b052-283c2436aea5" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -260,6 +258,7 @@
       <workItem from="1593571555802" duration="6300000" />
       <workItem from="1594177594840" duration="432000" />
       <workItem from="1594179195151" duration="2043000" />
+      <workItem from="1594262152487" duration="62000" />
     </task>
     <task id="LOCAL-00001" summary="aaa">
       <created>1594179434236</created>
@@ -272,13 +271,12 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="29787000" />
+    <option name="totallyTimeSpent" value="29849000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.18976545" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.19189766" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />

@@ -4,6 +4,7 @@
     <list default="true" id="ff5e2e34-04e0-44ed-9206-1a7c575d6306" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/PyQtTest/TrayIconDemo.py" beforeDir="false" afterPath="$PROJECT_DIR$/PyQtTest/TrayIconDemo.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PyQtTest/tray.ico" beforeDir="false" afterPath="$PROJECT_DIR$/PyQtTest/images/tray.ico" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -28,8 +29,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/PyQtTest/TrayIconDemo.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="258">
-              <caret line="16" column="46" selection-start-line="16" selection-start-column="46" selection-end-line="16" selection-end-column="46" />
+            <state relative-caret-position="1512">
+              <caret line="73" column="27" lean-forward="true" selection-start-line="73" selection-start-column="27" selection-end-line="73" selection-end-column="27" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
               </folding>
@@ -50,6 +51,11 @@
         <option value="Python Script" />
       </list>
     </option>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>tray</find>
+    </findStrings>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -111,6 +117,9 @@
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
   </component>
   <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="F:\GitHub\PycharmProjects\PyQtTest\images" />
+    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="F:\GitHub\PycharmProjects\PyQtTest\images" />
       <recent name="F:\GitHub\PycharmProjects\PyQtTest" />
@@ -190,12 +199,12 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1594262257371</updated>
-      <workItem from="1594262259418" duration="7206000" />
+      <workItem from="1594262259418" duration="9761000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="7206000" />
+    <option name="totallyTimeSpent" value="9761000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
@@ -228,7 +237,7 @@
     <option name="version" value="1" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/PycharmProjects$TrayIconDemo.coverage" NAME="TrayIconDemo Coverage Results" MODIFIED="1594274244386" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/PyQtTest" />
+    <SUITE FILE_PATH="coverage/PycharmProjects$TrayIconDemo.coverage" NAME="TrayIconDemo Coverage Results" MODIFIED="1594276173543" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/PyQtTest" />
     <SUITE FILE_PATH="coverage/PycharmProjects$testlayout_main.coverage" NAME="testlayout_main Coverage Results" MODIFIED="1594262355283" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/PyQtTest" />
   </component>
   <component name="editorHistoryManager">
@@ -254,8 +263,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/PyQtTest/TrayIconDemo.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="258">
-          <caret line="16" column="46" selection-start-line="16" selection-start-column="46" selection-end-line="16" selection-end-column="46" />
+        <state relative-caret-position="1512">
+          <caret line="73" column="27" lean-forward="true" selection-start-line="73" selection-start-column="27" selection-end-line="73" selection-end-column="27" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
           </folding>

@@ -7,10 +7,10 @@ from PyQt5.QtGui import *
 class TrayIcon(QSystemTrayIcon):
     def __init__(self, parent=None):
         super(TrayIcon, self).__init__(parent)
-        self.showMenu()
-        self.other()
+        self.initMenu()
+        self.initOthers()
 
-    def showMenu(self):
+    def initMenu(self):
         # 设计托盘的菜单，这里我实现了一个二级菜单
         self.menu = QMenu()
         self.menu1 = QMenu("二级菜单")
@@ -30,12 +30,12 @@ class TrayIcon(QSystemTrayIcon):
         self.menu.addAction(self.quitAction)
         self.setContextMenu(self.menu)
 
-    def other(self):
+    def initOthers(self):
         # 把鼠标点击图标的信号和槽连接
         self.activated.connect(self.iconClicked)
         # 把鼠标点击弹出消息的信号和槽连接
         self.messageClicked.connect(self.msgClicked)
-        self.setIcon(QIcon("tray.ico"))
+        self.setIcon(QIcon("images/tray.ico"))
         # 设置图标
         self.icon = self.MessageIcon()
 
@@ -64,10 +64,13 @@ class TrayIcon(QSystemTrayIcon):
         sys.exit()
 
 
-class window(QWidget):
+class window(QMainWindow):
     def __init__(self, parent=None):
         super(window, self).__init__(parent)
         self.setWindowFlags(Qt.WindowCloseButtonHint)
+        self.setWindowTitle("文件处理器")
+        self.resize(400, 300)
+        self.status = self.statusBar()
         ti = TrayIcon(self)
         ti.show()
 
@@ -78,6 +81,7 @@ class window(QWidget):
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
+    app.setWindowIcon(QIcon("images/tray.ico"))
     win = window()
     win.show()
     sys.exit(app.exec_())

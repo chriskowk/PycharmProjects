@@ -1,0 +1,19 @@
+<!DOCTYPE RCC><RCC version="1.0">
+<qresource prefix="/images">
+    <file alias="tray.ico">images/tray.ico</file>
+    <file alias="start.png">images/start.png</file>
+    <file alias="setup.png">images/setup.png</file>
+    <file alias="setup1.png">images/setup1.png</file>
+    <file alias="settle.png">images/settle.png</file>
+    <file alias="pause.png">images/pause.png</file>
+    <file alias="location.png">images/location.png</file>
+    <file alias="hospital.png">images/hospital.png</file>
+    <file alias="exit.png">images/exit.png</file>
+    <file alias="close.png">images/close.png</file>
+    <file alias="building.png">images/building.png</file>
+    <file alias="schedule.png">images/schedule.png</file>
+    <file alias="schedule.ico">images/schedule.ico</file>
+    <file alias="scheduler.png">images/scheduler.png</file>
+    <file alias="scheduler.ico">images/scheduler.ico</file>
+</qresource>
+</RCC>

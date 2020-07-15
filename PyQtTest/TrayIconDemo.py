@@ -2,7 +2,10 @@ import sys
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
-
+from PyQt5 import QtGui
+import subprocess
+import os
+import resources_rc
 
 class TrayIcon(QSystemTrayIcon):
     def __init__(self, parent=None):
@@ -14,7 +17,7 @@ class TrayIcon(QSystemTrayIcon):
         # 设计托盘的菜单，这里我实现了一个二级菜单
         self.menu = QMenu()
         self.menu1 = QMenu("重启")
-        self.menu1.setIcon(QIcon('images/start.png'))
+        self.menu1.setIcon(QtGui.QIcon(":/images/start.png"))
         seviceAct = QAction("服务", self, triggered=self.showMsg)
         configAct = QAction("配置", self, triggered=self.showMsg)
         scheduleAct = QAction("调度", self, triggered=self.showMsg)
@@ -23,7 +26,7 @@ class TrayIcon(QSystemTrayIcon):
         self.menu1.addAction(scheduleAct)
 
         self.menu2 = QMenu("版本")
-        self.menu2.setIcon(QIcon('images/location.png'))
+        self.menu2.setIcon(QtGui.QIcon(":/images/location.png"))
         version1 = QAction("中山眼科", self, checkable=True)
         version2 = QAction("省医", self, checkable=True)
         version3 = QAction("市一", self, checkable=True)
@@ -43,7 +46,7 @@ class TrayIcon(QSystemTrayIcon):
         self.menu.addMenu(self.menu2)
 
         self.menu.addSeparator()
-        self.quitAction = QAction(QIcon('images/exit.png'), "退出", self, triggered=self.quit)
+        self.quitAction = QAction(QtGui.QIcon(":/images/exit.png"), "退出", self, triggered=self.quit)
         self.menu.addAction(self.quitAction)
         self.setContextMenu(self.menu)
 
@@ -52,7 +55,7 @@ class TrayIcon(QSystemTrayIcon):
         self.activated.connect(self.iconClicked)
         # 把鼠标点击弹出消息的信号和槽连接
         self.messageClicked.connect(self.msgClicked)
-        self.setIcon(QIcon("images/tray.ico"))
+        self.setIcon(QtGui.QIcon(":/images/schedule.ico"))
         # 设置图标
         self.icon = self.MessageIcon()
 
@@ -93,16 +96,41 @@ class window(QMainWindow):
         self.setWindowTitle("作业调度控制器")
         self.resize(400, 300)
         self.status = self.statusBar()
+        self.setWindowIcon(QtGui.QIcon(':/images/scheduler.ico'))
+
+        mu1 = QMenu()
+        act0 = QAction(icon=QtGui.QIcon(":/images/location.png"), text="中山眼科", checkable=True, parent=mu1)
+        act0.setStatusTip("E:\VSTS\MedicalHealth\BatchFiles\全编译Upload.bat")
+        act1 = QAction(text="省医", checkable=True, parent=mu1)
+        act1.setStatusTip("E:\MedicalHealthSY\BatchFiles\全编译Upload.bat")
+        act2 = QAction(text="市一", checkable=True, parent=mu1)
+        act2.setStatusTip("E:\MedicalHealthS1\BatchFiles\全编译Upload.bat")
+        mu1.addAction(act0)
+        mu1.addAction(act1)
+        mu1.addAction(act2)
+        mu1.setTearOffEnabled(False)
+        mu1.triggered[QAction].connect(self.processtrigger)
+
+        mu2 = QMenu()
+        act20 = QAction(icon=QtGui.QIcon(":/images/setup1.png"), text="服务", parent=mu2)
+        act21 = QAction(text="配置", parent=mu2)
+        act22 = QAction(text="调度计划", parent=mu2)
+        mu2.addAction(act20)
+        mu2.addAction(act21)
+        mu2.addAction(act22)
+        mu2.setTearOffEnabled(False)
 
         tbrMain = self.addToolBar("Scheduler")
-        start = QAction(QIcon('images/start.png'), "启动", self)
+        start = QAction(QtGui.QIcon(":/images/start.png"), "启动", self)
+        start.setMenu(mu1)
         tbrMain.addAction(start)
-        pause = QAction(QIcon('images/pause.png'), "暂停", self)
+        pause = QAction(QtGui.QIcon(":/images/pause.png"), "暂停", self)
         tbrMain.addAction(pause)
-        setup = QAction(QIcon('images/setup.png'), "设置", self)
+        setup = QAction(QtGui.QIcon(":/images/setup.png"), "设置", self)
+        setup.setMenu(mu2)
         tbrMain.addAction(setup)
         tbrExit = self.addToolBar("Exit")
-        close = QAction(QIcon('images/close.png'), "退出", self)
+        close = QAction(QtGui.QIcon(":/images/close.png"), "退出", self)
         tbrExit.addAction(close)
         # 设置名称显示在图标下面（默认本来是只显示图标）
         tbrMain.setToolButtonStyle(Qt.ToolButtonTextUnderIcon)
@@ -124,10 +152,23 @@ class window(QMainWindow):
         event.ignore()  # 忽视点击X事件
         self.hide()
 
+    def processtrigger(self, qaction):
+        path = os.path.dirname(qaction.statusTip())
+        self.runCmd(qaction.statusTip(), path)
+
+    def runCmd(self, cmd, path) :
+        # 语法：subprocess.Popen(args, bufsize=0, executable=None, stdin=None, stdout=None, stderr=None, preexec_fn=None, close_fds=False, shell=False, cwd=None, env=None, universal_newlines=False, startupinfo=None, creationflags=0)
+        res = subprocess.Popen(cmd, shell=True, cwd=path, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        sout, serr = res.communicate() # 该方法和子进程交互，返回一个包含 输出和错误的元组，如果对应参数没有设置的，则无法返回
+        return res.returncode, sout, serr, res.pid # 可获得返回码、输出、错误、进程号；
+        # subprocess.check_call(cmd, shell=True, cwd=path)
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    app.setWindowIcon(QIcon("images/tray.ico"))
+    app.setWindowIcon(QtGui.QIcon(":/images/scheduler.ico"))
     win = window()
+    # res = win.runCmd("E:\MedicalHealthSY\BatchFiles\全编译Upload.bat", "E:\MedicalHealthSY\BatchFiles")
+    # print (res[0], res[1], res[2], res[3])  # 从元组中获得对应数据
     win.show()
     sys.exit(app.exec_())

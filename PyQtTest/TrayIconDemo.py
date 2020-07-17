@@ -5,6 +5,9 @@ from PyQt5.QtGui import *
 from PyQt5 import QtGui
 import subprocess
 import os
+from threading import *
+from queue import *
+import time
 import resources_rc
 
 class TrayIcon(QSystemTrayIcon):
@@ -97,6 +100,10 @@ class window(QMainWindow):
         self.resize(400, 300)
         self.status = self.statusBar()
         self.setWindowIcon(QtGui.QIcon(':/images/scheduler.ico'))
+        self.work_queue = ClosableQueue()
+        self.out_queue = ClosableQueue()
+        t = Consumer(self.run, self.work_queue, self.out_queue)
+        t.start()
 
         mu1 = QMenu()
         act0 = QAction(icon=QtGui.QIcon(":/images/location.png"), text="中山眼科", checkable=True, parent=mu1)
@@ -152,23 +159,71 @@ class window(QMainWindow):
         event.ignore()  # 忽视点击X事件
         self.hide()
 
-    def processtrigger(self, qaction):
+    def processtriggerX(self, qaction):
         path = os.path.dirname(qaction.statusTip())
-        self.runCmd(qaction.statusTip(), path)
+        t = Thread(target=self.runCmd, args=(qaction.statusTip(), path))
+        t.start()
+
+    def processtrigger(self, qaction):
+        self.work_queue.put(Task(qaction))
+        # self.work_queue.close()
+        # self.work_queue.join()
 
     def runCmd(self, cmd, path) :
         # 语法：subprocess.Popen(args, bufsize=0, executable=None, stdin=None, stdout=None, stderr=None, preexec_fn=None, close_fds=False, shell=False, cwd=None, env=None, universal_newlines=False, startupinfo=None, creationflags=0)
-        res = subprocess.Popen(cmd, shell=True, cwd=path, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-        sout, serr = res.communicate() # 该方法和子进程交互，返回一个包含 输出和错误的元组，如果对应参数没有设置的，则无法返回
-        return res.returncode, sout, serr, res.pid # 可获得返回码、输出、错误、进程号；
-        # subprocess.check_call(cmd, shell=True, cwd=path)
+        # res = subprocess.Popen(cmd, shell=False, cwd=path, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        # sout, serr = res.communicate() # 该方法和子进程交互，返回一个包含 输出和错误的元组，如果对应参数没有设置的，则无法返回
+        # return res.returncode, sout, serr, res.pid # 可获得返回码、输出、错误、进程号；
+        # subprocess.check_call(cmd, shell=False, cwd=path, stdin=None, stdout=None, stderr=None, timeout=None)
+        subprocess.call(cmd, shell=False, cwd=path, stdin=None, stdout=None, stderr=None, timeout=None)
+
+    def run(self, task) :
+        subprocess.call(task.cmd, shell=False, cwd=task.path, stdin=None, stdout=None, stderr=None, timeout=None)
+        print("Worker Solve: %s" % task)
+        return task
+
+class Task(object):
+    def __init__(self, qaction=QAction()):
+        self.id = qaction.text()
+        self.cmd = qaction.statusTip()
+        self.path = os.path.dirname(qaction.statusTip())
+    def __repr__(self):
+        return "任务ID: %s" % self.id
+    def __str__(self):
+        return "任务ID: %s" % self.id
+
+class ClosableQueue(Queue):
+    TERMINATOR = Task()
+    def close(self):
+        self.put(self.TERMINATOR)
+    def __iter__(self):
+        while True:
+            item = self.get()
+            try:
+                if item is self.TERMINATOR:
+                    return  # Exit Thread
+                yield item
+            finally:
+                self.task_done()
+
+class Consumer(Thread):
+    # def __init__(self, func, args, work_queue, out_queue):
+    # self.args = args
+    def __init__(self, func, work_queue, out_queue):
+        super().__init__()
+        self.func = func
+        self.task = work_queue
+        self.out_queue = out_queue
+
+    def run(self):
+        for item in self.task:
+            result = self.func(item)
+            self.out_queue.put(result)
 
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     app.setWindowIcon(QtGui.QIcon(":/images/scheduler.ico"))
     win = window()
-    # res = win.runCmd("E:\MedicalHealthSY\BatchFiles\全编译Upload.bat", "E:\MedicalHealthSY\BatchFiles")
-    # print (res[0], res[1], res[2], res[3])  # 从元组中获得对应数据
     win.show()
     sys.exit(app.exec_())

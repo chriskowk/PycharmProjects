@@ -7,7 +7,9 @@ import subprocess
 import os
 from threading import *
 from queue import *
+from PyQt5.QtWidgets import QMessageBox
 import time
+
 import resources_rc
 
 class TrayIcon(QSystemTrayIcon):
@@ -102,21 +104,20 @@ class window(QMainWindow):
         self.setWindowIcon(QtGui.QIcon(':/images/scheduler.ico'))
         self.work_queue = ClosableQueue()
         self.out_queue = ClosableQueue()
-        t = Consumer(self.run, self.work_queue, self.out_queue)
-        t.start()
-
-        mu1 = QMenu()
-        act0 = QAction(icon=QtGui.QIcon(":/images/location.png"), text="中山眼科", checkable=True, parent=mu1)
-        act0.setStatusTip("E:\VSTS\MedicalHealth\BatchFiles\全编译Upload.bat")
-        act1 = QAction(text="省医", checkable=True, parent=mu1)
-        act1.setStatusTip("E:\MedicalHealthSY\BatchFiles\全编译Upload.bat")
-        act2 = QAction(text="市一", checkable=True, parent=mu1)
-        act2.setStatusTip("E:\MedicalHealthS1\BatchFiles\全编译Upload.bat")
-        mu1.addAction(act0)
-        mu1.addAction(act1)
-        mu1.addAction(act2)
-        mu1.setTearOffEnabled(False)
-        mu1.triggered[QAction].connect(self.processtrigger)
+        consumer = Consumer(self.run, self.work_queue, self.out_queue)
+        consumer.start()
+        self.mu1 = QMenu()
+        act0 = QAction(icon=QtGui.QIcon(":/images/location.png"), text="中山眼科", checkable=True, parent=self.mu1)
+        act0.setStatusTip("E:/VSTS/MedicalHealth/BatchFiles/全编译Upload.bat")
+        act1 = QAction(text="省医", checkable=True, parent=self.mu1)
+        act1.setStatusTip("E:/MedicalHealthSY/BatchFiles/全编译Upload.bat")
+        act2 = QAction(text="市一", checkable=True, parent=self.mu1)
+        act2.setStatusTip("E:/MedicalHealthS1/BatchFiles/全编译Upload.bat")
+        self.mu1.addAction(act0)
+        self.mu1.addAction(act1)
+        self.mu1.addAction(act2)
+        self.mu1.setTearOffEnabled(False)
+        self.mu1.triggered[QAction].connect(self.processtrigger)
 
         mu2 = QMenu()
         act20 = QAction(icon=QtGui.QIcon(":/images/setup1.png"), text="服务", parent=mu2)
@@ -129,7 +130,7 @@ class window(QMainWindow):
 
         tbrMain = self.addToolBar("Scheduler")
         start = QAction(QtGui.QIcon(":/images/start.png"), "启动", self)
-        start.setMenu(mu1)
+        start.setMenu(self.mu1)
         tbrMain.addAction(start)
         pause = QAction(QtGui.QIcon(":/images/pause.png"), "暂停", self)
         tbrMain.addAction(pause)
@@ -145,10 +146,10 @@ class window(QMainWindow):
         tbrMain.actionTriggered.connect(self.toolbarpressed)
         ti = TrayIcon(self)
         tbrExit.actionTriggered.connect(ti.quit)
-        textEdit = QTextEdit()
-        # textEdit.setReadOnly(True)
-        textEdit.setStyleSheet("color:rgb(10,10,10,255);font-size:16px;font-weight:normal;font-family:Roman times;")
-        self.setCentralWidget(textEdit)
+        self.txtMsg = QTextEdit()
+        self.txtMsg.setReadOnly(True)
+        self.txtMsg.setStyleSheet("color:rgb(10,10,10,255);font-size:16px;font-weight:normal;font-family:Roman times;")
+        self.setCentralWidget(self.txtMsg)
         ti.show()
 
     def toolbarpressed(self, sender):
@@ -165,11 +166,15 @@ class window(QMainWindow):
         t.start()
 
     def processtrigger(self, qaction):
+        for act in self.mu1.actions():
+            act.setChecked(True if qaction == act else False)
+        self.txtMsg.setText("正在运行任务: %s" % qaction.text())
         self.work_queue.put(Task(qaction))
+        self.txtMsg.append("\r\n已进入队列。")
         # self.work_queue.close()
         # self.work_queue.join()
 
-    def runCmd(self, cmd, path) :
+    def runCmd(self, cmd, path):
         # 语法：subprocess.Popen(args, bufsize=0, executable=None, stdin=None, stdout=None, stderr=None, preexec_fn=None, close_fds=False, shell=False, cwd=None, env=None, universal_newlines=False, startupinfo=None, creationflags=0)
         # res = subprocess.Popen(cmd, shell=False, cwd=path, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
         # sout, serr = res.communicate() # 该方法和子进程交互，返回一个包含 输出和错误的元组，如果对应参数没有设置的，则无法返回
@@ -181,6 +186,17 @@ class window(QMainWindow):
         subprocess.call(task.cmd, shell=False, cwd=task.path, stdin=None, stdout=None, stderr=None, timeout=None)
         print("Worker Solve: %s" % task)
         return task
+
+    def fun_timer(self):
+        # print(time.strftime('%Y-%m-%d %H:%M:%S'))
+        global timer
+        timer = Timer(timer_interval, self.fun_timer)
+        timer.start()
+        if not self.out_queue.empty():
+            for i in range(self.out_queue.qsize()):
+                item = self.out_queue.get()  # q.get会阻塞，q.get_nowait()不阻塞，但会抛异常
+                argv = "任务%s已完成" % item.id
+                subprocess.call("F:/GitHub/PycharmProjects/PyQtTest/dist/MessageBox.exe %s" % argv, shell=False, stdin=None, stdout=None, stderr=None, timeout=None)
 
 class Task(object):
     def __init__(self, qaction=QAction()):
@@ -222,8 +238,10 @@ class Consumer(Thread):
 
 
 if __name__ == "__main__":
+    timer_interval = 1
     app = QApplication(sys.argv)
     app.setWindowIcon(QtGui.QIcon(":/images/scheduler.ico"))
     win = window()
     win.show()
+    win.fun_timer()
     sys.exit(app.exec_())

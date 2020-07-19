@@ -24,8 +24,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/PyQtTest/TrayIconDemo.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="464">
-              <caret line="55" column="77" selection-start-line="55" selection-start-column="77" selection-end-line="55" selection-end-column="77" />
+            <state relative-caret-position="189">
+              <caret line="165" column="39" lean-forward="true" selection-start-line="165" selection-start-column="39" selection-end-line="165" selection-end-column="39" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
               </folding>
@@ -333,12 +333,12 @@
       <workItem from="1594884514616" duration="687000" />
       <workItem from="1594885229847" duration="4032000" />
       <workItem from="1594949055076" duration="155000" />
-      <workItem from="1594949247123" duration="29424000" />
+      <workItem from="1594949247123" duration="32084000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="80783000" />
+    <option name="totallyTimeSpent" value="83443000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
@@ -371,7 +371,7 @@
     <option name="version" value="1" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/PycharmProjects$TrayIconDemo.coverage" NAME="TrayIconDemo Coverage Results" MODIFIED="1595130648061" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/PyQtTest" />
+    <SUITE FILE_PATH="coverage/PycharmProjects$TrayIconDemo.coverage" NAME="TrayIconDemo Coverage Results" MODIFIED="1595133312796" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/PyQtTest" />
     <SUITE FILE_PATH="coverage/PycharmProjects$testlayout_main.coverage" NAME="testlayout_main Coverage Results" MODIFIED="1594262355283" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/PyQtTest" />
     <SUITE FILE_PATH="coverage/PycharmProjects$ping.coverage" NAME="ping Coverage Results" MODIFIED="1594975467036" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/PyQtTest" />
     <SUITE FILE_PATH="coverage/PycharmProjects$producer.coverage" NAME="producer Coverage Results" MODIFIED="1594981828764" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/PyQtTest" />
@@ -483,8 +483,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/PyQtTest/TrayIconDemo.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="464">
-          <caret line="55" column="77" selection-start-line="55" selection-start-column="77" selection-end-line="55" selection-end-column="77" />
+        <state relative-caret-position="189">
+          <caret line="165" column="39" lean-forward="true" selection-start-line="165" selection-start-column="39" selection-end-line="165" selection-end-column="39" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
           </folding>

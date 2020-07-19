@@ -147,13 +147,13 @@ class window(QMainWindow):
         tbrMain.setToolButtonStyle(Qt.ToolButtonTextUnderIcon)
         tbrExit.setToolButtonStyle(Qt.ToolButtonTextUnderIcon)
         tbrMain.actionTriggered.connect(self.toolbarpressed)
-        ti = TrayIcon(self)
-        tbrExit.actionTriggered.connect(ti.quit)
+        self.ti = TrayIcon(self)
+        tbrExit.actionTriggered.connect(self.ti.quit)
         self.txtMsg = QTextEdit()
         self.txtMsg.setReadOnly(True)
         self.txtMsg.setStyleSheet("color:rgb(10,10,10,255);font-size:16px;font-weight:normal;font-family:Roman times;")
         self.setCentralWidget(self.txtMsg)
-        ti.show()
+        self.ti.show()
 
     def toolbarpressed(self, sender):
         print("按下的ToolBar按钮是", sender.text())
@@ -168,9 +168,16 @@ class window(QMainWindow):
         t = Thread(target=self.runCmd, args=(qaction.statusTip(), path))
         t.start()
 
+    def syncmenuchecked(self, qa):
+        for act in self.mu1.actions():
+            act.setChecked(True if qa.text() == act.text() else False)
+        for act in self.ti.menu2.actions():
+            act.setChecked(True if qa.text() == act.text() else False)
+
     def processtrigger(self, qaction):
         for act in qaction.parent().actions():
             act.setChecked(True if qaction == act else False)
+        self.syncmenuchecked(qaction)
         self.work_queue.put(Task(qaction))
         self.txtMsg.append("%s 任务已进入调度队列，等待执行中..." % qaction.text())
         # self.work_queue.close()

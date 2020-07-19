@@ -21,23 +21,27 @@ class TrayIcon(QSystemTrayIcon):
     def initMenu(self):
         # 设计托盘的菜单，这里我实现了一个二级菜单
         self.menu = QMenu()
-        self.menu1 = QMenu("重启")
-        self.menu1.setIcon(QtGui.QIcon(":/images/start.png"))
-        seviceAct = QAction("服务", self, triggered=self.showMsg)
-        configAct = QAction("配置", self, triggered=self.showMsg)
-        scheduleAct = QAction("调度", self, triggered=self.showMsg)
+        self.menu1 = QMenu("重启服务")
+        self.menu1.setIcon(QtGui.QIcon(":/images/setup.png"))
+        seviceAct = QAction(icon=QtGui.QIcon(":/images/setup1.png"), text="服务", parent=self.menu1)
+        configAct = QAction(text="配置", parent=self.menu1)
+        scheduleAct = QAction(text="调度", parent=self.menu1)
         self.menu1.addAction(seviceAct)
         self.menu1.addAction(configAct)
         self.menu1.addAction(scheduleAct)
 
-        self.menu2 = QMenu("版本")
-        self.menu2.setIcon(QtGui.QIcon(":/images/location.png"))
-        version1 = QAction("中山眼科", self, checkable=True)
-        version2 = QAction("省医", self, checkable=True)
-        version3 = QAction("市一", self, checkable=True)
-        self.menu2.addAction(version1)
-        self.menu2.addAction(version2)
-        self.menu2.addAction(version3)
+        self.menu2 = QMenu("编译版本")
+        self.menu2.setIcon(QtGui.QIcon(":/images/start.png"))
+        act0 = QAction(icon=QtGui.QIcon(":/images/location.png"), text="中山眼科", checkable=True, parent=self.menu2)
+        act0.setStatusTip("E:/VSTS/MedicalHealth/BatchFiles/全编译Upload.bat")
+        act1 = QAction(text="省医", checkable=True, parent=self.menu2)
+        act1.setStatusTip("E:/MedicalHealthSY/BatchFiles/全编译Upload.bat")
+        act2 = QAction(text="市一", checkable=True, parent=self.menu2)
+        act2.setStatusTip("E:/MedicalHealthS1/BatchFiles/全编译Upload.bat")
+        self.menu2.addAction(act0)
+        self.menu2.addAction(act1)
+        self.menu2.addAction(act2)
+        self.menu2.triggered[QAction].connect(self.parent().processtrigger)
 
         showAct = QAction("显示/隐藏", self, triggered=self.toggleVisibility)
         self.menu.addAction(showAct)
@@ -49,6 +53,8 @@ class TrayIcon(QSystemTrayIcon):
         self.menu.addSeparator()
         self.menu.addMenu(self.menu1)
         self.menu.addMenu(self.menu2)
+        pauseAct = QAction(icon=QtGui.QIcon(":/images/pause.png"), text="暂停调度", parent=self)
+        self.menu.addAction(pauseAct)
 
         self.menu.addSeparator()
         self.quitAction = QAction(QtGui.QIcon(":/images/exit.png"), "退出", self, triggered=self.quit)
@@ -79,9 +85,6 @@ class TrayIcon(QSystemTrayIcon):
 
     def msgClicked(self):
         self.showMessage("提示", "你点了消息", self.icon)
-
-    def showMsg(self):
-        self.showMessage("测试", "我是消息", self.icon)
 
     def toggleStartup(self):
         self.showMessage("测试", "自动启动程序", self.icon)
@@ -166,11 +169,10 @@ class window(QMainWindow):
         t.start()
 
     def processtrigger(self, qaction):
-        for act in self.mu1.actions():
+        for act in qaction.parent().actions():
             act.setChecked(True if qaction == act else False)
-        self.txtMsg.setText("正在运行任务: %s" % qaction.text())
         self.work_queue.put(Task(qaction))
-        self.txtMsg.append("\r\n已进入队列。")
+        self.txtMsg.append("%s 任务已进入调度队列，等待执行中..." % qaction.text())
         # self.work_queue.close()
         # self.work_queue.join()
 
@@ -185,6 +187,7 @@ class window(QMainWindow):
     def run(self, task) :
         subprocess.call(task.cmd, shell=False, cwd=task.path, stdin=None, stdout=None, stderr=None, timeout=None)
         print("Worker Solve: %s" % task)
+        self.txtMsg.append("%s 任务已执行结束。\r\n" % task.id)
         return task
 
     def fun_timer(self):
@@ -204,7 +207,7 @@ class Task(object):
         self.cmd = qaction.statusTip()
         self.path = os.path.dirname(qaction.statusTip())
     def __repr__(self):
-        return "任务ID: %s" % self.id
+        return "任务(ID:%s)" % self.id
     def __str__(self):
         return "任务ID: %s" % self.id
 

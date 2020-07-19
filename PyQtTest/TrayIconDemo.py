@@ -194,7 +194,7 @@ class window(QMainWindow):
     def run(self, task) :
         subprocess.call(task.cmd, shell=False, cwd=task.path, stdin=None, stdout=None, stderr=None, timeout=None)
         print("Worker Solve: %s" % task)
-        self.txtMsg.append("%s 任务已执行结束。\r\n" % task.id)
+        self.txtMsg.append("%s 任务已执行结束。" % task.id)
         return task
 
     def fun_timer(self):

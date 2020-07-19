@@ -9,6 +9,8 @@ from threading import *
 from queue import *
 from PyQt5.QtWidgets import QMessageBox
 import time
+from win32api import *
+from win32con import *
 
 import resources_rc
 
@@ -43,10 +45,19 @@ class TrayIcon(QSystemTrayIcon):
         self.menu2.addAction(act2)
         self.menu2.triggered[QAction].connect(self.parent().processtrigger)
 
+        self.basename = os.path.basename(sys.argv[0])
+        self.path = sys.argv[0]
+        self.keyName = 'Software\\Microsoft\\Windows\\CurrentVersion\\Run'
+
         showAct = QAction("显示/隐藏", self, triggered=self.toggleVisibility)
         self.menu.addAction(showAct)
         autoStartupAct = QAction("下次自动启动", self, checkable=True)
-        autoStartupAct.setChecked(True)
+        ret = False
+        keyNames = ['HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run',
+                    r'HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run']
+        for keyName in keyNames:
+            ret = ret or self.get_values(keyName).__contains__(self.path.upper())
+        autoStartupAct.setChecked(ret)
         autoStartupAct.triggered.connect(self.toggleStartup)
         self.menu.addAction(autoStartupAct)
 
@@ -86,15 +97,50 @@ class TrayIcon(QSystemTrayIcon):
     def msgClicked(self):
         self.showMessage("提示", "你点了消息", self.icon)
 
-    def toggleStartup(self):
-        self.showMessage("测试", "自动启动程序", self.icon)
-
     def quit(self):
         # 保险起见，为了完整的退出
         self.setVisible(False)
         self.parent().exit()
         qApp.quit()
         sys.exit()
+
+    def get_values(self, fullname):
+        ret = []
+        name = str.split(fullname, '\\', 1)
+        try:
+            if name[0] == 'HKEY_LOCAL_MACHINE':
+                key = RegOpenKey(HKEY_LOCAL_MACHINE, name[1], 0, KEY_READ)
+            elif name[0] == 'HKEY_CURRENT_USER':
+                key = RegOpenKey(HKEY_CURRENT_USER, name[1], 0, KEY_READ)
+            elif name[0] == 'HKEY_CLASSES_ROOT':
+                key = RegOpenKey(HKEY_CLASSES_ROOT, name[1], 0, KEY_READ)
+            elif name[0] == 'HKEY_CURRENT_CONFIG':
+                key = RegOpenKey(HKEY_CURRENT_CONFIG, name[1], 0, KEY_READ)
+            elif name[0] == 'HKEY_USERS':
+                key = RegOpenKey(HKEY_USERS, name[1], 0, KEY_READ)
+            else:
+                raise ValueError('Error,no key named', name[0])
+            info = RegQueryInfoKey(key)
+            for i in range(0, info[1]):
+                valuename = RegEnumValue(key, i)
+                ret.append(valuename[1].upper())
+                # print(str.ljust(valuename[0], 20), valuename[1])
+            RegCloseKey(key)
+        except Exception as e:
+            print('发生异常:', str(e))
+        return ret
+
+    def toggleStartup(self, sender):
+        remove = not sender
+        try:
+            key = RegOpenKey(HKEY_LOCAL_MACHINE, self.keyName, 0, KEY_ALL_ACCESS)
+            if remove:
+                RegDeleteValue(key, self.basename)
+            else:
+                RegSetValueEx(key, self.basename, 0, REG_SZ, self.path)
+                RegCloseKey(key)
+        except (OSError, TypeError) as reason:
+            print('错误的原因是:', str(reason))
 
 
 class window(QMainWindow):
@@ -153,6 +199,7 @@ class window(QMainWindow):
         self.txtMsg.setReadOnly(True)
         self.txtMsg.setStyleSheet("color:rgb(10,10,10,255);font-size:16px;font-weight:normal;font-family:Roman times;")
         self.setCentralWidget(self.txtMsg)
+        # self.txtMsg.setText(sys.argv[0].upper())
         self.ti.show()
 
     def toolbarpressed(self, sender):

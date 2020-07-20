@@ -9,9 +9,10 @@ from threading import *
 from queue import *
 from PyQt5.QtWidgets import QMessageBox
 import time
+import win32gui
 from win32api import *
 from win32con import *
-
+import ctypes
 import resources_rc
 
 class TrayIcon(QSystemTrayIcon):
@@ -49,8 +50,8 @@ class TrayIcon(QSystemTrayIcon):
         self.path = sys.argv[0]
         self.keyName = 'Software\\Microsoft\\Windows\\CurrentVersion\\Run'
 
-        showAct = QAction("显示/隐藏", self, triggered=self.toggleVisibility)
-        self.menu.addAction(showAct)
+        self.showAct = QAction(icon=QtGui.QIcon(":/images/screen.png"), text="显示", parent=self, triggered=self.toggleVisibility)
+        self.menu.addAction(self.showAct)
         autoStartupAct = QAction("下次自动启动", self, checkable=True)
         ret = False
         keyNames = ['HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run',
@@ -88,11 +89,17 @@ class TrayIcon(QSystemTrayIcon):
 
     def toggleVisibility(self):
         win = self.parent()
+        s = win.windowState()
         if win.isVisible():
-            win.hide()
+            if s == Qt.WindowMinimized:
+                win.showNormal()
+                win.show()
+            else:
+                win.hide()
         else:
+            win.showNormal()
             win.show()
-            win.setWindowState(Qt.WindowActive)
+            # win.setWindowState(Qt.WindowActive)
 
     def msgClicked(self):
         self.showMessage("提示", "你点了消息", self.icon)
@@ -142,13 +149,29 @@ class TrayIcon(QSystemTrayIcon):
         except (OSError, TypeError) as reason:
             print('错误的原因是:', str(reason))
 
+class RECT(ctypes.Structure):
+    _fields_ = [
+        ('left', ctypes.c_long),
+        ('top', ctypes.c_long),
+        ('right', ctypes.c_long),
+        ('bottom', ctypes.c_long)
+    ]
+
+def get_work_area():
+  rect = RECT()
+  ctypes.windll.user32.SystemParametersInfoA(SPI_GETWORKAREA, 0, ctypes.byref(rect), 0)
+  return rect
 
 class window(QMainWindow):
     def __init__(self, parent=None):
         super(window, self).__init__(parent)
         self.setWindowFlags(Qt.WindowCloseButtonHint)
         self.setWindowTitle("作业调度控制器")
+        cx = GetSystemMetrics(SM_CXSCREEN)  # 获得屏幕分辨率X轴
+        cy = GetSystemMetrics(SM_CYSCREEN)  # 获得屏幕分辨率Y轴
+        rect = get_work_area()
         self.resize(400, 300)
+        self.setGeometry(rect.right-self.width()-10, rect.bottom-self.height()-10, self.width(), self.height())
         self.status = self.statusBar()
         self.setWindowIcon(QtGui.QIcon(':/images/scheduler.ico'))
         self.work_queue = ClosableQueue()
@@ -202,13 +225,26 @@ class window(QMainWindow):
         # self.txtMsg.setText(sys.argv[0].upper())
         self.ti.show()
 
+    # 覆写窗口隐藏事件
+    def hideEvent(self, event) :
+        self.ti.showAct.setIcon(QtGui.QIcon(":/images/screen.png"))
+        self.ti.showAct.setText("显示")
+        self.update()
+
+    # 覆写窗口显示事件
+    def showEvent(self, event) :
+        self.ti.showAct.setIcon(QtGui.QIcon(":/images/noscreen.png"))
+        self.ti.showAct.setText("隐藏")
+        self.update()
+
+    # 覆写窗口关闭事件（函数名固定不可变）
+    def closeEvent(self, event):
+        event.ignore()  # 忽视点击X事件
+        self.hide()
+
     def toolbarpressed(self, sender):
         print("按下的ToolBar按钮是", sender.text())
         self.status.showMessage(sender.text(), 5000)
-
-    def closeEvent(self, event):  # 覆写窗口关闭事件（函数名固定不可变）
-        event.ignore()  # 忽视点击X事件
-        self.hide()
 
     def processtriggerX(self, qaction):
         path = os.path.dirname(qaction.statusTip())
@@ -299,6 +335,6 @@ if __name__ == "__main__":
     app = QApplication(sys.argv)
     app.setWindowIcon(QtGui.QIcon(":/images/scheduler.ico"))
     win = window()
-    win.show()
+    win.hide()
     win.fun_timer()
     sys.exit(app.exec_())

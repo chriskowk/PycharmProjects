@@ -15,5 +15,9 @@
     <file alias="schedule.ico">images/schedule.ico</file>
     <file alias="scheduler.png">images/scheduler.png</file>
     <file alias="scheduler.ico">images/scheduler.ico</file>
+    <file alias="openeye.png">images/openeye.png</file>
+    <file alias="closeeye.png">images/closeeye.png</file>
+    <file alias="screen.png">images/screen.png</file>
+    <file alias="noscreen.png">images/noscreen.png</file>
 </qresource>
 </RCC>

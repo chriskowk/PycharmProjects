@@ -50,7 +50,7 @@ class TrayIcon(QSystemTrayIcon):
         self.path = sys.argv[0]
         self.keyName = 'Software\\Microsoft\\Windows\\CurrentVersion\\Run'
 
-        self.showAct = QAction(icon=QtGui.QIcon(":/images/screen.png"), text="显示", parent=self, triggered=self.toggleVisibility)
+        self.showAct = QAction(icon=QtGui.QIcon(":/images/screen.png"), text="显示", parent=self, triggered=self.parent().toggleVisibility)
         self.menu.addAction(self.showAct)
         autoStartupAct = QAction("下次自动启动", self, checkable=True)
         ret = False
@@ -85,21 +85,7 @@ class TrayIcon(QSystemTrayIcon):
     def iconClicked(self, reason):
         # 鼠标点击icon传递的信号会带有一个整形的值，1是表示单击右键，2是双击，3是单击左键，4是用鼠标中键点击
         if reason == 2 or reason == 3:
-            self.toggleVisibility()
-
-    def toggleVisibility(self):
-        win = self.parent()
-        s = win.windowState()
-        if win.isVisible():
-            if s == Qt.WindowMinimized:
-                win.showNormal()
-                win.show()
-            else:
-                win.hide()
-        else:
-            win.showNormal()
-            win.show()
-            # win.setWindowState(Qt.WindowActive)
+            self.parent().toggleVisibility()
 
     def msgClicked(self):
         self.showMessage("提示", "你点了消息", self.icon)
@@ -229,18 +215,35 @@ class window(QMainWindow):
     def hideEvent(self, event) :
         self.ti.showAct.setIcon(QtGui.QIcon(":/images/screen.png"))
         self.ti.showAct.setText("显示")
-        self.update()
+        # self.update()
 
     # 覆写窗口显示事件
     def showEvent(self, event) :
         self.ti.showAct.setIcon(QtGui.QIcon(":/images/noscreen.png"))
         self.ti.showAct.setText("隐藏")
-        self.update()
+        # self.update()
 
     # 覆写窗口关闭事件（函数名固定不可变）
     def closeEvent(self, event):
         event.ignore()  # 忽视点击X事件
         self.hide()
+
+    # 覆写窗口失焦事件
+    def focusOutEvent(self, event):
+        self.hide()
+
+    def toggleVisibility(self):
+        s = self.windowState()
+        if self.isVisible():
+            if s == Qt.WindowMinimized:
+                self.showNormal()
+                self.show()
+            else:
+                self.hide()
+        else:
+            self.showNormal()
+            self.show()
+            # self.setWindowState(Qt.WindowActive)
 
     def toolbarpressed(self, sender):
         print("按下的ToolBar按钮是", sender.text())

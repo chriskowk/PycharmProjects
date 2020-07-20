@@ -233,17 +233,22 @@ class window(QMainWindow):
         self.hide()
 
     def toggleVisibility(self):
-        s = self.windowState()
         if self.isVisible():
-            if s == Qt.WindowMinimized:
-                self.showNormal()
-                self.show()
-            else:
-                self.hide()
+            self.hide_window()
         else:
-            self.showNormal()
-            self.show()
-            # self.setWindowState(Qt.WindowActive)
+            self.show_window()
+
+    def show_window(self):
+        hwnd = self.winId()
+        win32gui.SetWindowPos(hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW)
+        self.showNormal()
+        # self.setWindowState(self.windowState() & ~Qt.WindowMinimized | Qt.WindowActive)
+        # self.activateWindow()
+
+    def hide_window(self):
+        hwnd = self.winId()
+        win32gui.SetWindowPos(hwnd, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW)
+        self.hide()
 
     def toolbarpressed(self, sender):
         print("按下的ToolBar按钮是", sender.text())

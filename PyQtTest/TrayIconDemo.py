@@ -13,6 +13,10 @@ import win32gui
 from win32api import *
 from win32con import *
 import ctypes
+import win32com.client
+import configparser
+import copy
+
 import resources_rc
 
 class TrayIcon(QSystemTrayIcon):
@@ -35,16 +39,8 @@ class TrayIcon(QSystemTrayIcon):
 
         self.menu2 = QMenu("编译版本")
         self.menu2.setIcon(QtGui.QIcon(":/images/start.png"))
-        act0 = QAction(icon=QtGui.QIcon(":/images/location.png"), text="中山眼科", checkable=True, parent=self.menu2)
-        act0.setStatusTip("E:/VSTS/MedicalHealth/BatchFiles/全编译Upload.bat")
-        act1 = QAction(text="省医", checkable=True, parent=self.menu2)
-        act1.setStatusTip("E:/MedicalHealthSY/BatchFiles/全编译Upload.bat")
-        act2 = QAction(text="市一", checkable=True, parent=self.menu2)
-        act2.setStatusTip("E:/MedicalHealthS1/BatchFiles/全编译Upload.bat")
-        self.menu2.addAction(act0)
-        self.menu2.addAction(act1)
-        self.menu2.addAction(act2)
-        self.menu2.triggered[QAction].connect(self.parent().processtrigger)
+        for item in self.parent().mu1.actions():
+            self.menu2.addAction(item)
 
         self.basename = os.path.basename(sys.argv[0])
         self.path = sys.argv[0]
@@ -165,20 +161,17 @@ class window(QMainWindow):
         consumer = Consumer(self.run, self.work_queue, self.out_queue)
         consumer.start()
         self.mu1 = QMenu()
-        act0 = QAction(icon=QtGui.QIcon(":/images/location.png"), text="中山眼科", checkable=True, parent=self.mu1)
-        act0.setStatusTip("E:/VSTS/MedicalHealth/BatchFiles/全编译Upload.bat")
-        act1 = QAction(text="省医", checkable=True, parent=self.mu1)
-        act1.setStatusTip("E:/MedicalHealthSY/BatchFiles/全编译Upload.bat")
-        act2 = QAction(text="市一", checkable=True, parent=self.mu1)
-        act2.setStatusTip("E:/MedicalHealthS1/BatchFiles/全编译Upload.bat")
-        self.mu1.addAction(act0)
-        self.mu1.addAction(act1)
-        self.mu1.addAction(act2)
+        for item in _dict.items():
+            print(item)
+            act = QAction(text=item[1].name, checkable=True, parent=self.mu1)
+            act.setStatusTip("%s/BatchFiles/全编译Upload.bat" % item[1].base_path)
+            self.mu1.addAction(act)
+        self.mu1.actions()[0].setIcon(QtGui.QIcon(":/images/location.png"))
         self.mu1.setTearOffEnabled(False)
         self.mu1.triggered[QAction].connect(self.processtrigger)
 
         mu2 = QMenu()
-        act20 = QAction(icon=QtGui.QIcon(":/images/setup1.png"), text="服务", parent=mu2)
+        act20 = QAction(icon=QtGui.QIcon(":/images/setup1.png"), text="服务", parent=mu2, triggered=self.restart_service)
         act21 = QAction(text="配置", parent=mu2)
         act22 = QAction(text="调度计划", parent=mu2)
         mu2.addAction(act20)
@@ -206,7 +199,7 @@ class window(QMainWindow):
         tbrExit.actionTriggered.connect(self.ti.quit)
         self.txtMsg = QTextEdit()
         self.txtMsg.setReadOnly(True)
-        self.txtMsg.setStyleSheet("color:rgb(10,10,10,255);font-size:16px;font-weight:normal;font-family:Roman times;")
+        self.txtMsg.setStyleSheet("color:rgb(10,10,10,255);font-size:14px;font-weight:normal;font-family:Roman times;")
         self.setCentralWidget(self.txtMsg)
         self.status.installEventFilter(self)
         self.ti.show()
@@ -260,7 +253,7 @@ class window(QMainWindow):
             print("按下的ToolBar按钮是 %s" % opt)
         elif opt == "设置":
             print("按下的ToolBar按钮是 %s" % opt)
-        self.status.showMessage("正在%s ..." % opt, 5000)
+        self.status.showMessage("正在执行 %s ..." % opt, 5000)
 
     def start_default(self, sender):
         found = False
@@ -271,21 +264,38 @@ class window(QMainWindow):
         if not found:
             self.processtrigger(sender.menu().actions()[0])
 
+    def restart_service(self):
+        found = False
+        computer = "."
+        service = "jssvcl"
+        objWMIService = win32com.client.Dispatch("WbemScripting.SWbemLocator")
+        objSWbemServices = objWMIService.ConnectServer(computer, "root\cimv2")
+        colItems = objSWbemServices.ExecQuery("SELECT * FROM Win32_Service WHERE name='%s'" % service)
+        for item in colItems:
+            self.txtMsg.append("服务已安装在 %s" % item.PathName)
+            found = True
+        if not found:
+            self.txtMsg.append("服务 %s 已卸载，请重新安装服务！" % service)
+        key = self.get_current_version()
+        if key != '':
+            path = _dict[key].base_path
+            print(path)
+
     def processtriggerX(self, qaction):
         path = os.path.dirname(qaction.statusTip())
         t = Thread(target=self.runCmd, args=(qaction.statusTip(), path))
         t.start()
 
-    def syncmenuchecked(self, qa):
+    def get_current_version(self):
+        ret = ""
         for act in self.mu1.actions():
-            act.setChecked(True if qa.text() == act.text() else False)
-        for act in self.ti.menu2.actions():
-            act.setChecked(True if qa.text() == act.text() else False)
+            if act.isChecked():
+                ret = act.text()
+        return ret
 
     def processtrigger(self, qaction):
         for act in qaction.parent().actions():
             act.setChecked(True if qaction == act else False)
-        self.syncmenuchecked(qaction)
         self.push_queue(Task(qaction))
 
     def push_queue(self, task):
@@ -332,8 +342,10 @@ class Task(object):
 
 class ClosableQueue(Queue):
     TERMINATOR = Task()
+
     def close(self):
         self.put(self.TERMINATOR)
+
     def __iter__(self):
         while True:
             item = self.get()
@@ -358,8 +370,25 @@ class Consumer(Thread):
             result = self.func(item)
             self.out_queue.put(result)
 
+class VERSION:
+    def __init__(self):
+        self.key = ''
+        self.name = ''
+        self.base_path = ''
+
 
 if __name__ == "__main__":
+    _dict = {}
+    conf = configparser.ConfigParser()
+    conf.read('cfg.ini', encoding='utf-16')
+    for sec in conf.sections():
+        ver = VERSION()
+        ver.key = conf.get(sec, 'key')
+        ver.name = conf.get(sec, 'name')
+        ver.base_path = conf.get(sec, 'base_path')
+        _dict[sec] = ver
+    print(_dict)
+
     timer_interval = 1
     app = QApplication(sys.argv)
     app.setWindowIcon(QtGui.QIcon(":/images/scheduler.ico"))

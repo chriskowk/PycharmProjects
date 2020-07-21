@@ -30,12 +30,8 @@ class TrayIcon(QSystemTrayIcon):
         self.menu = QMenu()
         self.menu1 = QMenu("重启服务")
         self.menu1.setIcon(QtGui.QIcon(":/images/setup.png"))
-        seviceAct = QAction(icon=QtGui.QIcon(":/images/setup1.png"), text="服务", parent=self.menu1)
-        configAct = QAction(text="配置", parent=self.menu1)
-        scheduleAct = QAction(text="调度", parent=self.menu1)
-        self.menu1.addAction(seviceAct)
-        self.menu1.addAction(configAct)
-        self.menu1.addAction(scheduleAct)
+        for item in self.parent().mu2.actions():
+            self.menu1.addAction(item)
 
         self.menu2 = QMenu("编译版本")
         self.menu2.setIcon(QtGui.QIcon(":/images/start.png"))
@@ -170,14 +166,14 @@ class window(QMainWindow):
         self.mu1.setTearOffEnabled(False)
         self.mu1.triggered[QAction].connect(self.processtrigger)
 
-        mu2 = QMenu()
-        act20 = QAction(icon=QtGui.QIcon(":/images/setup1.png"), text="服务", parent=mu2, triggered=self.restart_service)
-        act21 = QAction(text="配置", parent=mu2)
-        act22 = QAction(text="调度计划", parent=mu2)
-        mu2.addAction(act20)
-        mu2.addAction(act21)
-        mu2.addAction(act22)
-        mu2.setTearOffEnabled(False)
+        self.mu2 = QMenu()
+        act0 = QAction(icon=QtGui.QIcon(":/images/setup1.png"), text="服务", parent=self.mu2, triggered=self.restart_service)
+        act1 = QAction(text="配置", parent=self.mu2)
+        act2 = QAction(text="调度计划", parent=self.mu2)
+        self.mu2.addAction(act0)
+        self.mu2.addAction(act1)
+        self.mu2.addAction(act2)
+        self.mu2.setTearOffEnabled(False)
 
         tbrMain = self.addToolBar("Scheduler")
         self.startAct = QAction(QtGui.QIcon(":/images/start.png"), "启动", self)
@@ -186,7 +182,7 @@ class window(QMainWindow):
         pause = QAction(QtGui.QIcon(":/images/pause.png"), "暂停", self)
         tbrMain.addAction(pause)
         setup = QAction(QtGui.QIcon(":/images/setup.png"), "设置", self)
-        setup.setMenu(mu2)
+        setup.setMenu(self.mu2)
         tbrMain.addAction(setup)
         tbrExit = self.addToolBar("Exit")
         close = QAction(QtGui.QIcon(":/images/close.png"), "退出", self)
@@ -272,14 +268,20 @@ class window(QMainWindow):
         objSWbemServices = objWMIService.ConnectServer(computer, "root\cimv2")
         colItems = objSWbemServices.ExecQuery("SELECT * FROM Win32_Service WHERE name='%s'" % service)
         for item in colItems:
-            self.txtMsg.append("服务已安装在 %s" % item.PathName)
+            oldpath = item.PathName != None and item.PathName or ""
+            self.txtMsg.append("服务已安装在 %s" % oldpath)
             found = True
         if not found:
+            oldpath = ""
             self.txtMsg.append("服务 %s 已卸载，请重新安装服务！" % service)
+        newpath = oldpath
         key = self.get_current_version()
         if key != '':
-            path = _dict[key].base_path
-            print(path)
+            newpath = '"%s\Lib\jssvc.exe"' % _dict[key].base_path
+        cmd = '_$RestartLocalService.bat ' + oldpath + ' ' + newpath
+        print(cmd)
+        self.push_queue(Task(QAction(text="本地服务", statusTip=cmd), os.path.dirname(sys.argv[0])))
+
 
     def processtriggerX(self, qaction):
         path = os.path.dirname(qaction.statusTip())
@@ -331,10 +333,10 @@ class window(QMainWindow):
 
 
 class Task(object):
-    def __init__(self, qaction=QAction()):
+    def __init__(self, qaction=QAction(), path=''):
         self.id = qaction.text()
         self.cmd = qaction.statusTip()
-        self.path = os.path.dirname(qaction.statusTip())
+        self.path = path == '' and os.path.dirname(qaction.statusTip()) or path
     def __repr__(self):
         return "任务(ID:%s)" % self.id
     def __str__(self):

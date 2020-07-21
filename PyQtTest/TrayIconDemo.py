@@ -144,17 +144,17 @@ class RECT(ctypes.Structure):
     ]
 
 def get_work_area():
-  rect = RECT()
-  ctypes.windll.user32.SystemParametersInfoA(SPI_GETWORKAREA, 0, ctypes.byref(rect), 0)
-  return rect
+    # cx = GetSystemMetrics(SM_CXSCREEN)  # 获得屏幕分辨率X轴
+    # cy = GetSystemMetrics(SM_CYSCREEN)  # 获得屏幕分辨率Y轴
+    rect = RECT()
+    ctypes.windll.user32.SystemParametersInfoA(SPI_GETWORKAREA, 0, ctypes.byref(rect), 0)
+    return rect
 
 class window(QMainWindow):
     def __init__(self, parent=None):
         super(window, self).__init__(parent)
         self.setWindowFlags(Qt.WindowCloseButtonHint)
         self.setWindowTitle("作业调度控制器")
-        cx = GetSystemMetrics(SM_CXSCREEN)  # 获得屏幕分辨率X轴
-        cy = GetSystemMetrics(SM_CYSCREEN)  # 获得屏幕分辨率Y轴
         rect = get_work_area()
         self.resize(400, 300)
         self.setGeometry(rect.right-self.width()-10, rect.bottom-self.height()-10, self.width(), self.height())
@@ -187,9 +187,9 @@ class window(QMainWindow):
         mu2.setTearOffEnabled(False)
 
         tbrMain = self.addToolBar("Scheduler")
-        start = QAction(QtGui.QIcon(":/images/start.png"), "启动", self)
-        start.setMenu(self.mu1)
-        tbrMain.addAction(start)
+        self.startAct = QAction(QtGui.QIcon(":/images/start.png"), "启动", self)
+        self.startAct.setMenu(self.mu1)
+        tbrMain.addAction(self.startAct)
         pause = QAction(QtGui.QIcon(":/images/pause.png"), "暂停", self)
         tbrMain.addAction(pause)
         setup = QAction(QtGui.QIcon(":/images/setup.png"), "设置", self)
@@ -208,7 +208,7 @@ class window(QMainWindow):
         self.txtMsg.setReadOnly(True)
         self.txtMsg.setStyleSheet("color:rgb(10,10,10,255);font-size:16px;font-weight:normal;font-family:Roman times;")
         self.setCentralWidget(self.txtMsg)
-        # self.txtMsg.setText(sys.argv[0].upper())
+        self.status.installEventFilter(self)
         self.ti.show()
 
     # 覆写窗口隐藏事件
@@ -228,9 +228,11 @@ class window(QMainWindow):
         event.ignore()  # 忽视点击X事件
         self.hide()
 
-    # 覆写窗口失焦事件
-    def focusOutEvent(self, event):
-        self.hide()
+    def eventFilter(self, watched, event):
+        if watched == self.status and event.type() == QEvent.MouseButtonDblClick:
+            print("pos: ", event.pos())
+            self.txtMsg.clear()
+        return QWidget.eventFilter(self, watched, event)
 
     def toggleVisibility(self):
         if self.isVisible():
@@ -251,8 +253,23 @@ class window(QMainWindow):
         self.hide()
 
     def toolbarpressed(self, sender):
-        print("按下的ToolBar按钮是", sender.text())
-        self.status.showMessage(sender.text(), 5000)
+        opt = sender.text()
+        if opt == "启动":
+            self.start_default(sender)
+        elif opt == "暂停":
+            print("按下的ToolBar按钮是 %s" % opt)
+        elif opt == "设置":
+            print("按下的ToolBar按钮是 %s" % opt)
+        self.status.showMessage("正在%s ..." % opt, 5000)
+
+    def start_default(self, sender):
+        found = False
+        for act in sender.menu().actions():
+            if act.isChecked():
+                self.push_queue(Task(act))
+                found = True
+        if not found:
+            self.processtrigger(sender.menu().actions()[0])
 
     def processtriggerX(self, qaction):
         path = os.path.dirname(qaction.statusTip())
@@ -269,8 +286,11 @@ class window(QMainWindow):
         for act in qaction.parent().actions():
             act.setChecked(True if qaction == act else False)
         self.syncmenuchecked(qaction)
-        self.work_queue.put(Task(qaction))
-        self.txtMsg.append("%s 任务已进入调度队列，等待执行中..." % qaction.text())
+        self.push_queue(Task(qaction))
+
+    def push_queue(self, task):
+        self.work_queue.put(task)
+        self.txtMsg.append("%s 任务已进入调度队列，等待执行中..." % task.id)
         # self.work_queue.close()
         # self.work_queue.join()
 
@@ -298,6 +318,7 @@ class window(QMainWindow):
                 item = self.out_queue.get()  # q.get会阻塞，q.get_nowait()不阻塞，但会抛异常
                 argv = "任务%s已完成" % item.id
                 subprocess.call("F:/GitHub/PycharmProjects/PyQtTest/dist/MessageBox.exe %s" % argv, shell=False, stdin=None, stdout=None, stderr=None, timeout=None)
+
 
 class Task(object):
     def __init__(self, qaction=QAction()):

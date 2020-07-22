@@ -139,6 +139,38 @@ def _reg_open_key(fullname):
         key = RegOpenKey(HKEY_USERS, name[1], 0, KEY_READ)
     return key
 
+class VERSION:
+    def __init__(self, key='', name='', path=''):
+        self.key = key
+        self.name = name
+        self.base_path = path
+
+def _get_version():
+    ret = VERSION()
+    path = _get_key_value('HKEY_LOCAL_MACHINE\\SOFTWARE\\JetSun\\3.0', 'ExecutablePath')
+    for item in _dict.items():
+        if path.__contains__(item[1].base_path.upper()):
+            ret = item[1]; break
+    return ret
+
+def _get_reg_basepath():
+    ret = _get_version().base_path
+    return ret
+
+def _get_regfilepath():
+    v = _get_version()
+    ret = "%s\\BatchFiles\\注册表\\%s注册表.reg" % (v.base_path, v.name) if v.base_path != '' else ''
+    return ret
+
+def _get_key_value(fullname, valuename):
+    ret = ''
+    key = _reg_open_key(fullname)
+    if key != None:
+        info = RegQueryValueEx(key, valuename)
+        ret = info[0].upper()
+        RegCloseKey(key)
+    return ret
+
 
 class window(QMainWindow):
     def __init__(self, parent=None):
@@ -157,7 +189,7 @@ class window(QMainWindow):
         self.mu1 = QMenu()
         for item in _dict.items():
             act = QAction(text=item[1].name, checkable=True, parent=self.mu1)
-            act.setStatusTip("%s/BatchFiles/全编译Upload.bat" % item[1].base_path)
+            act.setStatusTip("%s\\BatchFiles\\全编译Upload.bat" % item[1].base_path)
             self.mu1.addAction(act)
         self.mu1.actions()[0].setIcon(QtGui.QIcon(":/images/location.png"))
         self.mu1.setTearOffEnabled(False)
@@ -269,10 +301,9 @@ class window(QMainWindow):
             self.txtMsg.append("服务已安装在 %s" % oldpath)
             found = True
         if not found:
-            path = self.get_key_value('HKEY_LOCAL_MACHINE\\SOFTWARE\\JetSun\\3.0', 'ExecutablePath')
-            for item in _dict.items():
-                if path.__contains__(item[1].base_path.upper()):
-                    oldpath = '"%s\\Lib\\jssvc.exe"' % item[1].base_path
+            bp = _get_reg_basepath()
+            if bp != '':
+                oldpath = '"%s\\Lib\\jssvc.exe"' % bp
             self.txtMsg.append("服务 %s 已卸载，请重新安装服务！" % service)
 
         if oldpath != None:
@@ -281,16 +312,7 @@ class window(QMainWindow):
             if key != '':
                 newpath = '"%s\\Lib\\jssvc.exe"' % _dict[key].base_path
             cmd = '_$RestartLocalService.bat %s %s' % (oldpath, newpath)
-            self.push_queue(Task(QAction(text="本地服务", statusTip=cmd), os.path.dirname(sys.argv[0])))
-
-    def get_key_value(self, fullname, valuename):
-        ret = ''
-        key = _reg_open_key(fullname)
-        if key != None:
-            info = RegQueryValueEx(key, valuename)
-            ret = info[0].upper()
-            RegCloseKey(key)
-        return ret
+            self.push_queue(Task(QAction(text="本地服务", statusTip=cmd), False, _dirname))
 
     def processtriggerX(self, sender):
         path = os.path.dirname(sender.statusTip())
@@ -324,7 +346,8 @@ class window(QMainWindow):
         subprocess.call(cmd, shell=False, cwd=path, stdin=None, stdout=None, stderr=None, timeout=None)
 
     def run(self, task) :
-        subprocess.call(task.cmd, shell=False, cwd=task.path, stdin=None, stdout=None, stderr=None, timeout=None)
+        cmd = '%s "%s"' % (task.cmd, _get_regfilepath()) if task.add_arg else task.cmd
+        subprocess.call(cmd, shell=False, cwd=task.path, stdin=None, stdout=None, stderr=None, timeout=None)
         print("Worker Solve: %s" % task)
         self.txtMsg.append("%s 任务已执行结束。" % task.id)
         return task
@@ -342,9 +365,10 @@ class window(QMainWindow):
 
 
 class Task(object):
-    def __init__(self, qaction=QAction(), path=''):
+    def __init__(self, qaction=QAction(), add_arg=True, path=''):
         self.id = qaction.text()
         self.cmd = qaction.statusTip()
+        self.add_arg = add_arg
         self.path = path == '' and os.path.dirname(qaction.statusTip()) or path
     def __repr__(self):
         return "任务(ID:%s)" % self.id
@@ -379,12 +403,6 @@ class Consumer(Thread):
             result = self.func(item)
             self.out_queue.put(result)
 
-class VERSION:
-    def __init__(self):
-        self.key = ''
-        self.name = ''
-        self.base_path = ''
-
 
 if __name__ == "__main__":
     _abspath = sys.argv[0]
@@ -392,15 +410,11 @@ if __name__ == "__main__":
     _dirname = os.path.dirname(_abspath)
     _dict = {}
     _interval = 1
-    conf = configparser.ConfigParser()
-    conf.read('cfg.ini', encoding='utf-16')
-    for sec in conf.sections():
-        ver = VERSION()
-        ver.key = conf.get(sec, 'key')
-        ver.name = conf.get(sec, 'name')
-        ver.base_path = conf.get(sec, 'base_path')
-        _dict[sec] = ver
-    # print(_dict)
+    _conf = configparser.ConfigParser()
+    _conf.read('cfg.ini', encoding='utf-16')
+    for sec in _conf.sections():
+        _dict[sec] = VERSION(_conf.get(sec, 'key'), _conf.get(sec, 'name'), _conf.get(sec, 'base_path'))
+    print(_dict)
 
     app = QApplication(sys.argv)
     app.setWindowIcon(QtGui.QIcon(":/images/scheduler.ico"))

@@ -1,8 +1,9 @@
+# -*- coding:UTF-8 -*-
 import sys
-from PyQt5.QtWidgets import *
-from PyQt5.QtCore import *
-from PyQt5.QtGui import *
 from PyQt5 import QtGui
+from PyQt5.QtGui import *
+from PyQt5.QtCore import *
+from PyQt5.QtWidgets import *
 import subprocess
 import os
 from threading import *
@@ -15,6 +16,7 @@ from win32con import *
 import ctypes
 import win32com.client
 import configparser
+from PyQt5.QtCore import pyqtSlot
 import copy
 
 import resources_rc
@@ -228,6 +230,10 @@ class window(QMainWindow):
         self.setCentralWidget(self.txtMsg)
         self.status.installEventFilter(self)
         self.ti.show()
+
+    @pyqtSlot()
+    def on_edit_textChanged(self):
+        self.txtMsg.ensureCursorVisible()
 
     # 覆写窗口隐藏事件
     def hideEvent(self, event) :

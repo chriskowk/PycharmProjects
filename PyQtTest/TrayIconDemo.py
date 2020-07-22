@@ -27,7 +27,7 @@ class TrayIcon(QSystemTrayIcon):
 
     def initMenu(self):
         # 设计托盘的菜单，这里我实现了一个二级菜单
-        self.menu = QMenu()
+        mainmenu = QMenu()
         self.menu1 = QMenu("重启服务")
         self.menu1.setIcon(QtGui.QIcon(":/images/setup.png"))
         for item in self.parent().mu2.actions():
@@ -38,28 +38,29 @@ class TrayIcon(QSystemTrayIcon):
         for item in self.parent().mu1.actions():
             self.menu2.addAction(item)
 
-        self.showAct = QAction(icon=QtGui.QIcon(":/images/screen.png"), text="显示", parent=self, triggered=self.parent().toggleVisibility)
-        self.menu.addAction(self.showAct)
-        autoStartupAct = QAction("下次自动启动", self, checkable=True)
+        self.showme = QAction(icon=QtGui.QIcon(":/images/screen.png"), text="显示", parent=self, triggered=self.parent().toggleVisibility)
+        mainmenu.addAction(self.showme)
+        autorun = QAction("下次自动启动", self, checkable=True)
         ret = False
         keyNames = ['HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run',
                     r'HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run']
-        for keyName in keyNames:
-            ret = ret or self.get_values(keyName).__contains__(_abspath.upper())
-        autoStartupAct.setChecked(ret)
-        autoStartupAct.triggered.connect(self.toggleStartup)
-        self.menu.addAction(autoStartupAct)
+        for item in keyNames:
+            if self.get_values(item).__contains__(_abspath.upper()):
+                ret = True; break
+        autorun.setChecked(ret)
+        autorun.triggered.connect(self.toggleStartup)
+        mainmenu.addAction(autorun)
 
-        self.menu.addSeparator()
-        self.menu.addMenu(self.menu1)
-        self.menu.addMenu(self.menu2)
-        pauseAct = QAction(icon=QtGui.QIcon(":/images/pause.png"), text="暂停调度", parent=self)
-        self.menu.addAction(pauseAct)
+        mainmenu.addSeparator()
+        mainmenu.addMenu(self.menu1)
+        mainmenu.addMenu(self.menu2)
+        pause = QAction(icon=QtGui.QIcon(":/images/pause.png"), text="暂停调度", parent=self)
+        mainmenu.addAction(pause)
 
-        self.menu.addSeparator()
-        self.quitAction = QAction(QtGui.QIcon(":/images/exit.png"), "退出", self, triggered=self.quit)
-        self.menu.addAction(self.quitAction)
-        self.setContextMenu(self.menu)
+        mainmenu.addSeparator()
+        exit = QAction(QtGui.QIcon(":/images/exit.png"), "退出", self, triggered=self.quit)
+        mainmenu.addAction(exit)
+        self.setContextMenu(mainmenu)
 
     def initOthers(self):
         # 把鼠标点击图标的信号和槽连接
@@ -117,7 +118,7 @@ class RECT(ctypes.Structure):
         ('bottom', ctypes.c_long)
     ]
 
-def get_work_area():
+def _get_work_area():
     # cx = GetSystemMetrics(SM_CXSCREEN)  # 获得屏幕分辨率X轴
     # cy = GetSystemMetrics(SM_CYSCREEN)  # 获得屏幕分辨率Y轴
     rect = RECT()
@@ -144,7 +145,7 @@ class window(QMainWindow):
         super(window, self).__init__(parent)
         self.setWindowFlags(Qt.WindowCloseButtonHint)
         self.setWindowTitle("作业调度控制器")
-        rect = get_work_area()
+        rect = _get_work_area()
         self.resize(400, 300)
         self.setGeometry(rect.right-self.width()-10, rect.bottom-self.height()-10, self.width(), self.height())
         self.status = self.statusBar()
@@ -172,17 +173,17 @@ class window(QMainWindow):
         self.mu2.setTearOffEnabled(False)
 
         tbrMain = self.addToolBar("Scheduler")
-        self.startAct = QAction(QtGui.QIcon(":/images/start.png"), "启动", self)
-        self.startAct.setMenu(self.mu1)
-        tbrMain.addAction(self.startAct)
+        start = QAction(QtGui.QIcon(":/images/start.png"), "启动", self)
+        start.setMenu(self.mu1)
+        tbrMain.addAction(start)
         pause = QAction(QtGui.QIcon(":/images/pause.png"), "暂停", self)
         tbrMain.addAction(pause)
         setup = QAction(QtGui.QIcon(":/images/setup.png"), "设置", self)
         setup.setMenu(self.mu2)
         tbrMain.addAction(setup)
         tbrExit = self.addToolBar("Exit")
-        close = QAction(QtGui.QIcon(":/images/close.png"), "退出", self)
-        tbrExit.addAction(close)
+        exit = QAction(QtGui.QIcon(":/images/close.png"), "退出", self)
+        tbrExit.addAction(exit)
         # 设置名称显示在图标下面（默认本来是只显示图标）
         tbrMain.setToolButtonStyle(Qt.ToolButtonTextUnderIcon)
         tbrExit.setToolButtonStyle(Qt.ToolButtonTextUnderIcon)
@@ -198,14 +199,14 @@ class window(QMainWindow):
 
     # 覆写窗口隐藏事件
     def hideEvent(self, event) :
-        self.ti.showAct.setIcon(QtGui.QIcon(":/images/screen.png"))
-        self.ti.showAct.setText("显示")
+        self.ti.showme.setIcon(QtGui.QIcon(":/images/screen.png"))
+        self.ti.showme.setText("显示")
         # self.update()
 
     # 覆写窗口显示事件
     def showEvent(self, event) :
-        self.ti.showAct.setIcon(QtGui.QIcon(":/images/noscreen.png"))
-        self.ti.showAct.setText("隐藏")
+        self.ti.showme.setIcon(QtGui.QIcon(":/images/noscreen.png"))
+        self.ti.showme.setText("隐藏")
         # self.update()
 
     # 覆写窗口关闭事件（函数名固定不可变）
@@ -300,7 +301,7 @@ class window(QMainWindow):
         ret = ""
         for act in self.mu1.actions():
             if act.isChecked():
-                ret = act.text()
+                ret = act.text(); break
         return ret
 
     def processtrigger(self, qaction):

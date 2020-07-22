@@ -38,10 +38,6 @@ class TrayIcon(QSystemTrayIcon):
         for item in self.parent().mu1.actions():
             self.menu2.addAction(item)
 
-        self.basename = os.path.basename(sys.argv[0])
-        self.path = sys.argv[0]
-        self.keyName = 'Software\\Microsoft\\Windows\\CurrentVersion\\Run'
-
         self.showAct = QAction(icon=QtGui.QIcon(":/images/screen.png"), text="显示", parent=self, triggered=self.parent().toggleVisibility)
         self.menu.addAction(self.showAct)
         autoStartupAct = QAction("下次自动启动", self, checkable=True)
@@ -49,7 +45,7 @@ class TrayIcon(QSystemTrayIcon):
         keyNames = ['HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run',
                     r'HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run']
         for keyName in keyNames:
-            ret = ret or self.get_values(keyName).__contains__(self.path.upper())
+            ret = ret or self.get_values(keyName).__contains__(_abspath.upper())
         autoStartupAct.setChecked(ret)
         autoStartupAct.triggered.connect(self.toggleStartup)
         self.menu.addAction(autoStartupAct)
@@ -91,38 +87,24 @@ class TrayIcon(QSystemTrayIcon):
 
     def get_values(self, fullname):
         ret = []
-        name = str.split(fullname, '\\', 1)
-        try:
-            if name[0] == 'HKEY_LOCAL_MACHINE':
-                key = RegOpenKey(HKEY_LOCAL_MACHINE, name[1], 0, KEY_READ)
-            elif name[0] == 'HKEY_CURRENT_USER':
-                key = RegOpenKey(HKEY_CURRENT_USER, name[1], 0, KEY_READ)
-            elif name[0] == 'HKEY_CLASSES_ROOT':
-                key = RegOpenKey(HKEY_CLASSES_ROOT, name[1], 0, KEY_READ)
-            elif name[0] == 'HKEY_CURRENT_CONFIG':
-                key = RegOpenKey(HKEY_CURRENT_CONFIG, name[1], 0, KEY_READ)
-            elif name[0] == 'HKEY_USERS':
-                key = RegOpenKey(HKEY_USERS, name[1], 0, KEY_READ)
-            else:
-                raise ValueError('Error,no key named', name[0])
+        key = _reg_open_key(fullname)
+        if key != None:
             info = RegQueryInfoKey(key)
             for i in range(0, info[1]):
                 valuename = RegEnumValue(key, i)
                 ret.append(valuename[1].upper())
                 # print(str.ljust(valuename[0], 20), valuename[1])
             RegCloseKey(key)
-        except Exception as e:
-            print('发生异常:', str(e))
         return ret
 
-    def toggleStartup(self, sender):
-        remove = not sender
+    def toggleStartup(self, checked):
+        remove = not checked
         try:
-            key = RegOpenKey(HKEY_LOCAL_MACHINE, self.keyName, 0, KEY_ALL_ACCESS)
+            key = RegOpenKey(HKEY_LOCAL_MACHINE, 'Software\\Microsoft\\Windows\\CurrentVersion\\Run', 0, KEY_ALL_ACCESS)
             if remove:
-                RegDeleteValue(key, self.basename)
+                RegDeleteValue(key, _basename)
             else:
-                RegSetValueEx(key, self.basename, 0, REG_SZ, self.path)
+                RegSetValueEx(key, _basename, 0, REG_SZ, _abspath)
                 RegCloseKey(key)
         except (OSError, TypeError) as reason:
             print('错误的原因是:', str(reason))
@@ -142,6 +124,21 @@ def get_work_area():
     ctypes.windll.user32.SystemParametersInfoA(SPI_GETWORKAREA, 0, ctypes.byref(rect), 0)
     return rect
 
+def _reg_open_key(fullname):
+    name = str.split(fullname, '\\', 1)
+    if name[0] == 'HKEY_LOCAL_MACHINE':
+        key = RegOpenKey(HKEY_LOCAL_MACHINE, name[1], 0, KEY_READ)
+    elif name[0] == 'HKEY_CURRENT_USER':
+        key = RegOpenKey(HKEY_CURRENT_USER, name[1], 0, KEY_READ)
+    elif name[0] == 'HKEY_CLASSES_ROOT':
+        key = RegOpenKey(HKEY_CLASSES_ROOT, name[1], 0, KEY_READ)
+    elif name[0] == 'HKEY_CURRENT_CONFIG':
+        key = RegOpenKey(HKEY_CURRENT_CONFIG, name[1], 0, KEY_READ)
+    elif name[0] == 'HKEY_USERS':
+        key = RegOpenKey(HKEY_USERS, name[1], 0, KEY_READ)
+    return key
+
+
 class window(QMainWindow):
     def __init__(self, parent=None):
         super(window, self).__init__(parent)
@@ -158,7 +155,6 @@ class window(QMainWindow):
         consumer.start()
         self.mu1 = QMenu()
         for item in _dict.items():
-            print(item)
             act = QAction(text=item[1].name, checkable=True, parent=self.mu1)
             act.setStatusTip("%s/BatchFiles/全编译Upload.bat" % item[1].base_path)
             self.mu1.addAction(act)
@@ -266,26 +262,38 @@ class window(QMainWindow):
         service = "jssvcl"
         objWMIService = win32com.client.Dispatch("WbemScripting.SWbemLocator")
         objSWbemServices = objWMIService.ConnectServer(computer, "root\cimv2")
-        colItems = objSWbemServices.ExecQuery("SELECT * FROM Win32_Service WHERE name='%s'" % service)
+        colItems = objSWbemServices.ExecQuery("SELECT * FROM Win32_Service WHERE name = '%s'" % service)
         for item in colItems:
             oldpath = item.PathName != None and item.PathName or ""
             self.txtMsg.append("服务已安装在 %s" % oldpath)
             found = True
         if not found:
-            oldpath = ""
+            path = self.get_key_value('HKEY_LOCAL_MACHINE\\SOFTWARE\\JetSun\\3.0', 'ExecutablePath')
+            for item in _dict.items():
+                if path.__contains__(item[1].base_path.upper()):
+                    oldpath = '"%s\\Lib\\jssvc.exe"' % item[1].base_path
             self.txtMsg.append("服务 %s 已卸载，请重新安装服务！" % service)
-        newpath = oldpath
-        key = self.get_current_version()
-        if key != '':
-            newpath = '"%s\Lib\jssvc.exe"' % _dict[key].base_path
-        cmd = '_$RestartLocalService.bat ' + oldpath + ' ' + newpath
-        print(cmd)
-        self.push_queue(Task(QAction(text="本地服务", statusTip=cmd), os.path.dirname(sys.argv[0])))
 
+        if oldpath != None:
+            newpath = oldpath
+            key = self.get_current_version()
+            if key != '':
+                newpath = '"%s\\Lib\\jssvc.exe"' % _dict[key].base_path
+            cmd = '_$RestartLocalService.bat %s %s' % (oldpath, newpath)
+            self.push_queue(Task(QAction(text="本地服务", statusTip=cmd), os.path.dirname(sys.argv[0])))
 
-    def processtriggerX(self, qaction):
-        path = os.path.dirname(qaction.statusTip())
-        t = Thread(target=self.runCmd, args=(qaction.statusTip(), path))
+    def get_key_value(self, fullname, valuename):
+        ret = ''
+        key = _reg_open_key(fullname)
+        if key != None:
+            info = RegQueryValueEx(key, valuename)
+            ret = info[0].upper()
+            RegCloseKey(key)
+        return ret
+
+    def processtriggerX(self, sender):
+        path = os.path.dirname(sender.statusTip())
+        t = Thread(target=self.runCmd, args=(sender.statusTip(), path))
         t.start()
 
     def get_current_version(self):
@@ -323,13 +331,13 @@ class window(QMainWindow):
     def fun_timer(self):
         # print(time.strftime('%Y-%m-%d %H:%M:%S'))
         global timer
-        timer = Timer(timer_interval, self.fun_timer)
+        timer = Timer(_interval, self.fun_timer)
         timer.start()
         if not self.out_queue.empty():
             for i in range(self.out_queue.qsize()):
                 item = self.out_queue.get()  # q.get会阻塞，q.get_nowait()不阻塞，但会抛异常
                 argv = "任务%s已完成" % item.id
-                subprocess.call("F:/GitHub/PycharmProjects/PyQtTest/dist/MessageBox.exe %s" % argv, shell=False, stdin=None, stdout=None, stderr=None, timeout=None)
+                subprocess.call(os.path.join(_dirname, "MessageBox.exe %s" % argv), shell=False, stdin=None, stdout=None, stderr=None, timeout=None)
 
 
 class Task(object):
@@ -344,10 +352,8 @@ class Task(object):
 
 class ClosableQueue(Queue):
     TERMINATOR = Task()
-
     def close(self):
         self.put(self.TERMINATOR)
-
     def __iter__(self):
         while True:
             item = self.get()
@@ -380,7 +386,11 @@ class VERSION:
 
 
 if __name__ == "__main__":
+    _abspath = sys.argv[0]
+    _basename = os.path.basename(_abspath)
+    _dirname = os.path.dirname(_abspath)
     _dict = {}
+    _interval = 1
     conf = configparser.ConfigParser()
     conf.read('cfg.ini', encoding='utf-16')
     for sec in conf.sections():
@@ -389,9 +399,8 @@ if __name__ == "__main__":
         ver.name = conf.get(sec, 'name')
         ver.base_path = conf.get(sec, 'base_path')
         _dict[sec] = ver
-    print(_dict)
+    # print(_dict)
 
-    timer_interval = 1
     app = QApplication(sys.argv)
     app.setWindowIcon(QtGui.QIcon(":/images/scheduler.ico"))
     win = window()

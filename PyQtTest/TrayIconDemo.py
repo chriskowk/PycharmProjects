@@ -13,8 +13,12 @@ import time
 import win32gui
 from win32api import *
 from win32con import *
+import win32event
+import win32process
 import ctypes
 import win32com.client
+from win32com import *
+
 import configparser
 from PyQt5.QtCore import pyqtSlot
 import copy
@@ -91,7 +95,7 @@ class TrayIcon(QSystemTrayIcon):
     def get_values(self, fullname):
         ret = []
         key = _reg_open_key(fullname)
-        if key != None:
+        if key is not None:
             info = RegQueryInfoKey(key)
             for i in range(0, info[1]):
                 valuename = RegEnumValue(key, i)
@@ -159,20 +163,19 @@ def _get_reg_basepath():
     ret = _get_version().base_path
     return ret
 
-def _get_regfilepath():
-    v = _get_version()
+def _get_regfilepath(key=''):
+    v = _get_version() if key=='' else _dict[key]
     ret = "%s\\BatchFiles\\注册表\\%s注册表.reg" % (v.base_path, v.name) if v.base_path != '' else ''
     return ret
 
 def _get_key_value(fullname, valuename):
     ret = ''
     key = _reg_open_key(fullname)
-    if key != None:
+    if key is not None:
         info = RegQueryValueEx(key, valuename)
         ret = info[0].upper()
         RegCloseKey(key)
     return ret
-
 
 class window(QMainWindow):
     def __init__(self, parent=None):
@@ -199,7 +202,7 @@ class window(QMainWindow):
 
         self.mu2 = QMenu()
         act0 = QAction(icon=QtGui.QIcon(":/images/setup1.png"), text="服务", parent=self.mu2, triggered=self.restart_service)
-        act1 = QAction(text="配置", parent=self.mu2)
+        act1 = QAction(text="所有配置", parent=self.mu2, triggered=self.restart_all)
         act2 = QAction(text="调度计划", parent=self.mu2)
         self.mu2.addAction(act0)
         self.mu2.addAction(act1)
@@ -290,12 +293,17 @@ class window(QMainWindow):
         found = False
         for act in sender.menu().actions():
             if act.isChecked():
-                self.push_queue(Task(act))
+                self.push_queue(Task(act, True))
                 found = True
         if not found:
             self.processtrigger(sender.menu().actions()[0])
 
     def restart_service(self):
+        task = self.get_service_task()
+        if task is not None:
+            self.push_queue(task)
+
+    def get_service_task(self):
         found = False
         computer = "."
         service = "jssvcl"
@@ -303,7 +311,7 @@ class window(QMainWindow):
         objSWbemServices = objWMIService.ConnectServer(computer, "root\cimv2")
         colItems = objSWbemServices.ExecQuery("SELECT * FROM Win32_Service WHERE name = '%s'" % service)
         for item in colItems:
-            oldpath = item.PathName != None and item.PathName or ""
+            oldpath = item.PathName is not None and item.PathName or ""
             self.txtMsg.append("服务已安装在 %s" % oldpath)
             found = True
         if not found:
@@ -312,21 +320,43 @@ class window(QMainWindow):
                 oldpath = '"%s\\Lib\\jssvc.exe"' % bp
             self.txtMsg.append("服务 %s 已卸载，请重新安装服务！" % service)
 
-        if oldpath != None:
+        if oldpath is not None:
             newpath = oldpath
-            key = self.get_current_version()
+            key = self.get_cur_ver_key()
             if key != '':
                 newpath = '"%s\\Lib\\jssvc.exe"' % _dict[key].base_path
             cmd = '_$RestartLocalService.bat %s %s' % (oldpath, newpath)
-            self.push_queue(Task(QAction(text="本地服务", statusTip=cmd), False, _dirname))
+            task = Task(QAction(text="本地服务", statusTip=cmd), False, _dirname)
+        return task
+
+    def restart_all(self):
+        key = self.get_cur_ver_key()
+        if key == '': return
+
+        workdir = os.path.join(_dict[key].base_path, "BatchFiles")
+        r = _get_regfilepath(key)
+        if r != '' and os.path.exists(r) and os.path.isfile(r):
+            # subprocess.call(["C:\\Windows\\regedit.exe", "/s", r], shell=False, cwd="C:\\Windows", stdin=None, stdout=None, stderr=None, timeout=None)
+            task1 = Task(QAction(text="导入注册表文件", statusTip="C:\\Windows\\regedit.exe /s %s" % r), False, "C:\\Windows")
+
+        # subprocess.call(os.path.join(workdir, "__copy2svcbin.bat"), shell=False, cwd=workdir, stdin=None, stdout=None, stderr=None, timeout=None)
+        # subprocess.call(["cmd.exe", "/C", "__copy2svcbin.bat"], shell=False, cwd=workdir, stdin=None, stdout=None, stderr=None, timeout=None)
+        # ShellExecute(0, 'open', os.path.join(workdir, "__copy2svcbin.bat"), '', workdir, 1)  # 最后一个参数bShow: 1(0)表示前台(后台)运行程序; 传递参数path打开指定文件
+        # handle = win32process.CreateProcess(os.path.join(workdir, "__copy2svcbin.bat"), '', None, None, 0, win32process.CREATE_NEW_CONSOLE, None, None, win32process.STARTUPINFO()) # 创建进程获得句柄
+        # win32event.WaitForSingleObject(handle[0], win32event.INFINITE)  # 等待进程结束
+        task2 = Task(QAction(text="执行__copy2svcbin.bat", statusTip=os.path.join(workdir, "__copy2svcbin.bat")), False)
+        task3 = self.get_service_task()
+        if task1 is not None: self.push_queue(task1)
+        if task2 is not None: self.push_queue(task2)
+        if task3 is not None: self.push_queue(task3)
 
     def processtriggerX(self, sender):
         path = os.path.dirname(sender.statusTip())
         t = Thread(target=self.runCmd, args=(sender.statusTip(), path))
         t.start()
 
-    def get_current_version(self):
-        ret = ""
+    def get_cur_ver_key(self):
+        ret = ''
         for act in self.mu1.actions():
             if act.isChecked():
                 ret = act.text(); break
@@ -335,7 +365,7 @@ class window(QMainWindow):
     def processtrigger(self, qaction):
         for act in qaction.parent().actions():
             act.setChecked(True if qaction == act else False)
-        self.push_queue(Task(qaction))
+        self.push_queue(Task(qaction, True))
 
     def push_queue(self, task):
         self.work_queue.put(task)
@@ -366,12 +396,15 @@ class window(QMainWindow):
         if not self.out_queue.empty():
             for i in range(self.out_queue.qsize()):
                 item = self.out_queue.get()  # q.get会阻塞，q.get_nowait()不阻塞，但会抛异常
-                argv = "任务%s已完成" % item.id
-                subprocess.call(os.path.join(_dirname, "MessageBox.exe %s" % argv), shell=False, stdin=None, stdout=None, stderr=None, timeout=None)
+                msg = u"任务%s已完成" % item.id
+                # MessageBox(0, msg, u"任务调度结果", MB_OK | MB_ICONINFORMATION | MB_TOPMOST)
+                # ctypes.windll.user32.MessageBoxA(0, msg.encode('gb2312'), u"任务调度结果".encode('gb2312'), MB_OK | MB_ICONINFORMATION | MB_TOPMOST)
+                # ShellExecute(0, 'open', os.path.join(_dirname, "MessageBox.exe"), msg, _dirname, 1)  # 最后一个参数bShow: 1(0)表示前台(后台)运行程序; 传递参数path打开指定文件
+                subprocess.call([os.path.join(_dirname, "MessageBox.exe"), msg], cwd=_dirname, shell=False, stdin=None, stdout=None, stderr=None, timeout=None)
 
 
 class Task(object):
-    def __init__(self, qaction=QAction(), add_arg=True, path=''):
+    def __init__(self, qaction=QAction(), add_arg=False, path=''):
         self.id = qaction.text()
         self.cmd = qaction.statusTip()
         self.add_arg = add_arg

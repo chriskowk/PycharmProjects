@@ -1,11 +1,11 @@
 # -*- coding:UTF-8 -*-
 import sys
+import os
 from PyQt5 import QtGui
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
 import subprocess
-import os
 from threading import *
 from queue import *
 from PyQt5.QtWidgets import QMessageBox
@@ -51,7 +51,7 @@ class TrayIcon(QSystemTrayIcon):
         keyNames = ['HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run',
                     r'HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run']
         for item in keyNames:
-            if self.get_values(item).__contains__(_abspath.upper()):
+            if _get_valuenames(item).__contains__(_abspath.upper()):
                 ret = True; break
         autorun.setChecked(ret)
         autorun.triggered.connect(self.toggleStartup)
@@ -92,18 +92,6 @@ class TrayIcon(QSystemTrayIcon):
         qApp.quit()
         sys.exit()
 
-    def get_values(self, fullname):
-        ret = []
-        key = _reg_open_key(fullname)
-        if key is not None:
-            info = RegQueryInfoKey(key)
-            for i in range(0, info[1]):
-                valuename = RegEnumValue(key, i)
-                ret.append(valuename[1].upper())
-                # print(str.ljust(valuename[0], 20), valuename[1])
-            RegCloseKey(key)
-        return ret
-
     def toggleStartup(self, checked):
         remove = not checked
         try:
@@ -130,6 +118,18 @@ def _get_work_area():
     rect = RECT()
     ctypes.windll.user32.SystemParametersInfoA(SPI_GETWORKAREA, 0, ctypes.byref(rect), 0)
     return rect
+
+def _get_valuenames(fullname):
+    ret = []
+    key = _reg_open_key(fullname)
+    if key is not None:
+        info = RegQueryInfoKey(key)
+        for i in range(0, info[1]):
+            valuename = RegEnumValue(key, i)
+            ret.append(valuename[1].upper())
+            # print(str.ljust(valuename[0], 20), valuename[1])
+        RegCloseKey(key)
+    return ret
 
 def _reg_open_key(fullname):
     name = str.split(fullname, '\\', 1)
@@ -237,6 +237,10 @@ class window(QMainWindow):
     @pyqtSlot()
     def on_edit_textChanged(self):
         self.txtMsg.ensureCursorVisible()
+
+    @pyqtSlot(int, int)
+    def change_scroll(self, min, max):
+        self.txtMsg.verticalScrollBar().setSliderPosition(max)
 
     # 覆写窗口隐藏事件
     def hideEvent(self, event) :
@@ -397,10 +401,10 @@ class window(QMainWindow):
             for i in range(self.out_queue.qsize()):
                 item = self.out_queue.get()  # q.get会阻塞，q.get_nowait()不阻塞，但会抛异常
                 msg = u"任务%s已完成" % item.id
-                # MessageBox(0, msg, u"任务调度结果", MB_OK | MB_ICONINFORMATION | MB_TOPMOST)
+                MessageBox(0, msg, u"任务调度结果", MB_OK | MB_ICONINFORMATION | MB_TOPMOST)
                 # ctypes.windll.user32.MessageBoxA(0, msg.encode('gb2312'), u"任务调度结果".encode('gb2312'), MB_OK | MB_ICONINFORMATION | MB_TOPMOST)
                 # ShellExecute(0, 'open', os.path.join(_dirname, "MessageBox.exe"), msg, _dirname, 1)  # 最后一个参数bShow: 1(0)表示前台(后台)运行程序; 传递参数path打开指定文件
-                subprocess.call([os.path.join(_dirname, "MessageBox.exe"), msg], cwd=_dirname, shell=False, stdin=None, stdout=None, stderr=None, timeout=None)
+                # subprocess.call([os.path.join(_dirname, "MessageBox.exe"), msg], cwd=_dirname, shell=False, stdin=None, stdout=None, stderr=None, timeout=None)
 
 
 class Task(object):

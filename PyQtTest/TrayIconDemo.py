@@ -374,6 +374,7 @@ class window(QMainWindow):
     def push_queue(self, task):
         self.work_queue.put(task)
         self.txtMsg.append("%s: %s 任务已入队，等待执行中..." % (time.strftime('%H:%M:%S'), task.id))
+        self.txtMsg.moveCursor(QTextCursor.End)
         # self.work_queue.close()
         # self.work_queue.join()
 

@@ -302,6 +302,11 @@ class window(QMainWindow):
         if not found:
             self.processtrigger(sender.menu().actions()[0])
 
+    def showStatus(self, text, movecursor=True):
+        self.txtMsg.append(text)
+        if movecursor:
+            self.txtMsg.moveCursor(QTextCursor.End)
+
     def restart_service(self):
         task = self.get_service_task()
         if task is not None:
@@ -316,13 +321,13 @@ class window(QMainWindow):
         colItems = objSWbemServices.ExecQuery("SELECT * FROM Win32_Service WHERE name = '%s'" % service)
         for item in colItems:
             oldpath = item.PathName is not None and item.PathName or ""
-            self.txtMsg.append("%s: 服务已安装在 %s" % (time.strftime('%H:%M:%S'), oldpath))
+            self.showStatus("%s: 服务已安装在 %s" % (time.strftime('%H:%M:%S'), oldpath))
             found = True
         if not found:
             bp = _get_reg_basepath()
             if bp != '':
                 oldpath = '"%s\\Lib\\jssvc.exe"' % bp
-            self.txtMsg.append("%s: 服务 %s 已卸载，请重新安装！" % (time.strftime('%H:%M:%S'), service))
+            self.showStatus("%s: 服务 %s 已卸载，请重新安装！" % (time.strftime('%H:%M:%S'), service))
 
         if oldpath is not None:
             newpath = oldpath
@@ -373,8 +378,7 @@ class window(QMainWindow):
 
     def push_queue(self, task):
         self.work_queue.put(task)
-        self.txtMsg.append("%s: %s 任务已入队，等待执行中..." % (time.strftime('%H:%M:%S'), task.id))
-        self.txtMsg.moveCursor(QTextCursor.End)
+        self.showStatus("%s: %s 任务已入队，等待执行中..." % (time.strftime('%H:%M:%S'), task.id))
         # self.work_queue.close()
         # self.work_queue.join()
 
@@ -390,7 +394,7 @@ class window(QMainWindow):
         cmd = '%s "%s"' % (task.cmd, _get_regfilepath()) if task.add_arg else task.cmd
         subprocess.call(cmd, shell=False, cwd=task.path, stdin=None, stdout=None, stderr=None, timeout=None)
         print("Worker Solve: %s" % task)
-        self.txtMsg.append("%s: %s 任务已执行结束。" % (time.strftime('%H:%M:%S'), task.id))
+        self.showStatus("%s: %s 任务已执行结束。" % (time.strftime('%H:%M:%S'), task.id))
         return task
 
     def fun_timer(self):

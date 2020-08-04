@@ -218,6 +218,8 @@ class window(QMainWindow):
         setup = QAction(QtGui.QIcon(":/images/setup.png"), "设置", self)
         setup.setMenu(self.mu2)
         tbrMain.addAction(setup)
+        clear = QAction(icon=QtGui.QIcon(":/images/clear.png"), text="清空队列", parent=self, triggered=self.clear_work_queue)
+        tbrMain.addAction(clear)
         tbrExit = self.addToolBar("Exit")
         exit = QAction(QtGui.QIcon(":/images/close.png"), "退出", self)
         tbrExit.addAction(exit)
@@ -359,17 +361,17 @@ class window(QMainWindow):
         if task2 is not None: self.push_queue(task2)
         if task3 is not None: self.push_queue(task3)
 
-    def processtriggerX(self, sender):
-        path = os.path.dirname(sender.statusTip())
-        t = Thread(target=self.runCmd, args=(sender.statusTip(), path))
-        t.start()
-
     def get_cur_ver_key(self):
         ret = ''
         for act in self.mu1.actions():
             if act.isChecked():
                 ret = act.text(); break
         return ret
+
+    def processtriggerX(self, sender):
+        path = os.path.dirname(sender.statusTip())
+        t = Thread(target=self.runCmd, args=(sender.statusTip(), path))
+        t.start()
 
     def processtrigger(self, qaction):
         for act in qaction.parent().actions():
@@ -396,6 +398,18 @@ class window(QMainWindow):
         print("Worker Solve: %s" % task)
         self.showStatus("%s: %s 任务已执行结束。" % (time.strftime('%H:%M:%S'), task.id))
         return task
+
+    def clear_work_queue(self):
+        try:
+            self.txtMsg.clear()
+            while not self.work_queue.empty():
+                task = self.work_queue.get(False)
+                self.showStatus("%s: %s 任务已移除..." % (time.strftime('%H:%M:%S'), task.id))
+        except Queue.Empty:
+            pass  # Handle empty queue here
+        else:
+            return  # Handle task here and call q.task_done()
+
 
     def fun_timer(self):
         # print(time.strftime('%Y-%m-%d %H:%M:%S'))
@@ -443,11 +457,11 @@ class Consumer(Thread):
     def __init__(self, func, work_queue, out_queue):
         super().__init__()
         self.func = func
-        self.task = work_queue
+        self.work_queue = work_queue
         self.out_queue = out_queue
 
     def run(self):
-        for item in self.task:
+        for item in self.work_queue:
             result = self.func(item)
             self.out_queue.put(result)
 

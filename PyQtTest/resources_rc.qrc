@@ -19,5 +19,7 @@
     <file alias="closeeye.png">images/closeeye.png</file>
     <file alias="screen.png">images/screen.png</file>
     <file alias="noscreen.png">images/noscreen.png</file>
+    <file alias="recycle.png">images/recycle.png</file>
+    <file alias="clear.png">images/clear.png</file>
 </qresource>
 </RCC>

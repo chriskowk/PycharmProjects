@@ -417,6 +417,7 @@ class window(QMainWindow):
     def subprocess_check_output(self, *args):
         p = subprocess.Popen(*args, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         out, err = p.communicate()
+        status = p.wait()
         return out
         # msg = ''
         # for line in p.stdout.readlines():

@@ -44,6 +44,11 @@ class TrayIcon(QSystemTrayIcon):
         for item in self.parent().mu1.actions():
             self.menu2.addAction(item)
 
+        self.menu3 = QMenu("下载最新")
+        self.menu3.setIcon(QtGui.QIcon(":/images/download.png"))
+        for item in self.parent().mu3.actions():
+            self.menu3.addAction(item)
+
         self.showme = QAction(icon=QtGui.QIcon(":/images/screen.png"), text="显示", parent=self, triggered=self.parent().toggleVisibility)
         mainmenu.addAction(self.showme)
         autorun = QAction("下次自动启动", self, checkable=True)
@@ -56,13 +61,10 @@ class TrayIcon(QSystemTrayIcon):
         autorun.setChecked(ret)
         autorun.triggered.connect(self.toggleStartup)
         mainmenu.addAction(autorun)
-
         mainmenu.addSeparator()
         mainmenu.addMenu(self.menu1)
         mainmenu.addMenu(self.menu2)
-        pause = QAction(icon=QtGui.QIcon(":/images/pause.png"), text="暂停调度", parent=self)
-        mainmenu.addAction(pause)
-
+        mainmenu.addMenu(self.menu3)
         mainmenu.addSeparator()
         exit = QAction(QtGui.QIcon(":/images/exit.png"), "退出", self, triggered=self.quit)
         mainmenu.addAction(exit)
@@ -209,12 +211,22 @@ class window(QMainWindow):
         self.mu2.addAction(act2)
         self.mu2.setTearOffEnabled(False)
 
+        self.mu3 = QMenu()
+        for item in _dict.items():
+            act = QAction(text=item[1].name, checkable=True, parent=self.mu3)
+            act.setStatusTip("%s\\BatchFiles\\TF_GET_MedicalHealth.bat" % item[1].base_path)
+            self.mu3.addAction(act)
+        self.mu3.actions()[0].setIcon(QtGui.QIcon(":/images/location.png"))
+        self.mu3.setTearOffEnabled(False)
+        self.mu3.triggered[QAction].connect(self.get_latest_version)
+
         tbrMain = self.addToolBar("Scheduler")
         start = QAction(QtGui.QIcon(":/images/start.png"), "启动", self)
         start.setMenu(self.mu1)
         tbrMain.addAction(start)
-        pause = QAction(QtGui.QIcon(":/images/pause.png"), "暂停", self)
-        tbrMain.addAction(pause)
+        getlatest = QAction(QtGui.QIcon(":/images/download.png"), "下载", self)
+        getlatest.setMenu(self.mu3)
+        tbrMain.addAction(getlatest)
         setup = QAction(QtGui.QIcon(":/images/setup.png"), "设置", self)
         setup.setMenu(self.mu2)
         tbrMain.addAction(setup)
@@ -289,8 +301,8 @@ class window(QMainWindow):
         opt = sender.text()
         if opt == "启动":
             self.start_default(sender)
-        elif opt == "暂停":
-            print("按下的ToolBar按钮是 %s" % opt)
+        elif opt == "下载":
+            self.get_latest_default(sender)
         elif opt == "设置":
             print("按下的ToolBar按钮是 %s" % opt)
         self.status.showMessage("正在执行 %s ..." % opt, 5000)
@@ -399,6 +411,44 @@ class window(QMainWindow):
         self.showStatus("%s: %s 任务已执行结束。" % (time.strftime('%H:%M:%S'), task.id))
         return task
 
+    # 使用pyinstaller打包python程序，使用 - w参数，去掉console，发现执行命令行的subprocess相关语句报“[ERROR][WinError 6] 句柄无效”的错误。去掉 - w参数，将console显示的话，就正常
+    # 可行的解决方案是用subpross.Popen来替代subprocess.check_output，Popen函数加入如下参数：shell = True, stdin = subprocess.PIPE, stdout = subprocess.PIPE, stderr = subprocess.PIPE
+    # Popen方法执行命令，父进程不会等待子进程。这个时候需要用wait()方法来等待运行的结果（所以定义如下方法提供本地调用）。
+    def subprocess_check_output(self, *args):
+        p = subprocess.Popen(*args, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        out, err = p.communicate()
+        return out
+        # msg = ''
+        # for line in p.stdout.readlines():
+        #     msg += line.decode("gbk", "ignore")
+        # status = p.wait()
+        # return msg
+
+    def get_latest_version(self, qaction):
+        try:
+            for act in qaction.parent().actions():
+                act.setChecked(True if qaction == act else False)
+            workdir = os.path.join(_dict[qaction.text()].base_path, "BatchFiles")
+            fn = os.path.join(workdir, "TF_GET_MedicalHealth.bat")
+            # self.showStatus("%s: 执行命令 %s ..." % (time.strftime('%H:%M:%S'), fn))
+            if os.path.exists(fn) and os.path.isfile(fn):
+                output = self.subprocess_check_output(fn)
+                response = output.decode("gbk", "ignore")
+                self.showStatus("%s: 下载最新[%s]...\r\n%s" % (time.strftime('%H:%M:%S'), qaction.text(), response))
+        except Exception as e:
+            self.showStatus(str(e))
+        finally:
+            return
+
+    def get_latest_default(self, sender):
+        found = False
+        for act in sender.menu().actions():
+            if act.isChecked():
+                self.get_latest_version(act)
+                found = True
+        if not found:
+            self.get_latest_version(sender.menu().actions()[0])
+
     def clear_work_queue(self):
         try:
             self.txtMsg.clear()
@@ -410,7 +460,6 @@ class window(QMainWindow):
         else:
             return  # Handle task here and call q.task_done()
 
-
     def fun_timer(self):
         # print(time.strftime('%Y-%m-%d %H:%M:%S'))
         global timer
@@ -420,11 +469,10 @@ class window(QMainWindow):
             for i in range(self.out_queue.qsize()):
                 item = self.out_queue.get()  # q.get会阻塞，q.get_nowait()不阻塞，但会抛异常
                 msg = u"任务%s已完成" % item.id
-                MessageBox(0, msg, u"任务调度结果", MB_OK | MB_ICONINFORMATION | MB_TOPMOST)
+                # MessageBox(0, msg, u"任务调度结果", MB_OK | MB_ICONINFORMATION | MB_TOPMOST)
                 # ctypes.windll.user32.MessageBoxA(0, msg.encode('gb2312'), u"任务调度结果".encode('gb2312'), MB_OK | MB_ICONINFORMATION | MB_TOPMOST)
                 # ShellExecute(0, 'open', os.path.join(_dirname, "MessageBox.exe"), msg, _dirname, 1)  # 最后一个参数bShow: 1(0)表示前台(后台)运行程序; 传递参数path打开指定文件
-                # subprocess.call([os.path.join(_dirname, "MessageBox.exe"), msg], cwd=_dirname, shell=False, stdin=None, stdout=None, stderr=None, timeout=None)
-
+                subprocess.call([os.path.join(_dirname, "MessageBox.exe"), msg], cwd=_dirname, shell=False, stdin=None, stdout=None, stderr=None, timeout=None)
 
 class Task(object):
     def __init__(self, qaction=QAction(), add_arg=False, path=''):

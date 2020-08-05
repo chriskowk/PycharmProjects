@@ -21,5 +21,6 @@
     <file alias="noscreen.png">images/noscreen.png</file>
     <file alias="recycle.png">images/recycle.png</file>
     <file alias="clear.png">images/clear.png</file>
+    <file alias="download.png">images/download.png</file>
 </qresource>
 </RCC>

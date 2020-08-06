@@ -188,7 +188,7 @@ class window(QMainWindow):
         self.resize(400, 300)
         self.setGeometry(rect.right-self.width()-10, rect.bottom-self.height()-10, self.width(), self.height())
         self.status = self.statusBar()
-        self.setWindowIcon(QtGui.QIcon(':/images/scheduler.ico'))
+        self.setWindowIcon(QtGui.QIcon(':/images/clock.ico'))
         self.work_queue = ClosableQueue()
         self.out_queue = ClosableQueue()
         consumer = Consumer(self.run, self.work_queue, self.out_queue)
@@ -528,7 +528,7 @@ if __name__ == "__main__":
     print(_dict)
 
     app = QApplication(sys.argv)
-    app.setWindowIcon(QtGui.QIcon(":/images/scheduler.ico"))
+    app.setWindowIcon(QtGui.QIcon(":/images/clock.ico"))
     win = window()
     win.hide()
     win.fun_timer()

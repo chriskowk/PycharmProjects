@@ -22,5 +22,8 @@
     <file alias="recycle.png">images/recycle.png</file>
     <file alias="clear.png">images/clear.png</file>
     <file alias="download.png">images/download.png</file>
+    <file alias="upload.png">images/upload.png</file>
+    <file alias="clock.png">images/clock.png</file>
+    <file alias="clock.ico">images/clock.ico</file>
 </qresource>
 </RCC>

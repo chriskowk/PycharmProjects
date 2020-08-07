@@ -9,6 +9,7 @@ import subprocess
 from threading import *
 from queue import *
 from PyQt5.QtWidgets import QMessageBox
+import datetime
 import time
 import win32gui
 from win32api import *
@@ -154,11 +155,14 @@ def _reg_open_key(fullname):
     return key
 
 class VERSION:
-    def __init__(self, key='', name='', path='', url=''):
+    def __init__(self, key='', name='', path='', url='', fireon='N/A', task=None):
+        self.task = task
         self.key = key
         self.name = name
         self.base_path = path
         self.tfs_url = url
+        self.fire_enabled = not fireon.upper().__contains__("N/A")
+        self.fire_on = self.fire_enabled and datetime.datetime.strptime(fireon, "%H:%M" if len(fireon) == 5 else "%H:%M:%S").time() or None
 
 def _get_version():
     ret = VERSION()
@@ -205,6 +209,7 @@ class window(QMainWindow):
             act = QAction(text=item[1].name, checkable=True, parent=self.mu1)
             act.setStatusTip("%s\\BatchFiles\\全编译Upload.bat" % item[1].base_path)
             self.mu1.addAction(act)
+            item[1].task = Task(act, True)
         self.mu1.actions()[0].setIcon(QtGui.QIcon(":/images/location.png"))
         self.mu1.setTearOffEnabled(False)
         self.mu1.triggered[QAction].connect(self.processtrigger)
@@ -495,10 +500,22 @@ class window(QMainWindow):
             return  # Handle task here and call q.task_done()
 
     def fun_timer(self):
-        # print(time.strftime('%Y-%m-%d %H:%M:%S'))
         global timer
+        # print(time.strftime('%Y-%m-%d %H:%M:%S'))
         timer = Timer(_interval, self.fun_timer)
         timer.start()
+        self.check_fired()
+        self.check_finished()
+
+    def check_fired(self):
+        for item in _dict.items():
+            if item[1].fire_enabled:
+                dt = datetime.datetime.now().time()
+                dt = datetime.time(dt.hour, dt.minute, dt.second)
+                if dt == item[1].fire_on:
+                    self.push_queue(item[1].task)
+
+    def check_finished(self):
         if not self.out_queue.empty():
             for i in range(self.out_queue.qsize()):
                 item = self.out_queue.get()  # q.get会阻塞，q.get_nowait()不阻塞，但会抛异常
@@ -557,7 +574,7 @@ if __name__ == "__main__":
     _conf = configparser.ConfigParser()
     _conf.read('cfg.ini', encoding='utf-16')
     for sec in _conf.sections():
-        _dict[sec] = VERSION(_conf.get(sec, 'key'), _conf.get(sec, 'name'), _conf.get(sec, 'base-path'), _conf.get(sec, 'tfs-url'))
+        _dict[sec] = VERSION(_conf.get(sec, 'key'), _conf.get(sec, 'name'), _conf.get(sec, 'base-path'), _conf.get(sec, 'tfs-url'), _conf.get(sec, 'fire-on'))
     print(_dict)
 
     app = QApplication(sys.argv)

@@ -161,8 +161,12 @@ class VERSION:
         self.name = name
         self.base_path = path
         self.tfs_url = url
+        fireon = fireon.replace(" ", "")
         self.fire_enabled = not fireon.upper().__contains__("N/A")
-        self.fire_on = self.fire_enabled and datetime.datetime.strptime(fireon, "%H:%M" if len(fireon) == 5 else "%H:%M:%S").time() or None
+        self.fire_on = []
+        if self.fire_enabled:
+            for item in fireon.split(";"):
+                self.fire_on.append(datetime.datetime.strptime(item, "%H:%M" if len(item) == 5 else "%H:%M:%S").time() or None)
 
 def _get_version():
     ret = VERSION()
@@ -512,7 +516,7 @@ class window(QMainWindow):
             if item[1].fire_enabled:
                 dt = datetime.datetime.now().time()
                 dt = datetime.time(dt.hour, dt.minute, dt.second)
-                if dt == item[1].fire_on:
+                if dt in item[1].fire_on:
                     self.push_queue(item[1].task)
 
     def check_finished(self):

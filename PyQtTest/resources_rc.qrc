@@ -25,5 +25,6 @@
     <file alias="upload.png">images/upload.png</file>
     <file alias="clock.png">images/clock.png</file>
     <file alias="clock.ico">images/clock.ico</file>
+    <file alias="history.png">images/history.png</file>
 </qresource>
 </RCC>

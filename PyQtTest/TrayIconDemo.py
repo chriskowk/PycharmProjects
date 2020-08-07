@@ -49,6 +49,11 @@ class TrayIcon(QSystemTrayIcon):
         for item in self.parent().mu3.actions():
             self.menu3.addAction(item)
 
+        self.menu4 = QMenu("查看历史")
+        self.menu4.setIcon(QtGui.QIcon(":/images/history.png"))
+        for item in self.parent().mu4.actions():
+            self.menu4.addAction(item)
+
         self.showme = QAction(icon=QtGui.QIcon(":/images/screen.png"), text="显示", parent=self, triggered=self.parent().toggleVisibility)
         mainmenu.addAction(self.showme)
         autorun = QAction("下次自动启动", self, checkable=True)
@@ -65,6 +70,7 @@ class TrayIcon(QSystemTrayIcon):
         mainmenu.addMenu(self.menu1)
         mainmenu.addMenu(self.menu2)
         mainmenu.addMenu(self.menu3)
+        mainmenu.addMenu(self.menu4)
         mainmenu.addSeparator()
         exit = QAction(QtGui.QIcon(":/images/exit.png"), "退出", self, triggered=self.quit)
         mainmenu.addAction(exit)
@@ -148,10 +154,11 @@ def _reg_open_key(fullname):
     return key
 
 class VERSION:
-    def __init__(self, key='', name='', path=''):
+    def __init__(self, key='', name='', path='', url=''):
         self.key = key
         self.name = name
         self.base_path = path
+        self.tfs_url = url
 
 def _get_version():
     ret = VERSION()
@@ -220,6 +227,15 @@ class window(QMainWindow):
         self.mu3.setTearOffEnabled(False)
         self.mu3.triggered[QAction].connect(self.get_latest_version)
 
+        self.mu4 = QMenu()
+        for item in _dict.items():
+            act = QAction(text=item[1].name, checkable=True, parent=self.mu4)
+            act.setStatusTip("%s %s" % (os.path.join(_dirname, "TFSH.exe"), item[1].tfs_url))
+            self.mu4.addAction(act)
+        self.mu4.actions()[0].setIcon(QtGui.QIcon(":/images/location.png"))
+        self.mu4.setTearOffEnabled(False)
+        self.mu4.triggered[QAction].connect(self.show_latest_history)
+
         tbrMain = self.addToolBar("Scheduler")
         start = QAction(QtGui.QIcon(":/images/start.png"), "启动", self)
         start.setMenu(self.mu1)
@@ -227,6 +243,9 @@ class window(QMainWindow):
         getlatest = QAction(QtGui.QIcon(":/images/download.png"), "下载", self)
         getlatest.setMenu(self.mu3)
         tbrMain.addAction(getlatest)
+        showhistory = QAction(QtGui.QIcon(":/images/history.png"), "历史", self)
+        showhistory.setMenu(self.mu4)
+        tbrMain.addAction(showhistory)
         setup = QAction(QtGui.QIcon(":/images/setup.png"), "设置", self)
         setup.setMenu(self.mu2)
         tbrMain.addAction(setup)
@@ -435,7 +454,21 @@ class window(QMainWindow):
             if os.path.exists(fn) and os.path.isfile(fn):
                 output = self.subprocess_check_output(fn)
                 response = output.decode("gbk", "ignore")
-                self.showStatus("%s: 下载最新[%s]...\r\n%s" % (time.strftime('%H:%M:%S'), qaction.text(), response))
+                self.txtMsg.setText("%s: 下载最新[%s]...\r\n%s" % (time.strftime('%H:%M:%S'), qaction.text(), response))
+        except Exception as e:
+            self.showStatus(str(e))
+        finally:
+            return
+
+    def show_latest_history(self, qaction):
+        try:
+            for act in qaction.parent().actions():
+                act.setChecked(True if qaction == act else False)
+            fn = os.path.join(_dirname, "TFSH.exe")
+            if os.path.exists(fn) and os.path.isfile(fn):
+                output = self.subprocess_check_output([fn, _dict[qaction.text()].tfs_url])
+                response = output.decode("gbk", "ignore")
+                self.txtMsg.setText("%s: 查看历史[%s]...\r\n%s" % (time.strftime('%H:%M:%S'), qaction.text(), response))
         except Exception as e:
             self.showStatus(str(e))
         finally:
@@ -524,7 +557,7 @@ if __name__ == "__main__":
     _conf = configparser.ConfigParser()
     _conf.read('cfg.ini', encoding='utf-16')
     for sec in _conf.sections():
-        _dict[sec] = VERSION(_conf.get(sec, 'key'), _conf.get(sec, 'name'), _conf.get(sec, 'base_path'))
+        _dict[sec] = VERSION(_conf.get(sec, 'key'), _conf.get(sec, 'name'), _conf.get(sec, 'base-path'), _conf.get(sec, 'tfs-url'))
     print(_dict)
 
     app = QApplication(sys.argv)

@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="ff5e2e34-04e0-44ed-9206-1a7c575d6306" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/PyQtTest/TrayIconDemo.py" beforeDir="false" afterPath="$PROJECT_DIR$/PyQtTest/TrayIconDemo.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PyQtTest/cfg.ini" beforeDir="false" afterPath="$PROJECT_DIR$/PyQtTest/cfg.ini" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -13,34 +14,10 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/PyQtTest/testlayout_main.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state>
-              <caret column="7" selection-start-column="7" selection-end-column="7" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/PyQtTest/TrayIconDemo.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="228">
-              <caret line="197" column="19" lean-forward="true" selection-start-line="197" selection-start-column="19" selection-end-line="197" selection-end-column="19" />
-              <folding>
-                <element signature="e#0#10#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/PyQtTest/producer.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="638">
-              <caret line="56" column="20" selection-start-line="56" selection-start-column="20" selection-end-line="56" selection-end-column="20" />
-              <folding>
-                <element signature="e#39#67#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="1386">
+              <caret line="64" column="13" selection-start-line="64" selection-start-column="13" selection-end-line="64" selection-end-column="13" />
             </state>
           </provider>
         </entry>
@@ -48,7 +25,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/PyQtTest/ping.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="358">
+            <state relative-caret-position="528">
               <caret line="29" column="58" selection-start-line="29" selection-start-column="31" selection-end-line="29" selection-end-column="58" />
               <folding>
                 <element signature="e#0#28#0" expanded="true" />
@@ -57,32 +34,68 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/PyQtTest/feedparser.py">
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/PyQtTest/TrayIconDemo.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="440">
-              <caret line="20" column="21" selection-start-line="20" selection-start-column="21" selection-end-line="20" selection-end-column="21" />
+            <state relative-caret-position="310">
+              <caret line="163" column="40" lean-forward="true" selection-start-line="163" selection-start-column="40" selection-end-line="163" selection-end-column="40" />
               <folding>
-                <element signature="e#0#11#0" expanded="true" />
+                <element signature="e#23#33#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/PyQtTest/resources_rc.qrc">
+        <entry file="file://$PROJECT_DIR$/PyQtTest/readme.txt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="286">
-              <caret line="13" column="46" selection-start-line="13" selection-start-column="46" selection-end-line="13" selection-end-column="46" />
+            <state relative-caret-position="22">
+              <caret line="1" selection-start-line="1" selection-end-line="1" selection-end-column="83" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/UITestCase/Common/hellowin.py">
+        <entry file="file://D:/Program Files (x86)/Microsoft Visual Studio/Shared/Python37_64/Lib/threading.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="88">
-              <caret line="4" selection-end-line="4" />
+            <state relative-caret-position="168">
+              <caret line="1176" selection-start-line="1176" selection-end-line="1176" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://D:/Program Files (x86)/Microsoft Visual Studio/Shared/Python37_64/Lib/_strptime.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="300">
+              <caret line="364" column="19" selection-start-line="364" selection-start-column="19" selection-end-line="364" selection-end-column="19" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://D:/Program Files (x86)/Microsoft Visual Studio/Shared/Python37_64/Lib/configparser.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="268">
+              <caret line="790" selection-start-line="790" selection-end-line="790" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://D:/Program Files (x86)/Microsoft Visual Studio/Shared/Python37_64/Lib/subprocess.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="19294">
+              <caret line="877" selection-start-line="877" selection-end-line="877" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/PyQtTest/eventfilter.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="44">
+              <caret line="3" column="32" selection-start-line="3" selection-start-column="32" selection-end-line="3" selection-end-column="32" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
               </folding>
@@ -91,9 +104,11 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/PyQtTest/testlayout.py">
+        <entry file="file://$PROJECT_DIR$/PyQtTest/win32services.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-5" />
+            <state relative-caret-position="286">
+              <caret line="13" selection-start-line="13" selection-end-line="13" />
+            </state>
           </provider>
         </entry>
       </file>
@@ -108,27 +123,45 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>tray</find>
-      <find>QIcon(&quot;images/</find>
-      <find>QIcon('images/</find>
-      <find>tray.ico</find>
-      <find>.ico</find>
-      <find>get_all_device_status</find>
-      <find>threading</find>
-      <find>run</find>
-      <find>runCmd</find>
-      <find>text()</find>
-      <find>task</find>
-      <find>checkable</find>
-      <find>enclosure_queue</find>
-      <find>append_result</find>
-      <find>txtMsg</find>
+      <find>self.txtMsg</find>
+      <find>isChecked</find>
+      <find>get_cur_ver_key</find>
       <find>processtrigger</find>
-      <find>\r\n</find>
+      <find>暂停</find>
+      <find>utf</find>
+      <find>取</find>
+      <find>获取</find>
+      <find>decode</find>
+      <find>except</find>
+      <find>download.png</find>
+      <find>download1.png</find>
+      <find>setup</find>
+      <find>scheduler</find>
+      <find>base_path</find>
+      <find>_dict[</find>
+      <find>show_latest_history</find>
+      <find>upper</find>
+      <find>if</find>
+      <find>and</find>
+      <find>_interval</find>
+      <find>fun_timer</find>
+      <find>func</find>
+      <find>==</find>
+      <find>push_queue</find>
+      <find>_dt</find>
+      <find>oldpath</find>
+      <find>fire_on</find>
+      <find>strip</find>
+      <find>VERSION</find>
     </findStrings>
     <replaceStrings>
       <replace>QtGui.QIcon(':/images/</replace>
       <replace>QtGui.QIcon(&quot;:/images/</replace>
+      <replace>: %s&quot; %</replace>
+      <replace>)</replace>
+      <replace>autorun</replace>
+      <replace>_conf</replace>
+      <replace>showStatus</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -137,10 +170,15 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/PyQtTest/resources_rc.qrc" />
         <option value="$PROJECT_DIR$/PyQtTest/feedparser.py" />
         <option value="$PROJECT_DIR$/PyQtTest/ping.py" />
         <option value="$PROJECT_DIR$/PyQtTest/producer.py" />
+        <option value="$PROJECT_DIR$/PyQtTest/regaccess.py" />
+        <option value="$PROJECT_DIR$/PyQtTest/workarea.py" />
+        <option value="$PROJECT_DIR$/PyQtTest/eventfilter.py" />
+        <option value="$PROJECT_DIR$/PyQtTest/win32services.py" />
+        <option value="$PROJECT_DIR$/PyQtTest/readme.txt" />
+        <option value="$PROJECT_DIR$/PyQtTest/resources_rc.qrc" />
         <option value="$PROJECT_DIR$/PyQtTest/TrayIconDemo.py" />
       </list>
     </option>
@@ -150,6 +188,9 @@
     <option name="y" value="36" />
     <option name="width" value="1400" />
     <option name="height" value="1000" />
+  </component>
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="1" id="Add" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
@@ -174,12 +215,6 @@
               <item name="PycharmProjects" type="462c0819:PsiDirectoryNode" />
               <item name="UITestCase" type="462c0819:PsiDirectoryNode" />
             </path>
-            <path>
-              <item name="PycharmProjects" type="b2602c69:ProjectViewProjectNode" />
-              <item name="PycharmProjects" type="462c0819:PsiDirectoryNode" />
-              <item name="UITestCase" type="462c0819:PsiDirectoryNode" />
-              <item name="Common" type="462c0819:PsiDirectoryNode" />
-            </path>
           </expand>
           <select />
         </subPane>
@@ -193,7 +228,7 @@
     <property name="last_opened_file_path" value="$PROJECT_DIR$/PyQtTest/images" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
-    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+    <property name="settings.editor.selected.configurable" value="Errors" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -239,7 +274,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="ping" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration name="eventfilter" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="PycharmProjects" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -252,7 +287,7 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/PyQtTest/ping.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/PyQtTest/eventfilter.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -261,7 +296,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="producer" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration name="regaccess" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="PycharmProjects" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -274,7 +309,7 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/PyQtTest/producer.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/PyQtTest/regaccess.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -283,7 +318,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="testlayout_main" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration name="win32services" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="PycharmProjects" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -296,7 +331,29 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/PyQtTest/testlayout_main.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/PyQtTest/win32services.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="workarea" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="PycharmProjects" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/PyQtTest" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/PyQtTest/workarea.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -308,9 +365,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="Python.TrayIconDemo" />
-        <item itemvalue="Python.producer" />
-        <item itemvalue="Python.ping" />
-        <item itemvalue="Python.testlayout_main" />
+        <item itemvalue="Python.win32services" />
+        <item itemvalue="Python.eventfilter" />
+        <item itemvalue="Python.workarea" />
+        <item itemvalue="Python.regaccess" />
       </list>
     </recent_temporary>
   </component>
@@ -334,24 +392,32 @@
       <workItem from="1594884514616" duration="687000" />
       <workItem from="1594885229847" duration="4032000" />
       <workItem from="1594949055076" duration="155000" />
-      <workItem from="1594949247123" duration="32853000" />
+      <workItem from="1594949247123" duration="34113000" />
+      <workItem from="1595163168154" duration="55923000" />
+      <workItem from="1595381675784" duration="8708000" />
+      <workItem from="1595400999404" duration="39230000" />
+      <workItem from="1595575336387" duration="1283000" />
+      <workItem from="1595576653467" duration="5255000" />
+      <workItem from="1595927319396" duration="8986000" />
+      <workItem from="1596439509915" duration="26241000" />
+      <workItem from="1596768552431" duration="12735000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="84212000" />
+    <option name="totallyTimeSpent" value="243833000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.26599148" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.22014925" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32936078" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.31527627" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.3997833" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4225352" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -359,7 +425,7 @@
       <window_info anchor="bottom" id="Version Control" order="8" />
       <window_info anchor="bottom" id="Database Changes" order="9" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="11" visible="true" weight="0.32936078" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="11" visible="true" weight="0.26218852" />
       <window_info anchor="bottom" id="Python Console" order="12" weight="0.32936078" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -372,23 +438,20 @@
     <option name="version" value="1" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/PycharmProjects$TrayIconDemo.coverage" NAME="TrayIconDemo Coverage Results" MODIFIED="1595133312796" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/PyQtTest" />
+    <SUITE FILE_PATH="coverage/PycharmProjects$TrayIconDemo.coverage" NAME="TrayIconDemo Coverage Results" MODIFIED="1596791722827" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/PyQtTest" />
+    <SUITE FILE_PATH="coverage/PycharmProjects$workarea.coverage" NAME="workarea Coverage Results" MODIFIED="1595234370843" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/PyQtTest" />
     <SUITE FILE_PATH="coverage/PycharmProjects$testlayout_main.coverage" NAME="testlayout_main Coverage Results" MODIFIED="1594262355283" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/PyQtTest" />
+    <SUITE FILE_PATH="coverage/PycharmProjects$win32services.coverage" NAME="win32services Coverage Results" MODIFIED="1595314874609" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/PyQtTest" />
     <SUITE FILE_PATH="coverage/PycharmProjects$ping.coverage" NAME="ping Coverage Results" MODIFIED="1594975467036" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/PyQtTest" />
     <SUITE FILE_PATH="coverage/PycharmProjects$producer.coverage" NAME="producer Coverage Results" MODIFIED="1594981828764" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/PyQtTest" />
+    <SUITE FILE_PATH="coverage/PycharmProjects$eventfilter.coverage" NAME="eventfilter Coverage Results" MODIFIED="1595302546008" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/PyQtTest" />
+    <SUITE FILE_PATH="coverage/PycharmProjects$regaccess.coverage" NAME="regaccess Coverage Results" MODIFIED="1595164491235" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/PyQtTest" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$USER_HOME$/.PyCharm2019.1/system/python_stubs/-771540385/PyQt5/QtWidgets/QWidget.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="196">
           <caret line="96" column="8" selection-start-line="96" selection-start-column="8" selection-end-line="96" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://D:/Program Files (x86)/Microsoft Visual Studio/Shared/Python37_64/Lib/subprocess.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="219">
-          <caret line="1206" selection-start-line="1206" selection-end-line="1206" />
         </state>
       </provider>
     </entry>
@@ -413,32 +476,31 @@
         <state relative-caret-position="-1188" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/PyQtTest/resources_rc.qrc">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="286">
-          <caret line="13" column="46" selection-start-line="13" selection-start-column="46" selection-end-line="13" selection-end-column="46" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/PyQtTest/ping.temp">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://D:/Program Files (x86)/Microsoft Visual Studio/Shared/Python37_64/Lib/threading.py">
+    <entry file="file://$PROJECT_DIR$/PyQtTest/feedparser.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="201">
-          <caret line="925" selection-start-line="925" selection-end-line="925" />
+        <state relative-caret-position="352">
+          <caret line="20" column="21" selection-start-line="20" selection-start-column="21" selection-end-line="20" selection-end-column="21" />
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/UITestCase/Common/hellowin.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="88">
+        <state relative-caret-position="22">
           <caret line="4" selection-end-line="4" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
           </folding>
         </state>
       </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PyQtTest/testlayout.py">
+      <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/PyQtTest/testlayout_main.py">
       <provider selected="true" editor-type-id="text-editor">
@@ -447,34 +509,120 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/PyQtTest/producer.py">
+    <entry file="file://D:/Program Files (x86)/Microsoft Visual Studio/Shared/Python37_64/Lib/site-packages/win32com/client/dynamic.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="638">
-          <caret line="56" column="20" selection-start-line="56" selection-start-column="20" selection-end-line="56" selection-end-column="20" />
+        <state relative-caret-position="167">
+          <caret line="526" selection-start-line="526" selection-end-line="526" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://D:/Program Files (x86)/Microsoft Visual Studio/Shared/Python37_64/Lib/site-packages/win32com/client/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="197">
+          <caret line="94" selection-start-line="94" selection-end-line="94" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PyQtTest/regaccess.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1078">
+          <caret line="51" selection-start-line="40" selection-end-line="51" />
           <folding>
-            <element signature="e#39#67#0" expanded="true" />
+            <element signature="e#0#22#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/PyQtTest/testlayout.py">
+    <entry file="file://$PROJECT_DIR$/PyQtTest/workarea.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-5" />
+        <state relative-caret-position="308">
+          <caret line="17" selection-start-line="17" selection-end-line="17" selection-end-column="22" />
+          <folding>
+            <element signature="e#0#13#0" expanded="true" />
+          </folding>
+        </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/PyQtTest/feedparser.py">
+    <entry file="file://D:/Program Files (x86)/Microsoft Visual Studio/Shared/Python37_64/Lib/urllib/parse.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="440">
-          <caret line="20" column="21" selection-start-line="20" selection-start-column="21" selection-end-line="20" selection-end-column="21" />
-          <folding>
-            <element signature="e#0#11#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="17514">
+          <caret line="818" column="55" selection-start-line="818" selection-start-column="55" selection-end-line="818" selection-end-column="55" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://D:/Program Files (x86)/Microsoft Visual Studio/Shared/Python37_64/Lib/codecs.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="7040">
+          <caret line="321" selection-start-line="321" selection-end-line="321" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/.PyCharm2019.1/system/python_stubs/-771540385/PyQt5/QtWidgets/QSystemTrayIcon.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="151">
+          <caret line="94" column="25" selection-start-line="94" selection-start-column="25" selection-end-line="94" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/.PyCharm2019.1/system/python_stubs/-771540385/_collections.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-971">
+          <caret line="130" column="8" selection-start-line="130" selection-start-column="8" selection-end-line="130" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://D:/Program Files (x86)/Microsoft Visual Studio/Shared/Python37_64/Lib/queue.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1571">
+          <caret line="95" column="8" selection-start-line="95" selection-start-column="8" selection-end-line="95" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://D:/Program Files (x86)/Microsoft Visual Studio/Shared/Python37_64/Lib/typing.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="1530" column="8" selection-start-line="1530" selection-start-column="8" selection-end-line="1530" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PyQtTest/images/download.png">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PyQtTest/images/setup1.png">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PyQtTest/images/setup.png">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PyQtTest/images/scheduler.ico">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PyQtTest/images/scheduler.png">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PyQtTest/images/schedule.png">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PyQtTest/images/clock.ico">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PyQtTest/resources_rc.qrc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="562">
+          <caret line="27" column="44" selection-start-line="27" selection-start-column="44" selection-end-line="27" selection-end-column="44" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PyQtTest/producer.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1386">
+          <caret line="64" column="13" selection-start-line="64" selection-start-column="13" selection-end-line="64" selection-end-column="13" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/PyQtTest/ping.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="358">
+        <state relative-caret-position="528">
           <caret line="29" column="58" selection-start-line="29" selection-start-column="31" selection-end-line="29" selection-end-column="58" />
           <folding>
             <element signature="e#0#28#0" expanded="true" />
@@ -482,12 +630,64 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/PyQtTest/TrayIconDemo.py">
+    <entry file="file://D:/Program Files (x86)/Microsoft Visual Studio/Shared/Python37_64/Lib/subprocess.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="228">
-          <caret line="197" column="19" lean-forward="true" selection-start-line="197" selection-start-column="19" selection-end-line="197" selection-end-column="19" />
+        <state relative-caret-position="19294">
+          <caret line="877" selection-start-line="877" selection-end-line="877" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PyQtTest/eventfilter.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="44">
+          <caret line="3" column="32" selection-start-line="3" selection-start-column="32" selection-end-line="3" selection-end-column="32" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PyQtTest/win32services.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="286">
+          <caret line="13" selection-start-line="13" selection-end-line="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://D:/Program Files (x86)/Microsoft Visual Studio/Shared/Python37_64/Lib/configparser.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="268">
+          <caret line="790" selection-start-line="790" selection-end-line="790" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://D:/Program Files (x86)/Microsoft Visual Studio/Shared/Python37_64/Lib/_strptime.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="300">
+          <caret line="364" column="19" selection-start-line="364" selection-start-column="19" selection-end-line="364" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://D:/Program Files (x86)/Microsoft Visual Studio/Shared/Python37_64/Lib/threading.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="168">
+          <caret line="1176" selection-start-line="1176" selection-end-line="1176" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PyQtTest/readme.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="22">
+          <caret line="1" selection-start-line="1" selection-end-line="1" selection-end-column="83" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PyQtTest/TrayIconDemo.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="310">
+          <caret line="163" column="40" lean-forward="true" selection-start-line="163" selection-start-column="40" selection-end-line="163" selection-end-column="40" />
+          <folding>
+            <element signature="e#23#33#0" expanded="true" />
           </folding>
         </state>
       </provider>

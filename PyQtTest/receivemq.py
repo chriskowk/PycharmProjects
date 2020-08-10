@@ -17,8 +17,7 @@ channel = connection.channel()
 
 # 消费成功的回调函数
 def callback(ch, method, properties, body):
-    print(" [%s] Received %r" % (time.strftime('%H:%M:%S'), body))
-    # time.sleep(0.2)
+    print(" [%s] Received %r" % (time.strftime('%H:%M:%S'), body.decode('utf-8')))
 
 
 # 开始依次消费balance队列中的消息

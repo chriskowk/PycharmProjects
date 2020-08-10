@@ -9,10 +9,10 @@ if __name__ == "__main__":
     count = 0
     while True:
         time.sleep(1)
-        print("send to server with value: %s" % flag)
-        sock.send(bytes(flag, encoding='utf8'))
+        print("%s: send to server with value: %s" % (time.strftime('%H:%M:%S'), flag))
+        sock.send(bytes(flag, encoding='utf-8'))
         bs = sock.recv(1024)
-        print(bs.decode(encoding='utf8'))
+        print(bs.decode(encoding='utf-8'))
         flag = (flag == '1') and '2' or '1'  # change to another type of value each time
         count += 1
         if count % 3 == 0:
@@ -20,5 +20,5 @@ if __name__ == "__main__":
         elif count == 10:
             break
 
-    print("closing me: %s" % flag)
+    print("%s: closing me: %s" % (time.strftime('%H:%M:%S'), flag))
     sock.close()

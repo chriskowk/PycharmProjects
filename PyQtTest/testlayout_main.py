@@ -1,14 +1,30 @@
 from testlayout import Ui_MainWindow
 from PyQt5 import QtWidgets
+import sys
+import os
+from PyQt5 import QtGui
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
-import sys
-import pika
+from PyQt5.QtWidgets import *
+import subprocess
 import threading
+from queue import *
+from PyQt5.QtWidgets import QMessageBox
+import datetime
+import time
 import win32gui
-from PyQt5.QtGui import QTextCursor
 from win32api import *
 from win32con import *
+import win32event
+import win32process
+import ctypes
+import win32com.client
+from win32com import *
+
+import configparser
+from PyQt5.QtCore import pyqtSlot
+import pika
+
 
 class Consumer(threading.Thread):
     def __init__(self, func):
@@ -77,11 +93,12 @@ class main_window(QtWidgets.QMainWindow):
         )  # 向消息队列发送一条消息
         connection.close()
         self._status = 1
+        self.ui.textEdit.append(u"[%s] 编译任务已入队..." % msg)
 
     def run(self, msg):
         self._message = msg
         self._status = 2
-        msg = u"任务%s已完成" % msg
+        msg = u"[%s] 编译任务已完成。" % msg
         self.ui.textEdit.append(msg)
 
     def fun_timer(self):
@@ -97,14 +114,14 @@ class main_window(QtWidgets.QMainWindow):
             self.ui.textEdit.insertPlainText('.')
 
         elif self._status == 2:
-            msg = u"任务%s已完成" % self._message
+            msg = u"[%s] 编译任务已完成。" % self._message
             self._message = ''
             self._status = 0
             MessageBox(0, msg, u"任务调度结果", MB_OK | MB_ICONINFORMATION | MB_TOPMOST)
 
     def quit(self):
         self.exit()
-        app.quit()
+        qApp.exit(0)
         sys.exit()
 
     # 覆写窗口关闭事件（函数名固定不可变）

@@ -1,22 +1,119 @@
 from testlayout import Ui_MainWindow
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5 import QtWidgets
+from PyQt5.QtGui import *
+from PyQt5.QtCore import *
 import sys
+import pika
+import threading
+import win32gui
+from PyQt5.QtGui import QTextCursor
+from win32api import *
+from win32con import *
 
+class Consumer(threading.Thread):
+    def __init__(self, func):
+        super(Consumer, self).__init__()
+        self._func = func
+        self._is_interrupted = False
 
-class hello_window(QtWidgets.QMainWindow):
+    def stop(self):
+        self._is_interrupted = True
+
+    def run(self):
+        username = 'chris'
+        pwd = '123456'
+        ip_addr = '172.18.99.177'
+        # rabbitmq 报错 pika.exceptions.IncompatibleProtocolError: StreamLostError: (‘Transport indicated EOF’,) 产生此报错的原因是我将port写成了15672
+        # rabbitmq需要通过端口5672连接 - 而不是15672. 更改端口，转发，一切正常
+        port_num = 5672
+        credentials = pika.PlainCredentials(username, pwd)
+        connection = pika.BlockingConnection(pika.ConnectionParameters(ip_addr, port_num, '/', credentials))
+        channel = connection.channel()
+        channel.queue_declare('out_queue', durable=True)
+        for message in channel.consume('out_queue', auto_ack=True, inactivity_timeout=1):
+            if self._is_interrupted: break
+            if not message: continue
+            method, properties, body = message
+            if body is not None:
+                msg = body.decode('utf-8')
+                self._func(msg)
+
+class main_window(QtWidgets.QMainWindow):
     def __init__(self):
         QtWidgets.QMainWindow.__init__(self)
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
         self.ui.pushButton.clicked.connect(self.push_click)
-        # 给button 的 点击动作绑定一个事件处理函数
+        self.ui.closeButton.clicked.connect(self.quit)
+        self.setWindowFlags(Qt.WindowCloseButtonHint)
+        consumer = Consumer(self.run)
+        consumer.start()
+        self._status = 0
+        self._message = ''
 
     def push_click(self):
-        print('* push_click')
+        msg = ''
+        if self.ui.radioButton_1.isChecked():
+            msg = self.ui.radioButton_1.text()
+        elif self.ui.radioButton_2.isChecked():
+            msg = self.ui.radioButton_2.text()
+        elif self.ui.radioButton_3.isChecked():
+            msg = self.ui.radioButton_3.text()
+        username = 'chris'
+        pwd = '123456'
+        ip_addr = '172.18.99.177'
+        # rabbitmq 报错 pika.exceptions.IncompatibleProtocolError: StreamLostError: (‘Transport indicated EOF’,) 产生此报错的原因是我将port写成了15672
+        # rabbitmq需要通过端口5672连接 - 而不是15672. 更改端口，转发，一切正常
+        port_num = 5672
+        credentials = pika.PlainCredentials(username, pwd)
+        connection = pika.BlockingConnection(pika.ConnectionParameters(ip_addr, port_num, '/', credentials))
+        channel = connection.channel()
+        channel.queue_declare('work_queue', durable=True)
+        channel.basic_publish(
+            exchange='',
+            routing_key='work_queue',  # 写明将消息发送给队列balance
+            body=msg,  # 要发送的消息
+            properties=pika.BasicProperties(delivery_mode=2, )  # 设置消息持久化(持久化第二步)，将要发送的消息的属性标记为2，表示该消息要持久化
+        )  # 向消息队列发送一条消息
+        connection.close()
+        self._status = 1
 
+    def run(self, msg):
+        self._message = msg
+        self._status = 2
+        msg = u"任务%s已完成" % msg
+        self.ui.textEdit.append(msg)
+
+    def fun_timer(self):
+        global timer
+        # print(time.strftime('%Y-%m-%d %H:%M:%S'))
+        timer = threading.Timer(1, self.fun_timer)
+        timer.start()
+        self.check_finished()
+
+    def check_finished(self):
+        if self._status == 1:
+            self.ui.textEdit.moveCursor(QTextCursor.End)
+            self.ui.textEdit.insertPlainText('.')
+
+        elif self._status == 2:
+            msg = u"任务%s已完成" % self._message
+            self._message = ''
+            self._status = 0
+            MessageBox(0, msg, u"任务调度结果", MB_OK | MB_ICONINFORMATION | MB_TOPMOST)
+
+    def quit(self):
+        self.exit()
+        app.quit()
+        sys.exit()
+
+    # 覆写窗口关闭事件（函数名固定不可变）
+    def closeEvent(self, event):
+        self.quit()
 
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
-    window = hello_window()
-    window.show()
+    win = main_window()
+    win.show()
+    win.fun_timer()
     sys.exit(app.exec_())

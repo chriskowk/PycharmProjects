@@ -13,15 +13,16 @@ port_num = 5672
 credentials = pika.PlainCredentials(username, pwd)
 connection = pika.BlockingConnection(pika.ConnectionParameters(ip_addr, port_num, '/', credentials))
 channel = connection.channel()
-
+channel.queue_declare('work_queue', durable=True)
 
 # 消费成功的回调函数
 def callback(ch, method, properties, body):
     print(" [%s] Received %r" % (time.strftime('%H:%M:%S'), body.decode('utf-8')))
-
+    ch.basic_ack(delivery_tag=method.delivery_tag)
 
 # 开始依次消费balance队列中的消息
-channel.basic_consume(queue='balance', on_message_callback=callback, auto_ack=True)
+channel.basic_qos(prefetch_count=1)
+channel.basic_consume(queue='work_queue', on_message_callback=callback, auto_ack=False)
 
 print(' [*] Waiting for messages. To exit press CTRL+C')
 channel.start_consuming()  # 启动消费

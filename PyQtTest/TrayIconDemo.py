@@ -6,7 +6,7 @@ from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
 import subprocess
-from threading import *
+import threading
 from queue import *
 from PyQt5.QtWidgets import QMessageBox
 import datetime
@@ -22,7 +22,7 @@ from win32com import *
 
 import configparser
 from PyQt5.QtCore import pyqtSlot
-import copy
+import pika
 
 import resources_rc
 
@@ -204,9 +204,7 @@ class window(QMainWindow):
         self.setGeometry(rect.right-self.width()-10, rect.bottom-self.height()-10, self.width(), self.height())
         self.status = self.statusBar()
         self.setWindowIcon(QtGui.QIcon(':/images/clock.ico'))
-        self.work_queue = ClosableQueue()
-        self.out_queue = ClosableQueue()
-        consumer = Consumer(self.run, self.work_queue, self.out_queue)
+        consumer = Consumer(self.run, _work_queue, _out_queue)
         consumer.start()
         self.mu1 = QMenu()
         for item in _dict.items():
@@ -410,29 +408,31 @@ class window(QMainWindow):
 
     def processtriggerX(self, sender):
         path = os.path.dirname(sender.statusTip())
-        t = Thread(target=self.runCmd, args=(sender.statusTip(), path))
+        t = threading.Thread(target=self.runCmd, args=(sender.statusTip(), path))
         t.start()
 
     def processtrigger(self, qaction):
-        for act in qaction.parent().actions():
-            act.setChecked(True if qaction == act else False)
         self.push_queue(Task(qaction, True))
 
     def push_queue(self, task):
-        self.work_queue.put(task)
+        _work_queue.put(task)
         self.showStatus("%s: %s 任务已入队，等待执行中..." % (time.strftime('%H:%M:%S'), task.id))
-        # self.work_queue.close()
-        # self.work_queue.join()
+        # _work_queue.close()
+        # _work_queue.join()
 
-    def runCmd(self, cmd, path):
+    # def runCmd(self, cmd, path):
         # 语法：subprocess.Popen(args, bufsize=0, executable=None, stdin=None, stdout=None, stderr=None, preexec_fn=None, close_fds=False, shell=False, cwd=None, env=None, universal_newlines=False, startupinfo=None, creationflags=0)
         # res = subprocess.Popen(cmd, shell=False, cwd=path, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
         # sout, serr = res.communicate() # 该方法和子进程交互，返回一个包含 输出和错误的元组，如果对应参数没有设置的，则无法返回
         # return res.returncode, sout, serr, res.pid # 可获得返回码、输出、错误、进程号；
         # subprocess.check_call(cmd, shell=False, cwd=path, stdin=None, stdout=None, stderr=None, timeout=None)
-        subprocess.call(cmd, shell=False, cwd=path, stdin=None, stdout=None, stderr=None, timeout=None)
+        # subprocess.call(cmd, shell=False, cwd=path, stdin=None, stdout=None, stderr=None, timeout=None)
 
-    def run(self, task) :
+    def run(self, task):
+        if task.add_arg:
+            for act in task.qaction.parent().actions():
+                act.setChecked(True if task.qaction == act else False)
+
         cmd = '%s "%s"' % (task.cmd, _get_regfilepath()) if task.add_arg else task.cmd
         subprocess.call(cmd, shell=False, cwd=task.path, stdin=None, stdout=None, stderr=None, timeout=None)
         print("Worker Solve: %s" % task)
@@ -495,8 +495,8 @@ class window(QMainWindow):
     def clear_work_queue(self):
         try:
             self.txtMsg.clear()
-            while not self.work_queue.empty():
-                task = self.work_queue.get(False)
+            while not _work_queue.empty():
+                task = _work_queue.get(False)
                 self.showStatus("%s: %s 任务已移除..." % (time.strftime('%H:%M:%S'), task.id))
         except Queue.Empty:
             pass  # Handle empty queue here
@@ -506,7 +506,7 @@ class window(QMainWindow):
     def fun_timer(self):
         global timer
         # print(time.strftime('%Y-%m-%d %H:%M:%S'))
-        timer = Timer(_interval, self.fun_timer)
+        timer = threading.Timer(_interval, self.fun_timer)
         timer.start()
         self.check_fired()
         self.check_finished()
@@ -520,17 +520,39 @@ class window(QMainWindow):
                     self.push_queue(item[1].task)
 
     def check_finished(self):
-        if not self.out_queue.empty():
-            for i in range(self.out_queue.qsize()):
-                item = self.out_queue.get()  # q.get会阻塞，q.get_nowait()不阻塞，但会抛异常
+        if not _out_queue.empty():
+            for i in range(_out_queue.qsize()):
+                item = _out_queue.get()  # q.get会阻塞，q.get_nowait()不阻塞，但会抛异常
+                self.put_out_queue(item.id)
                 msg = u"任务%s已完成" % item.id
                 # MessageBox(0, msg, u"任务调度结果", MB_OK | MB_ICONINFORMATION | MB_TOPMOST)
                 # ctypes.windll.user32.MessageBoxA(0, msg.encode('gb2312'), u"任务调度结果".encode('gb2312'), MB_OK | MB_ICONINFORMATION | MB_TOPMOST)
                 # ShellExecute(0, 'open', os.path.join(_dirname, "MessageBox.exe"), msg, _dirname, 1)  # 最后一个参数bShow: 1(0)表示前台(后台)运行程序; 传递参数path打开指定文件
                 subprocess.call([os.path.join(_dirname, "MessageBox.exe"), msg], cwd=_dirname, shell=False, stdin=None, stdout=None, stderr=None, timeout=None)
 
+    def put_out_queue(self, message):
+        username = 'chris'
+        pwd = '123456'
+        ip_addr = '172.18.99.177'
+        # rabbitmq 报错 pika.exceptions.IncompatibleProtocolError: StreamLostError: (‘Transport indicated EOF’,) 产生此报错的原因是我将port写成了15672
+        # rabbitmq需要通过端口5672连接 - 而不是15672. 更改端口，转发，一切正常
+        port_num = 5672
+        credentials = pika.PlainCredentials(username, pwd)
+        connection = pika.BlockingConnection(pika.ConnectionParameters(ip_addr, port_num, '/', credentials))
+        channel = connection.channel()
+        channel.queue_declare('out_queue', durable=True)
+        channel.basic_publish(
+            exchange='',
+            routing_key='out_queue',  # 写明将消息发送给队列balance
+            body=message,  # 要发送的消息
+            properties=pika.BasicProperties(delivery_mode=2, )  # 设置消息持久化(持久化第二步)，将要发送的消息的属性标记为2，表示该消息要持久化
+        )  # 向消息队列发送一条消息
+        connection.close()
+
+
 class Task(object):
     def __init__(self, qaction=QAction(), add_arg=False, path=''):
+        self.qaction = qaction
         self.id = qaction.text()
         self.cmd = qaction.statusTip()
         self.add_arg = add_arg
@@ -554,7 +576,7 @@ class ClosableQueue(Queue):
             finally:
                 self.task_done()
 
-class Consumer(Thread):
+class Consumer(threading.Thread):
     # def __init__(self, func, args, work_queue, out_queue):
     # self.args = args
     def __init__(self, func, work_queue, out_queue):
@@ -568,6 +590,35 @@ class Consumer(Thread):
             result = self.func(item)
             self.out_queue.put(result)
 
+class WorkerThread(threading.Thread):
+    def __init__(self):
+        super(WorkerThread, self).__init__()
+        self._is_interrupted = False
+
+    def stop(self):
+        self._is_interrupted = True
+
+    def run(self):
+        username = 'chris'
+        pwd = '123456'
+        ip_addr = '172.18.99.177'
+        # rabbitmq 报错 pika.exceptions.IncompatibleProtocolError: StreamLostError: (‘Transport indicated EOF’,) 产生此报错的原因是我将port写成了15672
+        # rabbitmq需要通过端口5672连接 - 而不是15672. 更改端口，转发，一切正常
+        port_num = 5672
+        credentials = pika.PlainCredentials(username, pwd)
+        connection = pika.BlockingConnection(pika.ConnectionParameters(ip_addr, port_num, '/', credentials))
+        channel = connection.channel()
+        channel.queue_declare('work_queue', durable=True)
+        for message in channel.consume('work_queue', auto_ack=True, inactivity_timeout=1):
+            if self._is_interrupted: break
+            if not message: continue
+            method, properties, body = message
+            if body is not None:
+                name = body.decode('utf-8')
+                print(name)
+                for item in _dict.items():
+                    if item[1].name == name:
+                        _work_queue.put(item[1].task)
 
 if __name__ == "__main__":
     _abspath = sys.argv[0]
@@ -580,6 +631,10 @@ if __name__ == "__main__":
     for sec in _conf.sections():
         _dict[sec] = VERSION(_conf.get(sec, 'key'), _conf.get(sec, 'name'), _conf.get(sec, 'base-path'), _conf.get(sec, 'tfs-url'), _conf.get(sec, 'fire-on'))
     print(_dict)
+    _work_queue = ClosableQueue()
+    _out_queue = ClosableQueue()
+    _thread = WorkerThread()
+    _thread.start()
 
     app = QApplication(sys.argv)
     app.setWindowIcon(QtGui.QIcon(":/images/clock.ico"))

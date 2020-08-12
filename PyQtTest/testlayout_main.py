@@ -25,6 +25,7 @@ import configparser
 from PyQt5.QtCore import pyqtSlot
 import pika
 
+import resources_rc
 
 class Consumer(threading.Thread):
     def __init__(self, func):
@@ -62,6 +63,7 @@ class main_window(QtWidgets.QMainWindow):
         self.ui.pushButton.clicked.connect(self.push_click)
         self.ui.closeButton.clicked.connect(self.quit)
         self.setWindowFlags(Qt.WindowCloseButtonHint)
+        self.setWindowIcon(QtGui.QIcon(':/images/clock.ico'))
         consumer = Consumer(self.run)
         consumer.start()
         self._status = 0
@@ -101,6 +103,7 @@ class main_window(QtWidgets.QMainWindow):
             self._status = 2
             text = u"[%s] 编译任务已完成。" % msg
             self.ui.textEdit.append(text)
+            self.ui.textEdit.moveCursor(QTextCursor.End)
 
     def fun_timer(self):
         global timer
@@ -158,6 +161,7 @@ if __name__ == '__main__':
         _dict[sec] = VERSION(_conf.get(sec, 'key'), _conf.get(sec, 'name'), _conf.get(sec, 'base-path'), _conf.get(sec, 'tfs-url'), _conf.get(sec, 'upload-path'), _conf.get(sec, 'fire-on'))
     print(_dict)
     app = QtWidgets.QApplication(sys.argv)
+    app.setWindowIcon(QtGui.QIcon(":/images/clock.ico"))
     win = main_window()
     win.show()
     win.fun_timer()

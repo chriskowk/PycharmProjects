@@ -2,8 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8bc29d8f-5232-4841-9f27-b7e1be7144dd" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/testlayout.py" beforeDir="false" afterPath="$PROJECT_DIR$/testlayout.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/testlayout.ui" beforeDir="false" afterPath="$PROJECT_DIR$/testlayout.ui" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/testlayout_main.py" beforeDir="false" afterPath="$PROJECT_DIR$/testlayout_main.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -62,8 +60,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/testlayout_main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="213">
-              <caret line="123" column="19" selection-start-line="123" selection-start-column="19" selection-end-line="123" selection-end-column="19" />
+            <state relative-caret-position="111">
+              <caret line="115" selection-start-line="115" selection-end-line="115" />
               <folding>
                 <element signature="e#0#36#0" expanded="true" />
               </folding>
@@ -75,7 +73,10 @@
         <entry file="file://$PROJECT_DIR$/TrayIconDemo.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="271">
-              <caret line="25" selection-start-line="1" selection-end-line="25" />
+              <caret line="169" selection-start-line="156" selection-end-line="169" />
+              <folding>
+                <element signature="e#23#33#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -109,6 +110,8 @@
       <find>count</find>
       <find>QTextCursor</find>
       <find>'.'</find>
+      <find>self._status</find>
+      <find>self._message</find>
     </findStrings>
     <replaceStrings>
       <replace>hello_window</replace>
@@ -315,12 +318,12 @@
       <workItem from="1593661109845" duration="4546000" />
       <workItem from="1596851629775" duration="6950000" />
       <workItem from="1597063841948" duration="1337000" />
-      <workItem from="1597238321771" duration="2272000" />
+      <workItem from="1597238321771" duration="5625000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="15105000" />
+    <option name="totallyTimeSpent" value="18458000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1295" height="695" extended-state="6" />
@@ -331,7 +334,7 @@
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32900432" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.3285968" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.3285968" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.39964476" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -340,7 +343,7 @@
       <window_info anchor="bottom" id="Version Control" order="8" />
       <window_info anchor="bottom" id="Database Changes" order="9" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
-      <window_info anchor="bottom" id="Terminal" order="11" weight="0.3285968" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="11" visible="true" weight="0.3285968" />
       <window_info anchor="bottom" id="Python Console" order="12" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -448,17 +451,27 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/readme.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="19">
+          <caret line="1" lean-forward="true" selection-start-line="1" selection-end-line="1" selection-end-column="83" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/TrayIconDemo.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="271">
-          <caret line="25" selection-start-line="1" selection-end-line="25" />
+          <caret line="169" selection-start-line="156" selection-end-line="169" />
+          <folding>
+            <element signature="e#23#33#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/testlayout_main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="213">
-          <caret line="123" column="19" selection-start-line="123" selection-start-column="19" selection-end-line="123" selection-end-column="19" />
+        <state relative-caret-position="111">
+          <caret line="115" selection-start-line="115" selection-end-line="115" />
           <folding>
             <element signature="e#0#36#0" expanded="true" />
           </folding>

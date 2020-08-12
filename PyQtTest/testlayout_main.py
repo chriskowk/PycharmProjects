@@ -93,18 +93,19 @@ class main_window(QtWidgets.QMainWindow):
         )  # 向消息队列发送一条消息
         connection.close()
         self._status = 1
-        self.ui.textEdit.append(u"[%s] 编译任务已入队..." % msg)
+        self._message = msg
+        self.ui.textEdit.append(u"[%s] 编译任务已入队... " % msg)
 
     def run(self, msg):
-        self._message = msg
-        self._status = 2
-        msg = u"[%s] 编译任务已完成。" % msg
-        self.ui.textEdit.append(msg)
+        if self._status == 1 and self._message == msg:
+            self._status = 2
+            text = u"[%s] 编译任务已完成。" % msg
+            self.ui.textEdit.append(text)
 
     def fun_timer(self):
         global timer
         # print(time.strftime('%Y-%m-%d %H:%M:%S'))
-        timer = threading.Timer(1, self.fun_timer)
+        timer = threading.Timer(_interval, self.fun_timer)
         timer.start()
         self.check_finished()
 
@@ -112,9 +113,9 @@ class main_window(QtWidgets.QMainWindow):
         if self._status == 1:
             self.ui.textEdit.moveCursor(QTextCursor.End)
             self.ui.textEdit.insertPlainText('.')
-
         elif self._status == 2:
-            msg = u"[%s] 编译任务已完成。" % self._message
+            mark = u"下载路径：\r\n%s" % _dict[self._message].upload_path
+            msg = u"[%s] 编译任务已完成，%s" % (self._message, mark)
             self._message = ''
             self._status = 0
             MessageBox(0, msg, u"任务调度结果", MB_OK | MB_ICONINFORMATION | MB_TOPMOST)
@@ -128,7 +129,34 @@ class main_window(QtWidgets.QMainWindow):
     def closeEvent(self, event):
         self.quit()
 
+
+class VERSION:
+    def __init__(self, key='', name='', basepath='', url='', uploadpath='', fireon='N/A', task=None):
+        self.task = task
+        self.key = key
+        self.name = name
+        self.base_path = basepath
+        self.tfs_url = url
+        self.upload_path = uploadpath
+        fireon = fireon.replace(" ", "")
+        self.fire_enabled = not fireon.upper().__contains__("N/A")
+        self.fire_on = []
+        if self.fire_enabled:
+            for item in fireon.split(";"):
+                self.fire_on.append(datetime.datetime.strptime(item, "%H:%M" if len(item) == 5 else "%H:%M:%S").time() or None)
+
+
 if __name__ == '__main__':
+    _abspath = sys.argv[0]
+    _basename = os.path.basename(_abspath)
+    _dirname = os.path.dirname(_abspath)
+    _dict = {}
+    _interval = 1
+    _conf = configparser.ConfigParser()
+    _conf.read('cfg.ini', encoding='utf-16')
+    for sec in _conf.sections():
+        _dict[sec] = VERSION(_conf.get(sec, 'key'), _conf.get(sec, 'name'), _conf.get(sec, 'base-path'), _conf.get(sec, 'tfs-url'), _conf.get(sec, 'upload-path'), _conf.get(sec, 'fire-on'))
+    print(_dict)
     app = QtWidgets.QApplication(sys.argv)
     win = main_window()
     win.show()

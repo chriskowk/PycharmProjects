@@ -26,5 +26,6 @@
     <file alias="clock.png">images/clock.png</file>
     <file alias="clock.ico">images/clock.ico</file>
     <file alias="history.png">images/history.png</file>
+    <file alias="proxy.ico">images/proxy.ico</file>
 </qresource>
 </RCC>

@@ -71,7 +71,7 @@ class Ui_MainWindow(object):
         self.textEdit.setObjectName("textEdit")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 618, 22))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 618, 23))
         self.menubar.setObjectName("menubar")
         MainWindow.setMenuBar(self.menubar)
 
@@ -83,6 +83,6 @@ class Ui_MainWindow(object):
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.radioButton_2.setText(_translate("MainWindow", "市一"))
         self.radioButton_3.setText(_translate("MainWindow", "中山眼科"))
-        self.pushButton.setText(_translate("MainWindow", "发送"))
+        self.pushButton.setText(_translate("MainWindow", "发送请求"))
         self.radioButton_1.setText(_translate("MainWindow", "省医"))
-        self.closeButton.setText(_translate("MainWindow", "关闭"))
+        self.closeButton.setText(_translate("MainWindow", "退出"))

@@ -74,7 +74,7 @@
      </font>
     </property>
     <property name="text">
-     <string>发送</string>
+     <string>发送请求</string>
     </property>
    </widget>
    <widget class="QRadioButton" name="radioButton_1">
@@ -114,7 +114,7 @@
      </font>
     </property>
     <property name="text">
-     <string>关闭</string>
+     <string>退出</string>
     </property>
    </widget>
    <widget class="QTextEdit" name="textEdit">
@@ -146,7 +146,7 @@
      <x>0</x>
      <y>0</y>
      <width>618</width>
-     <height>22</height>
+     <height>23</height>
     </rect>
    </property>
   </widget>

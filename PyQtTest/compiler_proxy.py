@@ -20,12 +20,48 @@ import win32process
 import ctypes
 import win32com.client
 from win32com import *
-
 import configparser
 from PyQt5.QtCore import pyqtSlot
 import pika
-
 import resources_rc
+
+class TrayIcon(QSystemTrayIcon):
+    def __init__(self, parent=None):
+        super(TrayIcon, self).__init__(parent)
+        self.initMenu()
+        self.initOthers()
+
+    def initMenu(self):
+        # 设计托盘的菜单
+        mainmenu = QMenu()
+        self.showme = QAction(icon=QtGui.QIcon(":/images/screen.png"), text="显示", parent=self, triggered=self.parent().toggleVisibility)
+        mainmenu.addAction(self.showme)
+        mainmenu.addSeparator()
+        exit = QAction(QtGui.QIcon(":/images/exit.png"), "退出", self, triggered=self.quit)
+        mainmenu.addAction(exit)
+        self.setContextMenu(mainmenu)
+
+    def initOthers(self):
+        # 把鼠标点击图标的信号和槽连接
+        self.activated.connect(self.iconClicked)
+        # 把鼠标点击弹出消息的信号和槽连接
+        # self.messageClicked.connect(self.msgClicked)
+        self.setIcon(QtGui.QIcon(":/images/proxy.ico"))
+        # 设置图标
+        self.icon = self.MessageIcon()
+
+    def iconClicked(self, reason):
+        # 鼠标点击icon传递的信号会带有一个整形的值，1是表示单击右键，2是双击，3是单击左键，4是用鼠标中键点击
+        if reason == 2 or reason == 3:
+            self.parent().toggleVisibility()
+
+    def quit(self):
+        # 保险起见，为了完整的退出
+        self.setVisible(False)
+        self.parent()._consumer.stop()
+        self.parent().exit()
+        qApp.quit()
+        sys.exit()
 
 class Consumer(threading.Thread):
     def __init__(self, func):
@@ -61,7 +97,6 @@ class main_window(QMainWindow):
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
         self.ui.pushButton.clicked.connect(self.push_click)
-        self.ui.closeButton.clicked.connect(self.quit)
         self.setWindowTitle("编译请求客户端")
         self.setWindowFlags(Qt.WindowCloseButtonHint)
         self.setWindowIcon(QtGui.QIcon(':/images/proxy.ico'))
@@ -69,6 +104,9 @@ class main_window(QMainWindow):
         self._consumer.start()
         self._status = 0
         self._message = ''
+        self.ti = TrayIcon(self)
+        self.ui.closeButton.clicked.connect(self.ti.quit)
+        self.ti.show()
 
     def push_click(self):
         msg = ''
@@ -124,20 +162,41 @@ class main_window(QMainWindow):
             msg = u"[%s] 编译任务已完成，%s" % (self._message, mark)
             self._message = ''
             self._status = 0
-            MessageBox(0, msg, u"任务调度结果", MB_OK | MB_ICONINFORMATION | MB_TOPMOST)
+            MessageBox(0, msg, u"任务调度结果", MB_OK | MB_ICONINFORMATION | MB_TOPMOST | MB_SYSTEMMODAL)
+            # subprocess.call([os.path.join(_dirname, "MessageBox.exe"), msg], cwd=_dirname, shell=False, stdin=None, stdout=None, stderr=None, timeout=None)
 
-    def quit(self, isclosed=False):
-        self._consumer.stop()
-        if not isclosed:
-            self.close()
-        self.exit()
-        qApp.quit()
-        sys.exit()
+    # 覆写窗口隐藏事件
+    def hideEvent(self, event) :
+        self.ti.showme.setIcon(QtGui.QIcon(":/images/screen.png"))
+        self.ti.showme.setText("显示")
+        # self.update()
+
+    # 覆写窗口显示事件
+    def showEvent(self, event) :
+        self.ti.showme.setIcon(QtGui.QIcon(":/images/noscreen.png"))
+        self.ti.showme.setText("隐藏")
+        # self.update()
 
     # 覆写窗口关闭事件（函数名固定不可变）
     def closeEvent(self, event):
-        event.accept()
-        self.quit(True)
+        event.ignore()  # 忽视点击X事件
+        self.hide()
+
+    def toggleVisibility(self):
+        if self.isVisible():
+            self.hide_window()
+        else:
+            self.show_window()
+
+    def show_window(self):
+        hwnd = self.winId()
+        win32gui.SetWindowPos(hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW)
+        self.showNormal()
+
+    def hide_window(self):
+        hwnd = self.winId()
+        win32gui.SetWindowPos(hwnd, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW)
+        self.hide()
 
 
 class VERSION:
@@ -170,6 +229,6 @@ if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
     app.setWindowIcon(QtGui.QIcon(":/images/proxy.ico"))
     win = main_window()
-    win.show()
+    win.hide()
     win.fun_timer()
     sys.exit(app.exec_())

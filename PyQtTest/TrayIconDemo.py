@@ -206,6 +206,9 @@ class window(QMainWindow):
         self.setWindowIcon(QtGui.QIcon(':/images/clock.ico'))
         consumer = Consumer(self.run, _work_queue, _out_queue)
         consumer.start()
+        thread = WorkerThread(self.showStatus, _work_queue)
+        thread.start()
+
         self.mu1 = QMenu()
         for item in _dict.items():
             act = QAction(text=item[1].name, checkable=True, parent=self.mu1)
@@ -591,8 +594,10 @@ class Consumer(threading.Thread):
             self.out_queue.put(result)
 
 class WorkerThread(threading.Thread):
-    def __init__(self):
-        super(WorkerThread, self).__init__()
+    def __init__(self, func, work_queue):
+        super().__init__()
+        self.func = func
+        self.work_queue = work_queue
         self._is_interrupted = False
 
     def stop(self):
@@ -618,7 +623,8 @@ class WorkerThread(threading.Thread):
                 print(name)
                 for item in _dict.items():
                     if item[1].name == name:
-                        _work_queue.put(item[1].task)
+                        self.func("%s: [响应外部请求] %s 任务已入队..." % (time.strftime('%H:%M:%S'), name))
+                        self.work_queue.put(item[1].task)
 
 if __name__ == "__main__":
     _abspath = sys.argv[0]
@@ -633,8 +639,6 @@ if __name__ == "__main__":
     print(_dict)
     _work_queue = ClosableQueue()
     _out_queue = ClosableQueue()
-    _thread = WorkerThread()
-    _thread.start()
 
     app = QApplication(sys.argv)
     app.setWindowIcon(QtGui.QIcon(":/images/clock.ico"))

@@ -204,10 +204,12 @@ class window(QMainWindow):
         self.setGeometry(rect.right-self.width()-10, rect.bottom-self.height()-10, self.width(), self.height())
         self.status = self.statusBar()
         self.setWindowIcon(QtGui.QIcon(':/images/clock.ico'))
-        consumer = Consumer(self.run, _work_queue, _out_queue)
-        consumer.start()
-        thread = WorkerThread(self.showStatus, _work_queue)
-        thread.start()
+        self._consumer = ConsumeThread(self.run, _work_queue, _out_queue)
+        self._consumer.setDaemon(True)
+        self._consumer.start()
+        self._responser = ResponseThread(self.pull_work_queue)
+        self._responser.setDaemon(True)
+        self._responser.start()
 
         self.mu1 = QMenu()
         for item in _dict.items():
@@ -506,13 +508,20 @@ class window(QMainWindow):
         else:
             return  # Handle task here and call q.task_done()
 
-    def fun_timer(self):
+    def func_timer(self):
         global timer
-        # print(time.strftime('%Y-%m-%d %H:%M:%S'))
-        timer = threading.Timer(_interval, self.fun_timer)
+        timer = threading.Timer(_interval, self.func_timer)
         timer.start()
         self.check_fired()
         self.check_finished()
+        if not self._consumer.isAlive():
+            self._consumer = ConsumeThread(self.run, _work_queue, _out_queue)
+            self._consumer.setDaemon(True)
+            self._consumer.start()
+        if not self._responser.isAlive():
+            self._responser = ResponseThread(self.pull_work_queue)
+            self._responser.setDaemon(True)
+            self._responser.start()
 
     def check_fired(self):
         for item in _dict.items():
@@ -526,14 +535,14 @@ class window(QMainWindow):
         if not _out_queue.empty():
             for i in range(_out_queue.qsize()):
                 item = _out_queue.get()  # q.get会阻塞，q.get_nowait()不阻塞，但会抛异常
-                self.put_out_queue(item.id)
+                self.push_out_queue(item.id)
                 msg = u"任务%s已完成" % item.id
                 # MessageBox(0, msg, u"任务调度结果", MB_OK | MB_ICONINFORMATION | MB_TOPMOST | MB_SYSTEMMODAL)
                 # ctypes.windll.user32.MessageBoxA(0, msg.encode('gb2312'), u"任务调度结果".encode('gb2312'), MB_OK | MB_ICONINFORMATION | MB_TOPMOST)
                 # ShellExecute(0, 'open', os.path.join(_dirname, "MessageBox.exe"), msg, _dirname, 1)  # 最后一个参数bShow: 1(0)表示前台(后台)运行程序; 传递参数path打开指定文件
                 subprocess.call([os.path.join(_dirname, "MessageBox.exe"), msg], cwd=_dirname, shell=False, stdin=None, stdout=None, stderr=None, timeout=None)
 
-    def put_out_queue(self, message):
+    def push_out_queue(self, message):
         username = 'chris'
         pwd = '123456'
         ip_addr = '172.18.99.177'
@@ -552,6 +561,33 @@ class window(QMainWindow):
         )  # 向消息队列发送一条消息
         connection.close()
 
+    def minute_timer(self):
+        global timer2
+        timer2 = threading.Timer(_interval * 60, self.minute_timer)
+        timer2.start()
+        self.pull_work_queue(False)
+
+    def pull_work_queue(self, iswaited=True):
+        username = 'chris'
+        pwd = '123456'
+        ip_addr = '172.18.99.177'
+        # rabbitmq 报错 pika.exceptions.IncompatibleProtocolError: StreamLostError: (‘Transport indicated EOF’,) 产生此报错的原因是我将port写成了15672
+        # rabbitmq需要通过端口5672连接 - 而不是15672. 更改端口，转发，一切正常
+        port_num = 5672
+        credentials = pika.PlainCredentials(username, pwd)
+        connection = pika.BlockingConnection(pika.ConnectionParameters(ip_addr, port_num, '/', credentials))
+        channel = connection.channel()
+        channel.queue_declare('work_queue', durable=True)
+        for message in channel.consume('work_queue', auto_ack=True, inactivity_timeout=1):
+            if not iswaited: break
+            if not message: continue
+            method, properties, body = message
+            if body is not None:
+                name = body.decode('utf-8')
+                for item in _dict.items():
+                    if item[1].name == name:
+                        self.showStatus("%s: [响应外部请求] %s 任务已入队..." % (time.strftime('%H:%M:%S'), name))
+                        _work_queue.put(item[1].task)
 
 class Task(object):
     def __init__(self, qaction=QAction(), add_arg=False, path=''):
@@ -579,52 +615,64 @@ class ClosableQueue(Queue):
             finally:
                 self.task_done()
 
-class Consumer(threading.Thread):
+class ConsumeThread(threading.Thread):
     # def __init__(self, func, args, work_queue, out_queue):
     # self.args = args
     def __init__(self, func, work_queue, out_queue):
-        super().__init__()
+        super(ConsumeThread, self).__init__()
         self.func = func
         self.work_queue = work_queue
         self.out_queue = out_queue
+        self.__flag = threading.Event()  # 用于暂停线程的标识
+        self.__flag.set()  # 设置为True
+        self.__running = threading.Event()  # 用于停止线程的标识
+        self.__running.set()  # 将running设置为True
 
     def run(self):
-        for item in self.work_queue:
-            result = self.func(item)
-            self.out_queue.put(result)
+        if self.__running.isSet():
+            for item in self.work_queue:
+                result = self.func(item)
+                self.out_queue.put(result)
+        while self.__running.isSet():
+            self.__flag.wait()  # 为True时立即返回, 为False时阻塞直到内部的标识位为True后返回
+            time.sleep(1)
 
-class WorkerThread(threading.Thread):
-    def __init__(self, func, work_queue):
-        super().__init__()
-        self.func = func
-        self.work_queue = work_queue
-        self._is_interrupted = False
+    def pause(self):
+        self.__flag.clear()  # 设置为False, 让线程阻塞
+
+    def resume(self):
+        self.__flag.set()  # 设置为True, 让线程停止阻塞
 
     def stop(self):
-        self._is_interrupted = True
+        self.__flag.set()  # 将线程从暂停状态恢复, 如何已经暂停的话
+        self.__running.clear()  # 设置为False
+
+class ResponseThread(threading.Thread):
+    def __init__(self, func):
+        super(ResponseThread, self).__init__()
+        self.func = func
+        self.__flag = threading.Event()  # 用于暂停线程的标识
+        self.__flag.set()  # 设置为True
+        self.__running = threading.Event()  # 用于停止线程的标识
+        self.__running.set()  # 将running设置为True
 
     def run(self):
-        username = 'chris'
-        pwd = '123456'
-        ip_addr = '172.18.99.177'
-        # rabbitmq 报错 pika.exceptions.IncompatibleProtocolError: StreamLostError: (‘Transport indicated EOF’,) 产生此报错的原因是我将port写成了15672
-        # rabbitmq需要通过端口5672连接 - 而不是15672. 更改端口，转发，一切正常
-        port_num = 5672
-        credentials = pika.PlainCredentials(username, pwd)
-        connection = pika.BlockingConnection(pika.ConnectionParameters(ip_addr, port_num, '/', credentials))
-        channel = connection.channel()
-        channel.queue_declare('work_queue', durable=True)
-        for message in channel.consume('work_queue', auto_ack=True, inactivity_timeout=1):
-            if self._is_interrupted: break
-            if not message: continue
-            method, properties, body = message
-            if body is not None:
-                name = body.decode('utf-8')
-                print(name)
-                for item in _dict.items():
-                    if item[1].name == name:
-                        self.func("%s: [响应外部请求] %s 任务已入队..." % (time.strftime('%H:%M:%S'), name))
-                        self.work_queue.put(item[1].task)
+        if self.__running.isSet():
+            self.func()
+        while self.__running.isSet():
+            self.__flag.wait()  # 为True时立即返回, 为False时阻塞直到内部的标识位为True后返回
+            time.sleep(1)
+
+    def pause(self):
+        self.__flag.clear()  # 设置为False, 让线程阻塞
+
+    def resume(self):
+        self.__flag.set()  # 设置为True, 让线程停止阻塞
+
+    def stop(self):
+        self.__flag.set()  # 将线程从暂停状态恢复, 如何已经暂停的话
+        self.__running.clear()  # 设置为False
+
 
 if __name__ == "__main__":
     _abspath = sys.argv[0]
@@ -644,5 +692,6 @@ if __name__ == "__main__":
     app.setWindowIcon(QtGui.QIcon(":/images/clock.ico"))
     win = window()
     win.hide()
-    win.fun_timer()
+    win.func_timer()
+    win.minute_timer()
     sys.exit(app.exec_())

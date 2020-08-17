@@ -59,7 +59,6 @@ class TrayIcon(QSystemTrayIcon):
     def quit(self):
         # 保险起见，为了完整的退出
         self.setVisible(False)
-        self.parent()._consumer.stop()
         self.parent().exit()
         qApp.quit()
         sys.exit()
@@ -80,12 +79,13 @@ def _get_work_area():
     return rect
 
 class VERSION:
-    def __init__(self, key='', name='', path='', url='', fireon='N/A', task=None):
+    def __init__(self, key='', name='', basepath='', url='', uploadpath='', fireon='N/A', task=None):
         self.task = task
         self.key = key
         self.name = name
-        self.base_path = path
+        self.base_path = basepath
         self.tfs_url = url
+        self.upload_path = uploadpath
         fireon = fireon.replace(" ", "")
         self.fire_enabled = not fireon.upper().__contains__("N/A")
         self.fire_on = []
@@ -106,8 +106,8 @@ class Consumer(threading.Thread):
         username = 'chris'
         pwd = '123456'
         ip_addr = '172.18.99.177'
-        # rabbitmq 报错 pika.exceptions.IncompatibleProtocolError: StreamLostError: (‘Transport indicated EOF’,) 产生此报错的原因是我将port写成了15672
-        # rabbitmq需要通过端口5672连接 - 而不是15672. 更改端口，转发，一切正常
+        # rabbitmq 报错 pika.exceptions.IncompatibleProtocolError: StreamLostError: (‘Transport indicated EOF’,)
+        # 产生此报错的原因是我将port写成了15672; rabbitmq需要通过端口5672连接 - 而不是15672. 更改端口，转发，一切正常
         port_num = 5672
         credentials = pika.PlainCredentials(username, pwd)
         connection = pika.BlockingConnection(pika.ConnectionParameters(ip_addr, port_num, '/', credentials))
@@ -127,7 +127,7 @@ class window(QMainWindow):
         self.setWindowFlags(Qt.WindowCloseButtonHint)
         self.setWindowTitle("编译请求客户端")
         rect = _get_work_area()
-        self.resize(400, 300)
+        self.resize(500, 400)
         self.setGeometry(rect.right-self.width()-10, rect.bottom-self.height()-10, self.width(), self.height())
         self.status = self.statusBar()
         self.setWindowIcon(QtGui.QIcon(':/images/proxy.ico'))
@@ -159,7 +159,7 @@ class window(QMainWindow):
         tbrExit.actionTriggered.connect(self.ti.quit)
         self.txtMsg = QTextEdit()
         self.txtMsg.setReadOnly(True)
-        self.txtMsg.setStyleSheet("color:rgb(10,10,10,255);font-size:14px;font-weight:normal;font-family:Roman times;")
+        self.txtMsg.setStyleSheet("color:rgb(10,10,10,255);font-size:16px;font-weight:normal;font-family:Roman times;")
         self.setCentralWidget(self.txtMsg)
         self.status.installEventFilter(self)
         self.ti.show()
@@ -205,8 +205,6 @@ class window(QMainWindow):
         hwnd = self.winId()
         win32gui.SetWindowPos(hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW)
         self.showNormal()
-        # self.setWindowState(self.windowState() & ~Qt.WindowMinimized | Qt.WindowActive)
-        # self.activateWindow()
 
     def hide_window(self):
         hwnd = self.winId()
@@ -234,6 +232,8 @@ class window(QMainWindow):
             self.txtMsg.moveCursor(QTextCursor.End)
 
     def processtrigger(self, qaction):
+        for act in qaction.parent().actions():
+            act.setChecked(True if qaction == act else False)
         msg = qaction.text()
         username = 'chris'
         pwd = '123456'
@@ -280,6 +280,7 @@ class window(QMainWindow):
             MessageBox(0, msg, u"任务调度结果", MB_OK | MB_ICONINFORMATION | MB_TOPMOST | MB_SYSTEMMODAL)
             # subprocess.call([os.path.join(_dirname, "MessageBox.exe"), msg], cwd=_dirname, shell=False, stdin=None, stdout=None, stderr=None, timeout=None)
 
+
 if __name__ == "__main__":
     _abspath = sys.argv[0]
     _basename = os.path.basename(_abspath)
@@ -289,7 +290,7 @@ if __name__ == "__main__":
     _conf = configparser.ConfigParser()
     _conf.read('cfg.ini', encoding='utf-16')
     for sec in _conf.sections():
-        _dict[sec] = VERSION(_conf.get(sec, 'key'), _conf.get(sec, 'name'), _conf.get(sec, 'base-path'), _conf.get(sec, 'tfs-url'), _conf.get(sec, 'fire-on'))
+        _dict[sec] = VERSION(_conf.get(sec, 'key'), _conf.get(sec, 'name'), _conf.get(sec, 'base-path'), _conf.get(sec, 'tfs-url'), _conf.get(sec, 'upload-path'), _conf.get(sec, 'fire-on'))
     print(_dict)
 
     app = QApplication(sys.argv)

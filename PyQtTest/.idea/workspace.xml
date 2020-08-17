@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8bc29d8f-5232-4841-9f27-b7e1be7144dd" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/cfg.ini" beforeDir="false" afterPath="$PROJECT_DIR$/cfg.ini" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/testlayout_main.py" beforeDir="false" afterPath="$PROJECT_DIR$/testlayout_main.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -49,7 +48,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/receivemq.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="286">
+            <state relative-caret-position="380">
               <caret line="22" selection-start-line="22" selection-end-line="22" />
               <folding>
                 <element signature="e#0#11#0" expanded="true" />
@@ -61,31 +60,35 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/testlayout_main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="117">
-              <caret line="26" lean-forward="true" selection-start-line="26" selection-end-line="26" />
+            <state relative-caret-position="99">
+              <caret line="292" column="62" lean-forward="true" selection-start-line="292" selection-start-column="62" selection-end-line="292" selection-end-column="62" />
+              <folding>
+                <element signature="e#23#33#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/resources_rc.qrc">
-          <provider selected="true" editor-type-id="text-editor" />
+        <entry file="file://$PROJECT_DIR$/compiler_proxy.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="207">
+              <caret line="227" selection-start-line="226" selection-end-line="227" />
+              <folding>
+                <element signature="e#0#36#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/TrayIconDemo.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="114">
-              <caret line="25" lean-forward="true" selection-start-line="25" selection-end-line="25" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/hello_main.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="76">
-              <caret line="6" column="23" selection-start-line="6" selection-start-column="23" selection-end-line="6" selection-end-column="23" />
+              <caret line="439" selection-start-line="437" selection-end-line="439" />
+              <folding>
+                <element signature="e#23#33#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -108,9 +111,12 @@
       <find>utf16</find>
       <find>except</find>
       <find>count</find>
-      <find>QTextCursor</find>
       <find>'.'</find>
+      <find>on_edit_textChanged</find>
+      <find>processtrigger</find>
+      <find>QTextCursor</find>
       <find>self._status</find>
+      <find>VERSION</find>
       <find>self._message</find>
     </findStrings>
     <replaceStrings>
@@ -151,6 +157,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -167,7 +174,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -324,22 +330,23 @@
       <workItem from="1596851629775" duration="6950000" />
       <workItem from="1597063841948" duration="1337000" />
       <workItem from="1597238321771" duration="7115000" />
+      <workItem from="1597671232087" duration="2099000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="19948000" />
+    <option name="totallyTimeSpent" value="22047000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1295" height="695" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.22392885" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.2271625" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32900432" />
-      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.3285968" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.3285968" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.39964476" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -361,7 +368,7 @@
     <option name="version" value="1" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/PyQtTest$testlayout_main.coverage" NAME="testlayout_main Coverage Results" MODIFIED="1597246821672" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/PyQtTest$testlayout_main.coverage" NAME="testlayout_main Coverage Results" MODIFIED="1597672600990" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/PyQtTest$socket_client.coverage" NAME="socket_client Coverage Results" MODIFIED="1596860055649" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/PyQtTest$hello.coverage" NAME="hello Coverage Results" MODIFIED="1593661590230" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/PyQtTest$query_window.coverage" NAME="query_window Coverage Results" MODIFIED="1593670649402" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
@@ -412,6 +419,18 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/readme.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="19">
+          <caret line="1" selection-start-line="1" selection-end-line="1" selection-end-column="68" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/testlayout.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1395" />
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/hello.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="76">
@@ -439,16 +458,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/hello_main.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="76">
-          <caret line="6" column="23" selection-start-line="6" selection-start-column="23" selection-end-line="6" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/receivemq.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="286">
+        <state relative-caret-position="380">
           <caret line="22" selection-start-line="22" selection-end-line="22" />
           <folding>
             <element signature="e#0#11#0" expanded="true" />
@@ -456,32 +468,50 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/readme.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="19">
-          <caret line="1" selection-start-line="1" selection-end-line="1" selection-end-column="68" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/testlayout.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1395" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/resources_rc.qrc">
       <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/hello_main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="76">
+          <caret line="6" column="23" selection-start-line="6" selection-start-column="23" selection-end-line="6" selection-end-column="23" />
+        </state>
+      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/TrayIconDemo.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="114">
-          <caret line="25" lean-forward="true" selection-start-line="25" selection-end-line="25" />
+          <caret line="439" selection-start-line="437" selection-end-line="439" />
+          <folding>
+            <element signature="e#23#33#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://E:/ProgramData/Anaconda3/Lib/threading.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="104">
+          <caret line="1176" selection-start-line="1176" selection-end-line="1176" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/compiler_proxy.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="207">
+          <caret line="227" selection-start-line="226" selection-end-line="227" />
+          <folding>
+            <element signature="e#0#36#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/testlayout_main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="117">
-          <caret line="26" lean-forward="true" selection-start-line="26" selection-end-line="26" />
+        <state relative-caret-position="99">
+          <caret line="292" column="62" lean-forward="true" selection-start-line="292" selection-start-column="62" selection-end-line="292" selection-end-column="62" />
+          <folding>
+            <element signature="e#23#33#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

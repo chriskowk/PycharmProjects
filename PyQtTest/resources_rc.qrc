@@ -27,5 +27,9 @@
     <file alias="clock.ico">images/clock.ico</file>
     <file alias="history.png">images/history.png</file>
     <file alias="proxy.ico">images/proxy.ico</file>
+    <file alias="send.png">images/send.png</file>
+    <file alias="send2.png">images/send2.png</file>
+    <file alias="sendmsg.png">images/sendmsg.png</file>
+    <file alias="bell.png">images/bell.png</file>
 </qresource>
 </RCC>

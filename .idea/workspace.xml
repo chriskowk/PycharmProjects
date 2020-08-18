@@ -3,9 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="ff5e2e34-04e0-44ed-9206-1a7c575d6306" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PyQtTest/TrayIconDemo.py" beforeDir="false" afterPath="$PROJECT_DIR$/PyQtTest/TrayIconDemo.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PyQtTest/testlayout.py" beforeDir="false" afterPath="$PROJECT_DIR$/PyQtTest/testlayout.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PyQtTest/testlayout.ui" beforeDir="false" afterPath="$PROJECT_DIR$/PyQtTest/testlayout.ui" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PyQtTest/compiler_proxy.py" beforeDir="false" afterPath="$PROJECT_DIR$/PyQtTest/compiler_proxy.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PyQtTest/resources_rc.py" beforeDir="false" afterPath="$PROJECT_DIR$/PyQtTest/resources_rc.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PyQtTest/resources_rc.qrc" beforeDir="false" afterPath="$PROJECT_DIR$/PyQtTest/resources_rc.qrc" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/PyQtTest/testlayout_main.py" beforeDir="false" afterPath="$PROJECT_DIR$/PyQtTest/testlayout_main.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -19,7 +19,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/PyQtTest/hello.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="968">
+            <state>
               <caret line="44" column="57" selection-start-line="44" selection-start-column="57" selection-end-line="44" selection-end-column="57" />
             </state>
           </provider>
@@ -64,31 +64,19 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/PyQtTest/readme.txt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="22">
-              <caret line="1" column="83" selection-start-line="1" selection-end-line="1" selection-end-column="83" />
+            <state relative-caret-position="352">
+              <caret line="16" column="27" selection-start-line="16" selection-start-column="27" selection-end-line="16" selection-end-column="27" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/PyQtTest/eventfilter.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="44">
-              <caret line="3" column="32" selection-start-line="3" selection-start-column="32" selection-end-line="3" selection-end-column="32" />
-              <folding>
-                <element signature="e#0#10#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/PyQtTest/compiler_proxy.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="481">
-              <caret line="65" lean-forward="true" selection-start-line="65" selection-end-line="92" />
+            <state relative-caret-position="401">
+              <caret line="157" column="36" selection-start-line="157" selection-start-column="36" selection-end-line="157" selection-end-column="36" />
               <folding>
-                <element signature="e#0#36#0" expanded="true" />
+                <element signature="e#23#33#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -103,14 +91,23 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/PyQtTest/testlayout_main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="415">
-              <caret line="266" column="52" selection-start-line="266" selection-start-column="52" selection-end-line="266" selection-end-column="52" />
+            <state relative-caret-position="543">
+              <caret line="234" selection-start-line="234" selection-end-line="234" />
               <folding>
-                <element signature="e#23#33#0" expanded="true" />
+                <element signature="e#0#36#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/PyQtTest/resources_rc.qrc">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="416">
+              <caret line="31" column="55" selection-start-line="31" selection-start-column="55" selection-end-line="31" selection-end-column="55" />
             </state>
           </provider>
         </entry>
@@ -126,7 +123,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>qApp</find>
       <find>consumer</find>
       <find>closeEvent</find>
       <find>scheduler.ico</find>
@@ -156,6 +152,7 @@
       <find>pull_work_queue</find>
       <find>txtM</find>
       <find>ui.textEdit</find>
+      <find>self._status</find>
     </findStrings>
     <replaceStrings>
       <replace>QtGui.QIcon(':/images/</replace>
@@ -186,10 +183,10 @@
         <option value="$PROJECT_DIR$/PyQtTest/socket_client.py" />
         <option value="$PROJECT_DIR$/PyQtTest/sendmq.py" />
         <option value="$PROJECT_DIR$/PyQtTest/receivemq.py" />
-        <option value="$PROJECT_DIR$/PyQtTest/resources_rc.qrc" />
         <option value="$PROJECT_DIR$/PyQtTest/TrayIconDemo.py" />
-        <option value="$PROJECT_DIR$/PyQtTest/compiler_proxy.py" />
+        <option value="$PROJECT_DIR$/PyQtTest/resources_rc.qrc" />
         <option value="$PROJECT_DIR$/PyQtTest/testlayout_main.py" />
+        <option value="$PROJECT_DIR$/PyQtTest/compiler_proxy.py" />
       </list>
     </option>
   </component>
@@ -222,12 +219,6 @@
             <path>
               <item name="PycharmProjects" type="b2602c69:ProjectViewProjectNode" />
               <item name="PycharmProjects" type="462c0819:PsiDirectoryNode" />
-              <item name="PyQtTest" type="462c0819:PsiDirectoryNode" />
-              <item name="images" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="PycharmProjects" type="b2602c69:ProjectViewProjectNode" />
-              <item name="PycharmProjects" type="462c0819:PsiDirectoryNode" />
               <item name="UITestCase" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
@@ -241,17 +232,17 @@
     <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/PyQtTest" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/PyQtTest/images" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="settings.editor.selected.configurable" value="Errors" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="F:\GitHub\PycharmProjects\PyQtTest\images" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="F:\GitHub\PycharmProjects\PyQtTest\images" />
       <recent name="F:\GitHub\PycharmProjects\PyQtTest" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
       <recent name="F:\GitHub\PycharmProjects\PyQtTest\images" />
     </key>
   </component>
@@ -428,12 +419,12 @@
       <workItem from="1597309358864" duration="485000" />
       <workItem from="1597309869549" duration="25000" />
       <workItem from="1597369564143" duration="2288000" />
-      <workItem from="1597392456133" duration="25090000" />
+      <workItem from="1597392456133" duration="31309000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="319183000" />
+    <option name="totallyTimeSpent" value="325402000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
@@ -445,7 +436,7 @@
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32936078" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.31960997" />
-      <window_info active="true" anchor="bottom" id="Debug" order="3" visible="true" weight="0.29685807" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.29685807" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -453,7 +444,7 @@
       <window_info anchor="bottom" id="Version Control" order="8" weight="0.32936078" />
       <window_info anchor="bottom" id="Database Changes" order="9" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
-      <window_info anchor="bottom" id="Terminal" order="11" weight="0.27735645" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="11" visible="true" weight="0.27735645" />
       <window_info anchor="bottom" id="Python Console" order="12" weight="0.32936078" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -476,7 +467,7 @@
     <SUITE FILE_PATH="coverage/PycharmProjects$TrayIconDemo.coverage" NAME="TrayIconDemo Coverage Results" MODIFIED="1597649356601" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/PyQtTest" />
     <SUITE FILE_PATH="coverage/PycharmProjects$workarea.coverage" NAME="workarea Coverage Results" MODIFIED="1595234370843" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/PyQtTest" />
     <SUITE FILE_PATH="coverage/PycharmProjects$compiler_proxy.coverage" NAME="compiler_proxy Coverage Results" MODIFIED="1597657176038" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/PyQtTest" />
-    <SUITE FILE_PATH="coverage/PycharmProjects$testlayout_main.coverage" NAME="testlayout_main Coverage Results" MODIFIED="1597670621532" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/PyQtTest" />
+    <SUITE FILE_PATH="coverage/PycharmProjects$testlayout_main.coverage" NAME="testlayout_main Coverage Results" MODIFIED="1597719871898" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/PyQtTest" />
     <SUITE FILE_PATH="coverage/PycharmProjects$hello.coverage" NAME="hello Coverage Results" MODIFIED="1597217263619" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/PyQtTest" />
     <SUITE FILE_PATH="coverage/PycharmProjects$receivemq.coverage" NAME="receivemq Coverage Results" MODIFIED="1597202674915" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/PyQtTest" />
     <SUITE FILE_PATH="coverage/PycharmProjects$ping.coverage" NAME="ping Coverage Results" MODIFIED="1594975467036" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/PyQtTest" />
@@ -484,13 +475,6 @@
     <SUITE FILE_PATH="coverage/PycharmProjects$producer.coverage" NAME="producer Coverage Results" MODIFIED="1594981828764" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/PyQtTest" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$USER_HOME$/.PyCharm2019.1/system/python_stubs/-771540385/PyQt5/QtWidgets/QWidget.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="196">
-          <caret line="96" column="8" selection-start-line="96" selection-start-column="8" selection-end-line="96" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/UITestCase/Common/startup.py">
       <provider selected="true" editor-type-id="text-editor">
         <state>
@@ -721,13 +705,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/PyQtTest/resources_rc.qrc">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="421">
-          <caret line="28" column="44" selection-start-line="28" selection-start-column="44" selection-end-line="28" selection-end-column="44" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/.PyCharm2019.1/system/python_stubs/-771540385/win32api.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="196">
@@ -737,7 +714,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/PyQtTest/hello.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="968">
+        <state>
           <caret line="44" column="57" selection-start-line="44" selection-start-column="57" selection-end-line="44" selection-end-column="57" />
         </state>
       </provider>
@@ -782,13 +759,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/PyQtTest/readme.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="22">
-          <caret line="1" column="83" selection-start-line="1" selection-end-line="1" selection-end-column="83" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/PyQtTest/testlayout.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="199">
@@ -810,20 +780,62 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/PyQtTest/compiler_proxy.py">
+    <entry file="file://$PROJECT_DIR$/PyQtTest/readme.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="481">
-          <caret line="65" lean-forward="true" selection-start-line="65" selection-end-line="92" />
+        <state relative-caret-position="352">
+          <caret line="16" column="27" selection-start-line="16" selection-start-column="27" selection-end-line="16" selection-end-column="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/.PyCharm2019.1/system/python_stubs/-771540385/PyQt5/QtWidgets/QAction.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="6292">
+          <caret line="288" column="8" selection-start-line="288" selection-start-column="8" selection-end-line="288" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/.PyCharm2019.1/system/python_stubs/-771540385/PyQt5/QtGui/QTextBlock.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="206">
+          <caret line="152" column="8" selection-start-line="152" selection-start-column="8" selection-end-line="152" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/.PyCharm2019.1/system/python_stubs/-771540385/PyQt5/QtWidgets/QToolBar.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="199">
+          <caret line="38" column="8" selection-start-line="38" selection-start-column="8" selection-end-line="38" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PyQtTest/resources_rc.qrc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="416">
+          <caret line="31" column="55" selection-start-line="31" selection-start-column="55" selection-end-line="31" selection-end-column="55" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/.PyCharm2019.1/system/python_stubs/-771540385/PyQt5/QtGui/QFont.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="199">
+          <caret line="307" column="8" selection-start-line="307" selection-start-column="8" selection-end-line="307" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PyQtTest/testlayout_main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="543">
+          <caret line="234" selection-start-line="234" selection-end-line="234" />
           <folding>
             <element signature="e#0#36#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/PyQtTest/testlayout_main.py">
+    <entry file="file://$PROJECT_DIR$/PyQtTest/compiler_proxy.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="415">
-          <caret line="266" column="52" selection-start-line="266" selection-start-column="52" selection-end-line="266" selection-end-column="52" />
+        <state relative-caret-position="401">
+          <caret line="157" column="36" selection-start-line="157" selection-start-column="36" selection-end-line="157" selection-end-column="36" />
           <folding>
             <element signature="e#23#33#0" expanded="true" />
           </folding>

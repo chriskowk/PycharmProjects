@@ -419,11 +419,15 @@ class window(QMainWindow):
     def processtrigger(self, qaction):
         self.push_queue(Task(qaction, True))
 
-    def push_queue(self, task):
+    def push_queue(self, task, remote=False):
+        if not remote:
+            self.showStatus("%s: %s 任务已入队，等待执行中..." % (time.strftime('%H:%M:%S'), task.id))
+        else:
+            self.showStatus("%s: [响应外部请求] %s 任务已入队..." % (time.strftime('%H:%M:%S'), task.id))
+        for item in _tasks_todo:
+            if task.id == item.id: return
+        _tasks_todo.append(task)
         _work_queue.put(task)
-        self.showStatus("%s: %s 任务已入队，等待执行中..." % (time.strftime('%H:%M:%S'), task.id))
-        # _work_queue.close()
-        # _work_queue.join()
 
     # def runCmd(self, cmd, path):
         # 语法：subprocess.Popen(args, bufsize=0, executable=None, stdin=None, stdout=None, stderr=None, preexec_fn=None, close_fds=False, shell=False, cwd=None, env=None, universal_newlines=False, startupinfo=None, creationflags=0)
@@ -505,7 +509,8 @@ class window(QMainWindow):
                 self.showStatus("%s: %s 任务已移除..." % (time.strftime('%H:%M:%S'), task.id))
         except Queue.Empty:
             pass  # Handle empty queue here
-        else:
+        finally:
+            _tasks_todo.clear()
             return  # Handle task here and call q.task_done()
 
     def func_timer(self):
@@ -536,6 +541,7 @@ class window(QMainWindow):
             for i in range(_out_queue.qsize()):
                 item = _out_queue.get()  # q.get会阻塞，q.get_nowait()不阻塞，但会抛异常
                 self.push_out_queue(item.id)
+                _tasks_todo.remove(item)
                 msg = u"任务%s已完成" % item.id
                 # MessageBox(0, msg, u"任务调度结果", MB_OK | MB_ICONINFORMATION | MB_TOPMOST | MB_SYSTEMMODAL)
                 # ctypes.windll.user32.MessageBoxA(0, msg.encode('gb2312'), u"任务调度结果".encode('gb2312'), MB_OK | MB_ICONINFORMATION | MB_TOPMOST)
@@ -586,8 +592,7 @@ class window(QMainWindow):
                 name = body.decode('utf-8')
                 for item in _dict.items():
                     if item[1].name == name:
-                        self.showStatus("%s: [响应外部请求] %s 任务已入队..." % (time.strftime('%H:%M:%S'), name))
-                        _work_queue.put(item[1].task)
+                        self.push_queue(item[1].task, True)
 
 class Task(object):
     def __init__(self, qaction=QAction(), add_arg=False, path=''):
@@ -675,6 +680,7 @@ class ResponseThread(threading.Thread):
 
 
 if __name__ == "__main__":
+    _tasks_todo = []
     _abspath = sys.argv[0]
     _basename = os.path.basename(_abspath)
     _dirname = os.path.dirname(_abspath)

@@ -19,7 +19,7 @@ import win32process
 import ctypes
 import win32com.client
 from win32com import *
-
+import socket
 import configparser
 from PyQt5.QtCore import pyqtSlot
 import pika
@@ -77,6 +77,15 @@ def _get_work_area():
     rect = RECT()
     ctypes.windll.user32.SystemParametersInfoA(SPI_GETWORKAREA, 0, ctypes.byref(rect), 0)
     return rect
+
+def get_host_ip():
+    try:
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.connect(('8.8.8.8', 80))
+        ip = s.getsockname()[0]
+    finally:
+        s.close()
+    return ip
 
 class VERSION:
     def __init__(self, key='', name='', basepath='', url='', uploadpath='', fireon='N/A', task=None):
@@ -292,6 +301,7 @@ class window(QMainWindow):
 
 if __name__ == "__main__":
     _interval = 1
+    _host_ip = get_host_ip()
     _abspath = sys.argv[0]
     _basename = os.path.basename(_abspath)
     _dirname = os.path.dirname(_abspath)

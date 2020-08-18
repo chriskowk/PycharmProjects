@@ -4,6 +4,7 @@ import queue
 import sys, os, time
 import platform
 import traceback
+import socket
 
 def ping(
         hostname=None,
@@ -77,8 +78,18 @@ def get_all_device_status(ips):
     out_queue.join()
     return data
 
+def get_host_ip():
+    try:
+        s=socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.connect(('8.8.8.8', 80))
+        ip=s.getsockname()[0]
+    finally:
+        s.close()
+    return ip
+
 
 if __name__ == '__main__':
+    print(get_host_ip())
     ips = ['172.18.99.' + str(i) for i in range(0xff)]
     print(get_all_device_status(ips))
     print('main process begin sleep 20 seconds....')

@@ -263,15 +263,13 @@ class window(QMainWindow):
         tbrMain.addAction(setup)
         clear = QAction(icon=QtGui.QIcon(":/images/clear.png"), text="清空队列", parent=self, triggered=self.clear_work_queue)
         tbrMain.addAction(clear)
-        tbrExit = self.addToolBar("Exit")
+        tbrMain.addSeparator()
         exit = QAction(QtGui.QIcon(":/images/close.png"), "退出", self)
-        tbrExit.addAction(exit)
+        tbrMain.addAction(exit)
         # 设置名称显示在图标下面（默认本来是只显示图标）
         tbrMain.setToolButtonStyle(Qt.ToolButtonTextUnderIcon)
-        tbrExit.setToolButtonStyle(Qt.ToolButtonTextUnderIcon)
         tbrMain.actionTriggered.connect(self.toolbarpressed)
         self.ti = TrayIcon(self)
-        tbrExit.actionTriggered.connect(self.ti.quit)
         self.txtMsg = QTextEdit()
         self.txtMsg.setReadOnly(True)
         self.txtMsg.setStyleSheet("color:rgb(10,10,10,255);font-size:14px;font-weight:normal;font-family:Roman times;")
@@ -335,7 +333,9 @@ class window(QMainWindow):
         elif opt == "下载":
             self.get_latest_default(sender)
         elif opt == "设置":
-            print("按下的ToolBar按钮是 %s" % opt)
+            pass
+        elif opt == "退出":
+            self.ti.quit()
         self.status.showMessage("正在执行 %s ..." % opt, 5000)
 
     def start_default(self, sender):
@@ -420,8 +420,8 @@ class window(QMainWindow):
         self.push_queue(Task(qaction, True))
 
     def push_queue(self, task, remote=False, host_ip=''):
-        header = remote and "[来自%s的请求]" % host_ip or ''
-        self.showStatus("%s: %s%s 任务已入队..." % (time.strftime('%H:%M:%S'), header, task.id))
+        header = remote and "[来自%s的请求]" % host_ip or '[本地请求]'
+        self.showStatus("%s: %s %s 任务已入队..." % (time.strftime('%H:%M:%S'), header, task.id))
         for item in _tasks_todo:
             if task.id == item.id: return
         _tasks_todo.append(task)

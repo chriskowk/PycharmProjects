@@ -162,16 +162,14 @@ class window(QMainWindow):
         self._et = QAction(QtGui.QIcon(":/images/bell.png"), "00:00:00", self)
         self._et.setFont(QtGui.QFont("Microsoft YaHei", 11, QFont.Normal))
         tbrMain.addAction(self._et)
-        tbrExit = self.addToolBar("Exit")
+        tbrMain.addSeparator()
         exit = QAction(QtGui.QIcon(":/images/close.png"), "退出", self)
         exit.setFont(QtGui.QFont("宋体", 11, QFont.Normal))
-        tbrExit.addAction(exit)
+        tbrMain.addAction(exit)
         # 设置名称显示在图标下面（默认本来是只显示图标）
         tbrMain.setToolButtonStyle(Qt.ToolButtonTextUnderIcon)
-        tbrExit.setToolButtonStyle(Qt.ToolButtonTextUnderIcon)
         tbrMain.actionTriggered.connect(self.toolbarpressed)
         self.ti = TrayIcon(self)
-        tbrExit.actionTriggered.connect(self.ti.quit)
         self.txtMsg = QTextEdit()
         self.txtMsg.setReadOnly(True)
         self.txtMsg.setStyleSheet("color:rgb(10,10,10,255);font-size:16px;font-weight:normal;font-family:Roman times;")
@@ -230,6 +228,8 @@ class window(QMainWindow):
         opt = sender.text()
         if opt == "发送请求":
             self.start_default(sender)
+        elif opt == "退出":
+            self.ti.quit()
         self.status.showMessage("正在执行 %s ..." % opt, 5000)
 
     def start_default(self, sender):

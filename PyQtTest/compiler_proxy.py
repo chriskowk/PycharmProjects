@@ -275,7 +275,11 @@ class window(QMainWindow):
     def run(self, msg):
         if self._status == 1 and self._message == msg:
             self._status = 2
-            self.showStatus(u"[%s] 编译任务已完成。" % msg)
+        self.showStatus(u"[%s] 编译任务已完成。" % msg)
+        mark = u"下载路径：\r\n%s" % _dict[msg].upload_path
+        message = u"[%s] 编译任务已完成，%s" % (msg, mark)
+        MessageBox(0, message, u"任务调度结果", MB_OK | MB_ICONINFORMATION | MB_TOPMOST | MB_SYSTEMMODAL)
+        # subprocess.call([os.path.join(_dirname, "MessageBox.exe"), message], cwd=_dirname, shell=False, stdin=None, stdout=None, stderr=None, timeout=None)
 
     def func_timer(self):
         global timer
@@ -291,12 +295,8 @@ class window(QMainWindow):
             self._duration += _interval
             self._et.setText(time.strftime('%H:%M:%S', time.gmtime(self._duration)))
         elif self._status == 2:
-            mark = u"下载路径：\r\n%s" % _dict[self._message].upload_path
-            msg = u"[%s] 编译任务已完成，%s" % (self._message, mark)
             self._message = ''
             self._status = 0
-            MessageBox(0, msg, u"任务调度结果", MB_OK | MB_ICONINFORMATION | MB_TOPMOST | MB_SYSTEMMODAL)
-            # subprocess.call([os.path.join(_dirname, "MessageBox.exe"), msg], cwd=_dirname, shell=False, stdin=None, stdout=None, stderr=None, timeout=None)
 
 
 if __name__ == "__main__":

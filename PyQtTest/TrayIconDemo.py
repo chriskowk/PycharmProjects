@@ -548,11 +548,13 @@ class window(QMainWindow):
 
     def push_out_queue(self, message):
         for key in _remote_messages:
-            names = str.split(_remote_messages[key], ',', 1)
+            names = str.split(_remote_messages[key], ',')
             if names.__contains__(message):
                 self.push_specified_queue(key, message)
-                names.remove(message)
-                _remote_messages[key] = ''.join(names)
+                remains = []
+                for item in names:
+                    if item != message: remains.append(item)
+                _remote_messages[key] = ''.join(remains)
 
     def push_specified_queue(self, queue_name, message):
         username = 'chris'
@@ -596,7 +598,7 @@ class window(QMainWindow):
             method, properties, body = message
             if body is not None:
                 msg = body.decode('utf-8')
-                names = str.split(msg, ';', 1)
+                names = str.split(msg, ';')
                 key = names[0]
                 if not _remote_messages.keys().__contains__(key):
                     _remote_messages[key] = names[1]

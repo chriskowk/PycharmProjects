@@ -419,11 +419,9 @@ class window(QMainWindow):
     def processtrigger(self, qaction):
         self.push_queue(Task(qaction, True))
 
-    def push_queue(self, task, remote=False):
-        if not remote:
-            self.showStatus("%s: %s 任务已入队，等待执行中..." % (time.strftime('%H:%M:%S'), task.id))
-        else:
-            self.showStatus("%s: [响应外部请求] %s 任务已入队..." % (time.strftime('%H:%M:%S'), task.id))
+    def push_queue(self, task, remote=False, host_ip=''):
+        header = remote and "[来自%s的请求]" % host_ip or ''
+        self.showStatus("%s: %s%s 任务已入队..." % (time.strftime('%H:%M:%S'), header, task.id))
         for item in _tasks_todo:
             if task.id == item.id: return
         _tasks_todo.append(task)
@@ -549,6 +547,14 @@ class window(QMainWindow):
                 subprocess.call([os.path.join(_dirname, "MessageBox.exe"), msg], cwd=_dirname, shell=False, stdin=None, stdout=None, stderr=None, timeout=None)
 
     def push_out_queue(self, message):
+        for key in _remote_messages:
+            names = str.split(_remote_messages[key], ',', 1)
+            if names.__contains__(message):
+                self.push_specified_queue(key, message)
+                names.remove(message)
+                _remote_messages[key] = ''.join(names)
+
+    def push_specified_queue(self, queue_name, message):
         username = 'chris'
         pwd = '123456'
         ip_addr = '172.18.99.177'
@@ -558,10 +564,10 @@ class window(QMainWindow):
         credentials = pika.PlainCredentials(username, pwd)
         connection = pika.BlockingConnection(pika.ConnectionParameters(ip_addr, port_num, '/', credentials))
         channel = connection.channel()
-        channel.queue_declare('out_queue', durable=True)
+        channel.queue_declare(queue_name, durable=True)
         channel.basic_publish(
             exchange='',
-            routing_key='out_queue',  # 写明将消息发送给队列balance
+            routing_key=queue_name,  # 写明将消息发送给队列balance
             body=message,  # 要发送的消息
             properties=pika.BasicProperties(delivery_mode=2, )  # 设置消息持久化(持久化第二步)，将要发送的消息的属性标记为2，表示该消息要持久化
         )  # 向消息队列发送一条消息
@@ -589,10 +595,16 @@ class window(QMainWindow):
             if not message: continue
             method, properties, body = message
             if body is not None:
-                name = body.decode('utf-8')
+                msg = body.decode('utf-8')
+                names = str.split(msg, ';', 1)
+                key = names[0]
+                if not _remote_messages.keys().__contains__(key):
+                    _remote_messages[key] = names[1]
+                else:
+                    _remote_messages[key] += ',' + names[1]
                 for item in _dict.items():
-                    if item[1].name == name:
-                        self.push_queue(item[1].task, True)
+                    if item[1].name == names[1]:
+                        self.push_queue(item[1].task, True, key)
 
 class Task(object):
     def __init__(self, qaction=QAction(), add_arg=False, path=''):
@@ -681,6 +693,7 @@ class ResponseThread(threading.Thread):
 
 if __name__ == "__main__":
     _tasks_todo = []
+    _remote_messages = {}
     _abspath = sys.argv[0]
     _basename = os.path.basename(_abspath)
     _dirname = os.path.dirname(_abspath)

@@ -121,8 +121,8 @@ class Consumer(threading.Thread):
         credentials = pika.PlainCredentials(username, pwd)
         connection = pika.BlockingConnection(pika.ConnectionParameters(ip_addr, port_num, '/', credentials))
         channel = connection.channel()
-        channel.queue_declare('out_queue', durable=True)
-        for message in channel.consume('out_queue', auto_ack=True, inactivity_timeout=1):
+        channel.queue_declare(_host_ip, durable=True)
+        for message in channel.consume(_host_ip, auto_ack=True, inactivity_timeout=1):
             if self._is_interrupted: break
             if not message: continue
             method, properties, body = message
@@ -263,7 +263,7 @@ class window(QMainWindow):
         channel.basic_publish(
             exchange='',
             routing_key='work_queue',  # 写明将消息发送给队列balance
-            body=msg,  # 要发送的消息
+            body=_host_ip + ';' + msg,  # 要发送的消息
             properties=pika.BasicProperties(delivery_mode=2, )  # 设置消息持久化(持久化第二步)，将要发送的消息的属性标记为2，表示该消息要持久化
         )  # 向消息队列发送一条消息
         connection.close()

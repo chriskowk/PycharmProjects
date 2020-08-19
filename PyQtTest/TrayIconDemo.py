@@ -420,7 +420,7 @@ class window(QMainWindow):
         self.push_queue(Task(qaction, True))
 
     def push_queue(self, task, remote=False, host_ip=''):
-        header = remote and "[来自%s的请求]" % host_ip or '[本地请求]'
+        header = remote and "[来自%s]" % host_ip or '[本地请求]'
         self.showStatus("%s: %s %s 任务已入队..." % (time.strftime('%H:%M:%S'), header, task.id))
         for item in _tasks_todo:
             if task.id == item.id: return
@@ -554,7 +554,8 @@ class window(QMainWindow):
                 remains = []
                 for item in names:
                     if item != message: remains.append(item)
-                _remote_messages[key] = ''.join(remains)
+                _remote_messages[key] = ','.join(remains)
+                self.showStatus("%s: %s:%s" % (time.strftime('%H:%M:%S'), key, _remote_messages[key]))
 
     def push_specified_queue(self, queue_name, message):
         username = 'chris'
@@ -575,13 +576,7 @@ class window(QMainWindow):
         )  # 向消息队列发送一条消息
         connection.close()
 
-    def minute_timer(self):
-        global timer2
-        timer2 = threading.Timer(_interval * 60, self.minute_timer)
-        timer2.start()
-        self.pull_work_queue(False)
-
-    def pull_work_queue(self, iswaited=True):
+    def pull_work_queue(self):
         username = 'chris'
         pwd = '123456'
         ip_addr = '172.18.99.177'
@@ -593,19 +588,20 @@ class window(QMainWindow):
         channel = connection.channel()
         channel.queue_declare('work_queue', durable=True)
         for message in channel.consume('work_queue', auto_ack=True, inactivity_timeout=1):
-            if not iswaited: break
             if not message: continue
             method, properties, body = message
             if body is not None:
                 msg = body.decode('utf-8')
+                self.status.showMessage("%s: %s" % (time.strftime('%H:%M:%S'), msg))
                 names = str.split(msg, ';')
                 key = names[0]
-                if not _remote_messages.keys().__contains__(key):
+                if not _remote_messages.keys().__contains__(key) or _remote_messages[key] == '':
                     _remote_messages[key] = names[1]
                 else:
                     _remote_messages[key] += ',' + names[1]
                 for item in _dict.items():
                     if item[1].name == names[1]:
+                        self.showStatus("%s: %s|%s" % (time.strftime('%H:%M:%S'), key, item[1].task.id))
                         self.push_queue(item[1].task, True, key)
 
 class Task(object):
@@ -714,5 +710,4 @@ if __name__ == "__main__":
     win = window()
     win.hide()
     win.func_timer()
-    win.minute_timer()
     sys.exit(app.exec_())

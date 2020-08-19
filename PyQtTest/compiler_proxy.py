@@ -154,6 +154,7 @@ class window(QMainWindow):
         self.mu1.setTearOffEnabled(False)
         self.mu1.triggered[QAction].connect(self.processtrigger)
 
+        self.ti = TrayIcon(self)
         tbrMain = self.addToolBar("Scheduler")
         start = QAction(QtGui.QIcon(":/images/send.png"), "发送请求", self)
         start.setFont(QtGui.QFont("宋体", 11, QFont.Normal))
@@ -163,16 +164,16 @@ class window(QMainWindow):
         self._et.setFont(QtGui.QFont("Microsoft YaHei", 11, QFont.Normal))
         tbrMain.addAction(self._et)
         tbrMain.addSeparator()
-        exit = QAction(QtGui.QIcon(":/images/close.png"), "退出", self)
-        exit.setFont(QtGui.QFont("宋体", 11, QFont.Normal))
-        tbrMain.addAction(exit)
+        shutdown = QAction(QtGui.QIcon(":/images/close.png"), "退出", self, triggered=self.ti.quit)
+        shutdown.setFont(QtGui.QFont("宋体", 11, QFont.Normal))
+        tbrMain.addAction(shutdown)
         # 设置名称显示在图标下面（默认本来是只显示图标）
         tbrMain.setToolButtonStyle(Qt.ToolButtonTextUnderIcon)
         tbrMain.actionTriggered.connect(self.toolbarpressed)
-        self.ti = TrayIcon(self)
+
         self.txtMsg = QTextEdit()
         self.txtMsg.setReadOnly(True)
-        self.txtMsg.setStyleSheet("color:rgb(10,10,10,255);font-size:16px;font-weight:normal;font-family:Roman times;")
+        self.txtMsg.setStyleSheet("color:rgb(10,10,10,255);font-size:15px;font-weight:normal;font-family:Roman times;")
         self.setCentralWidget(self.txtMsg)
         self.status.installEventFilter(self)
         self.ti.show()
@@ -228,9 +229,7 @@ class window(QMainWindow):
         opt = sender.text()
         if opt == "发送请求":
             self.start_default(sender)
-        elif opt == "退出":
-            self.ti.quit()
-        self.status.showMessage("正在执行 %s ..." % opt, 5000)
+        self.status.showMessage("%s: 正在执行 %s ..." % (time.strftime('%H:%M:%S'), opt), 5000)
 
     def start_default(self, sender):
         found = False
@@ -270,12 +269,12 @@ class window(QMainWindow):
         self._status = 1
         self._message = msg
         self._duration = 0
-        self.showStatus(u"[%s] 编译任务已入队... " % msg)
+        self.showStatus("%s: [%s] 编译任务已入队... " % (time.strftime('%H:%M:%S'), msg))
 
     def run(self, msg):
         if self._status == 1 and self._message == msg:
             self._status = 2
-        self.showStatus(u"[%s] 编译任务已完成。" % msg)
+        self.showStatus("%s: [%s] 编译任务已完成。" % (time.strftime('%H:%M:%S'), msg))
         mark = u"下载路径：\r\n%s" % _dict[msg].upload_path
         message = u"[%s] 编译任务已完成，%s" % (msg, mark)
         MessageBox(0, message, u"任务调度结果", MB_OK | MB_ICONINFORMATION | MB_TOPMOST | MB_SYSTEMMODAL)

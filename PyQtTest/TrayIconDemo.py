@@ -248,6 +248,7 @@ class window(QMainWindow):
         self.mu4.setTearOffEnabled(False)
         self.mu4.triggered[QAction].connect(self.show_latest_history)
 
+        self.ti = TrayIcon(self)
         tbrMain = self.addToolBar("Scheduler")
         start = QAction(QtGui.QIcon(":/images/start.png"), "启动", self)
         start.setMenu(self.mu1)
@@ -264,12 +265,12 @@ class window(QMainWindow):
         clear = QAction(icon=QtGui.QIcon(":/images/clear.png"), text="清空队列", parent=self, triggered=self.clear_work_queue)
         tbrMain.addAction(clear)
         tbrMain.addSeparator()
-        exit = QAction(QtGui.QIcon(":/images/close.png"), "退出", self)
-        tbrMain.addAction(exit)
+        shutdown = QAction(QtGui.QIcon(":/images/close.png"), "退出", self, triggered=self.ti.quit)
+        tbrMain.addAction(shutdown)
         # 设置名称显示在图标下面（默认本来是只显示图标）
         tbrMain.setToolButtonStyle(Qt.ToolButtonTextUnderIcon)
         tbrMain.actionTriggered.connect(self.toolbarpressed)
-        self.ti = TrayIcon(self)
+
         self.txtMsg = QTextEdit()
         self.txtMsg.setReadOnly(True)
         self.txtMsg.setStyleSheet("color:rgb(10,10,10,255);font-size:14px;font-weight:normal;font-family:Roman times;")
@@ -334,9 +335,7 @@ class window(QMainWindow):
             self.get_latest_default(sender)
         elif opt == "设置":
             pass
-        elif opt == "退出":
-            self.ti.quit()
-        self.status.showMessage("正在执行 %s ..." % opt, 5000)
+        self.status.showMessage("%s: 正在执行 %s ..." % (time.strftime('%H:%M:%S'), opt), 5000)
 
     def start_default(self, sender):
         found = False

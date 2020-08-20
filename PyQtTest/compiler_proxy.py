@@ -87,6 +87,27 @@ def get_host_ip():
         s.close()
     return ip
 
+def get_file_modify_time(path, filename):
+    dt = datetime.datetime(1900, 1, 1)
+    if os.path.exists(path):
+        # 获取该目录下的所有文件或文件夹目录
+        files = os.listdir(path)
+        for file in files:
+            # 得到该文件下所有目录的路径
+            full_path = os.path.join(path, file)
+            if os.path.isfile(full_path) and file.lower() == filename.lower():
+                dt = datetime.datetime.fromtimestamp(os.stat(full_path).st_mtime)
+                # file_modify_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(dt))
+                # print("%s 修改时间是: %s" % (full_path, file_modify_time))
+                break
+
+    return dt
+
+def check_files_compiled(version):
+    modify_time = get_file_modify_time(version.upload_path, "DataModel.Cis.Oracle.dll")
+    # print("modify_time=%s version.requested_on=%s version.upload_path=%s" % (modify_time, version.requested_on, version.upload_path))
+    return modify_time > version.requested_on
+
 class VERSION:
     def __init__(self, key='', name='', basepath='', url='', uploadpath='', fireon='N/A', task=None):
         self.task = task
@@ -95,6 +116,8 @@ class VERSION:
         self.base_path = basepath
         self.tfs_url = url
         self.upload_path = uploadpath
+        self.requested_on = datetime.datetime.now()
+        self.is_running = False
         fireon = fireon.replace(" ", "")
         self.fire_enabled = not fireon.upper().__contains__("N/A")
         self.fire_on = []
@@ -129,6 +152,7 @@ class Consumer(threading.Thread):
             if body is not None:
                 msg = body.decode('utf-8')
                 self._func(msg)
+        connection.close()
 
 class window(QMainWindow):
     def __init__(self, parent=None):
@@ -145,6 +169,7 @@ class window(QMainWindow):
         self._status = 0
         self._message = ''
         self._duration = 0
+        self._counter = 0
 
         self.mu1 = QMenu()
         for item in _dict.items():
@@ -249,6 +274,8 @@ class window(QMainWindow):
         for act in qaction.parent().actions():
             act.setChecked(True if qaction == act else False)
         msg = qaction.text()
+        _dict[msg].requested_on = datetime.datetime.now()
+        _dict[msg].is_running = True
         username = 'chris'
         pwd = '123456'
         ip_addr = '172.18.99.177'
@@ -274,11 +301,16 @@ class window(QMainWindow):
     def run(self, msg):
         if self._status == 1 and self._message == msg:
             self._status = 2
-        self.showStatus("%s: [%s] 编译任务已完成。" % (time.strftime('%H:%M:%S'), msg))
-        mark = u"下载路径：\r\n%s" % _dict[msg].upload_path
-        message = u"[%s] 编译任务已完成，%s" % (msg, mark)
-        MessageBox(0, message, u"任务调度结果", MB_OK | MB_ICONINFORMATION | MB_TOPMOST | MB_SYSTEMMODAL)
-        # subprocess.call([os.path.join(_dirname, "MessageBox.exe"), message], cwd=_dirname, shell=False, stdin=None, stdout=None, stderr=None, timeout=None)
+        self.show_message(msg)
+
+    def show_message(self, msg):
+        if _dict[msg].is_running:
+            self.showStatus("%s: [%s] 编译任务已完成。" % (time.strftime('%H:%M:%S'), msg))
+            mark = u"下载路径：\r\n%s" % _dict[msg].upload_path
+            message = u"[%s] 编译任务已完成，%s" % (msg, mark)
+            MessageBox(0, message, u"任务调度结果", MB_OK | MB_ICONINFORMATION | MB_TOPMOST | MB_SYSTEMMODAL)
+            # subprocess.call([os.path.join(_dirname, "MessageBox.exe"), message], cwd=_dirname, shell=False, stdin=None, stdout=None, stderr=None, timeout=None)
+            _dict[msg].is_running = False
 
     def func_timer(self):
         global timer
@@ -289,16 +321,22 @@ class window(QMainWindow):
 
     def check_finished(self):
         if self._status == 1:
-            #self.txtMsg.moveCursor(QTextCursor.End)
-            #self.txtMsg.insertPlainText('.')
             self._duration += _interval
             self._et.setText(time.strftime('%H:%M:%S', time.gmtime(self._duration)))
+            self._counter = (self._counter + 1) % 10
+            if self._counter == 0:
+                for key in _dict:
+                    if _dict[key].is_running:
+                        self.showStatus("%s: [%s] is_running=%s check_files_compiled=%s" % (time.strftime('%H:%M:%S'), key, _dict[key].is_running, check_files_compiled(_dict[key])))
+                        if check_files_compiled(_dict[key]):
+                            self.show_message(key)
         elif self._status == 2:
             self._message = ''
             self._status = 0
 
 
 if __name__ == "__main__":
+    _latest_request_time = datetime.datetime.now()
     _interval = 1
     _host_ip = get_host_ip()
     _abspath = sys.argv[0]

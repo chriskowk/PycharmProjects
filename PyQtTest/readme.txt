@@ -1,5 +1,6 @@
 pyrcc5 -o resources_rc.py resources_rc.qrc
 pyinstaller.exe --hidden-import=PyQt5 -F -w -i images\scheduler.ico trayicondemo.py
+pyinstaller.exe --hidden-import=PyQt5 -F -w -i images\proxy.ico compiler_proxy.py
 
 打包 PyQt5 项目：
 1. 打包命令：pyinstaller.exe --hidden-import=PyQt5 -F -w -i images\scheduler.ico trayicondemo.py

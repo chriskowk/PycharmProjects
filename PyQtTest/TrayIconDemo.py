@@ -602,6 +602,7 @@ class window(QMainWindow):
                     if item[1].name == names[1]:
                         self.showStatus("%s: %s|%s" % (time.strftime('%H:%M:%S'), key, item[1].task.id))
                         self.push_queue(item[1].task, True, key)
+        connection.close()
 
 class Task(object):
     def __init__(self, qaction=QAction(), add_arg=False, path=''):

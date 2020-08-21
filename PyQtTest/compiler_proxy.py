@@ -158,12 +158,12 @@ class window(QMainWindow):
     def __init__(self, parent=None):
         super(window, self).__init__(parent)
         self.setWindowFlags(Qt.WindowCloseButtonHint)
-        self.setWindowTitle("编译请求客户端")
+        dt = datetime.datetime.fromtimestamp(os.stat(_abspath).st_mtime)
+        self.setWindowTitle("编译请求客户端 - BuiltOn: %s" % dt.strftime('%Y-%m-%d %H:%M:%S'))
         rect = _get_work_area()
         self.resize(400, 300)
         self.setGeometry(rect.right-self.width()-10, rect.bottom-self.height()-10, self.width(), self.height())
         self.status = self.statusBar()
-        self.setWindowIcon(QtGui.QIcon(':/images/proxy.ico'))
         self._consumer = Consumer(self.run)
         self._consumer.start()
         self._status = 0
@@ -350,7 +350,7 @@ if __name__ == "__main__":
     print(_dict)
 
     app = QApplication(sys.argv)
-    app.setWindowIcon(QtGui.QIcon(":/images/proxy.ico"))
+    app.setWindowIcon(QtGui.QIcon(":/images/client.ico"))
     win = window()
     win.hide()
     win.func_timer()

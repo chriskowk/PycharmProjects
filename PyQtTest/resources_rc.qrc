@@ -31,5 +31,6 @@
     <file alias="send2.png">images/send2.png</file>
     <file alias="sendmsg.png">images/sendmsg.png</file>
     <file alias="bell.png">images/bell.png</file>
+    <file alias="client.ico">images/client.ico</file>
 </qresource>
 </RCC>

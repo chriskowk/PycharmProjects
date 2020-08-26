@@ -159,12 +159,12 @@ class window(QMainWindow):
         super(window, self).__init__(parent)
         self.setWindowFlags(Qt.WindowCloseButtonHint)
         dt = datetime.datetime.fromtimestamp(os.stat(_abspath).st_mtime)
-        self.setWindowTitle("编译请求客户端 - BuiltOn: %s" % dt.strftime('%Y-%m-%d %H:%M:%S'))
+        self.setWindowTitle("编译请求客户端 - BuiltOn: %s" % dt.strftime('%Y/%m/%d %H:%M:%S'))
         rect = _get_work_area()
-        self.resize(400, 300)
+        self.resize(480, 360)
         self.setGeometry(rect.right-self.width()-10, rect.bottom-self.height()-10, self.width(), self.height())
         self.status = self.statusBar()
-        self._consumer = Consumer(self.run)
+        self._consumer = Consumer(self.show_message)
         self._consumer.start()
         self._status = 0
         self._message = ''
@@ -298,19 +298,25 @@ class window(QMainWindow):
         self._duration = 0
         self.showStatus("%s: [%s] 编译任务已入队... " % (time.strftime('%H:%M:%S'), msg))
 
-    def run(self, msg):
-        if self._status == 1 and self._message == msg:
-            self._status = 2
-        self.show_message(msg)
-
     def show_message(self, msg):
         if _dict[msg].is_running:
             _dict[msg].is_running = False
+            self.reset_status()
             self.showStatus("%s: [%s] 编译任务已完成。" % (time.strftime('%H:%M:%S'), msg))
             mark = u"下载路径：\r\n%s" % _dict[msg].upload_path
             message = u"[%s] 编译任务已完成，%s" % (msg, mark)
             MessageBox(0, message, u"任务调度结果", MB_OK | MB_ICONINFORMATION | MB_TOPMOST | MB_SYSTEMMODAL)
             # subprocess.call([os.path.join(_dirname, "MessageBox.exe"), message], cwd=_dirname, shell=False, stdin=None, stdout=None, stderr=None, timeout=None)
+
+    def reset_status(self):
+        found = False
+        if self._status == 1:
+            for key in _dict:
+                if _dict[key].is_running:
+                    found = True
+                    break
+            if not found:
+                self._status = 2
 
     def func_timer(self):
         global timer

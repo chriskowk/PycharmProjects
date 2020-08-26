@@ -200,7 +200,7 @@ class window(QMainWindow):
         self.setWindowFlags(Qt.WindowCloseButtonHint)
         self.setWindowTitle("作业调度控制器")
         rect = _get_work_area()
-        self.resize(400, 300)
+        self.resize(480, 360)
         self.setGeometry(rect.right-self.width()-10, rect.bottom-self.height()-10, self.width(), self.height())
         self.status = self.statusBar()
         self.setWindowIcon(QtGui.QIcon(':/images/clock.ico'))

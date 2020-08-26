@@ -2,10 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ff5e2e34-04e0-44ed-9206-1a7c575d6306" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PyQtTest/TrayIconDemo.py" beforeDir="false" afterPath="$PROJECT_DIR$/PyQtTest/TrayIconDemo.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/PyQtTest/compiler_proxy.py" beforeDir="false" afterPath="$PROJECT_DIR$/PyQtTest/compiler_proxy.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PyQtTest/resources_rc.py" beforeDir="false" afterPath="$PROJECT_DIR$/PyQtTest/resources_rc.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PyQtTest/resources_rc.qrc" beforeDir="false" afterPath="$PROJECT_DIR$/PyQtTest/resources_rc.qrc" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -39,11 +37,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/PyQtTest/compiler_proxy.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="343">
-              <caret line="161" column="38" selection-start-line="161" selection-start-column="38" selection-end-line="161" selection-end-column="38" />
+            <state relative-caret-position="173">
+              <caret line="163" column="27" selection-start-line="163" selection-start-column="27" selection-end-line="163" selection-end-column="27" />
               <folding>
                 <element signature="e#23#33#0" expanded="true" />
               </folding>
@@ -51,11 +49,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/PyQtTest/TrayIconDemo.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="12760">
-              <caret line="605" selection-start-line="605" selection-end-line="605" />
+            <state relative-caret-position="459">
+              <caret line="214" column="34" lean-forward="true" selection-start-line="214" selection-start-column="34" selection-end-line="214" selection-end-column="34" />
               <folding>
                 <element signature="e#23#33#0" expanded="true" />
               </folding>
@@ -101,15 +99,11 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>names[0]</find>
-      <find>and</find>
-      <find>push_queue</find>
       <find>来自</find>
       <find>发送请求</find>
       <find>Exit</find>
       <find>self._status == 1</find>
       <find>_tasks_todo</find>
-      <find>self._status</find>
       <find>str.split</find>
       <find>_remote_messages</find>
       <find>self.status.showMessage</find>
@@ -124,13 +118,17 @@
       <find>running_status</find>
       <find>is_running</find>
       <find>requested_on</find>
-      <find>check_files_compiled</find>
       <find>dict[key]</find>
       <find>show_message</find>
       <find>connection</find>
       <find>proxy</find>
       <find>_basename</find>
       <find>mtime</find>
+      <find>check_files_compiled</find>
+      <find>self._status</find>
+      <find>_dict</find>
+      <find>run</find>
+      <find>-</find>
     </findStrings>
     <replaceStrings>
       <replace>QtGui.QIcon(':/images/</replace>
@@ -162,9 +160,9 @@
         <option value="$PROJECT_DIR$/PyQtTest/testlayout_main.py" />
         <option value="$PROJECT_DIR$/PyQtTest/ping.py" />
         <option value="$PROJECT_DIR$/PyQtTest/readme.txt" />
-        <option value="$PROJECT_DIR$/PyQtTest/TrayIconDemo.py" />
         <option value="$PROJECT_DIR$/PyQtTest/resources_rc.qrc" />
         <option value="$PROJECT_DIR$/PyQtTest/compiler_proxy.py" />
+        <option value="$PROJECT_DIR$/PyQtTest/TrayIconDemo.py" />
       </list>
     </option>
   </component>
@@ -400,12 +398,12 @@
       <workItem from="1597392456133" duration="65371000" />
       <workItem from="1597886718245" duration="13036000" />
       <workItem from="1597915920319" duration="81000" />
-      <workItem from="1597974862015" duration="4329000" />
+      <workItem from="1597974862015" duration="7914000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="376910000" />
+    <option name="totallyTimeSpent" value="380495000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
@@ -416,7 +414,7 @@
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32936078" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.31960997" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.31960997" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.29685807" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -425,7 +423,7 @@
       <window_info anchor="bottom" id="Version Control" order="8" weight="0.32936078" />
       <window_info anchor="bottom" id="Database Changes" order="9" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
-      <window_info anchor="bottom" id="Terminal" order="11" weight="0.27735645" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="11" visible="true" weight="0.27735645" />
       <window_info anchor="bottom" id="Python Console" order="12" weight="0.23293608" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -786,16 +784,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/PyQtTest/TrayIconDemo.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="12760">
-          <caret line="605" selection-start-line="605" selection-end-line="605" />
-          <folding>
-            <element signature="e#23#33#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/PyQtTest/ping.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="132">
@@ -819,8 +807,18 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/PyQtTest/compiler_proxy.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="343">
-          <caret line="161" column="38" selection-start-line="161" selection-start-column="38" selection-end-line="161" selection-end-column="38" />
+        <state relative-caret-position="173">
+          <caret line="163" column="27" selection-start-line="163" selection-start-column="27" selection-end-line="163" selection-end-column="27" />
+          <folding>
+            <element signature="e#23#33#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PyQtTest/TrayIconDemo.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="459">
+          <caret line="214" column="34" lean-forward="true" selection-start-line="214" selection-start-column="34" selection-end-line="214" selection-end-column="34" />
           <folding>
             <element signature="e#23#33#0" expanded="true" />
           </folding>

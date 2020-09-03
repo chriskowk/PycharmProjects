@@ -163,7 +163,7 @@ class window(QMainWindow):
         rect = _get_work_area()
         self.resize(480, 360)
         self.setGeometry(rect.right-self.width()-10, rect.bottom-self.height()-10, self.width(), self.height())
-        self.status = self.statusBar()
+        self._statusBar = self.statusBar()
         self._consumer = Consumer(self.show_message)
         self._consumer.start()
         self._status = 0
@@ -179,48 +179,48 @@ class window(QMainWindow):
         self.mu1.setTearOffEnabled(False)
         self.mu1.triggered[QAction].connect(self.processtrigger)
 
-        self.ti = TrayIcon(self)
+        self._ti = TrayIcon(self)
         tbrMain = self.addToolBar("Scheduler")
         start = QAction(QtGui.QIcon(":/images/send.png"), "发送请求", self)
         start.setFont(QtGui.QFont("宋体", 11, QFont.Normal))
         start.setMenu(self.mu1)
         tbrMain.addAction(start)
-        self._et = QAction(QtGui.QIcon(":/images/bell.png"), "00:00:00", self)
+        self._et = QAction(QtGui.QIcon(":/images/bell.png"), "00:00:00", self, triggered=self.bell_clicked)
         self._et.setFont(QtGui.QFont("Microsoft YaHei", 11, QFont.Normal))
         tbrMain.addAction(self._et)
         tbrMain.addSeparator()
-        shutdown = QAction(QtGui.QIcon(":/images/close.png"), "退出", self, triggered=self.ti.quit)
+        shutdown = QAction(QtGui.QIcon(":/images/close.png"), "退出", self, triggered=self._ti.quit)
         shutdown.setFont(QtGui.QFont("宋体", 11, QFont.Normal))
         tbrMain.addAction(shutdown)
         # 设置名称显示在图标下面（默认本来是只显示图标）
         tbrMain.setToolButtonStyle(Qt.ToolButtonTextUnderIcon)
         tbrMain.actionTriggered.connect(self.toolbarpressed)
 
-        self.txtMsg = QTextEdit()
-        self.txtMsg.setReadOnly(True)
-        self.txtMsg.setStyleSheet("color:rgb(10,10,10,255);font-size:15px;font-weight:normal;font-family:Roman times;")
-        self.setCentralWidget(self.txtMsg)
-        self.status.installEventFilter(self)
-        self.ti.show()
+        self._txtMsg = QTextEdit()
+        self._txtMsg.setReadOnly(True)
+        self._txtMsg.setStyleSheet("color:rgb(10,10,10,255);font-size:15px;font-weight:normal;font-family:Roman times;")
+        self.setCentralWidget(self._txtMsg)
+        self._statusBar.installEventFilter(self)
+        self._ti.show()
 
     @pyqtSlot()
     def on_edit_textChanged(self):
-        self.txtMsg.ensureCursorVisible()
+        self._txtMsg.ensureCursorVisible()
 
     @pyqtSlot(int, int)
     def change_scroll(self, min, max):
-        self.txtMsg.verticalScrollBar().setSliderPosition(max)
+        self._txtMsg.verticalScrollBar().setSliderPosition(max)
 
     # 覆写窗口隐藏事件
     def hideEvent(self, event) :
-        self.ti.showme.setIcon(QtGui.QIcon(":/images/screen.png"))
-        self.ti.showme.setText("显示")
+        self._ti.showme.setIcon(QtGui.QIcon(":/images/screen.png"))
+        self._ti.showme.setText("显示")
         # self.update()
 
     # 覆写窗口显示事件
     def showEvent(self, event) :
-        self.ti.showme.setIcon(QtGui.QIcon(":/images/noscreen.png"))
-        self.ti.showme.setText("隐藏")
+        self._ti.showme.setIcon(QtGui.QIcon(":/images/noscreen.png"))
+        self._ti.showme.setText("隐藏")
         # self.update()
 
     # 覆写窗口关闭事件（函数名固定不可变）
@@ -229,9 +229,9 @@ class window(QMainWindow):
         self.hide()
 
     def eventFilter(self, watched, event):
-        if watched == self.status and event.type() == QEvent.MouseButtonDblClick:
+        if watched == self._statusBar and event.type() == QEvent.MouseButtonDblClick:
             print("pos: ", event.pos())
-            self.txtMsg.clear()
+            self._txtMsg.clear()
         return QWidget.eventFilter(self, watched, event)
 
     def toggleVisibility(self):
@@ -250,11 +250,14 @@ class window(QMainWindow):
         win32gui.SetWindowPos(hwnd, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW)
         self.hide()
 
+    def bell_clicked(self, sender):
+        self._et.setText("00:00:00")
+
     def toolbarpressed(self, sender):
         opt = sender.text()
         if opt == "发送请求":
             self.start_default(sender)
-        self.status.showMessage("%s: 正在执行 %s ..." % (time.strftime('%H:%M:%S'), opt), 5000)
+        self._statusBar.showMessage("%s: 正在执行 %s ..." % (time.strftime('%H:%M:%S'), opt), 5000)
 
     def start_default(self, sender):
         found = False
@@ -266,9 +269,9 @@ class window(QMainWindow):
             self.processtrigger(sender.menu().actions()[0])
 
     def showStatus(self, text, movecursor=True):
-        self.txtMsg.append(text)
+        self._txtMsg.append(text)
         if movecursor:
-            self.txtMsg.moveCursor(QTextCursor.End)
+            self._txtMsg.moveCursor(QTextCursor.End)
 
     def processtrigger(self, qaction):
         for act in qaction.parent().actions():

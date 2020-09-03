@@ -456,7 +456,7 @@ class window(QMainWindow):
         # msg = ''
         # for line in p.stdout.readlines():
         #     msg += line.decode("gbk", "ignore")
-        # status = p.wait()
+        # _statusBar = p.wait()
         # return msg
 
     def get_latest_version(self, qaction):
@@ -510,20 +510,17 @@ class window(QMainWindow):
             _tasks_todo.clear()
             return  # Handle task here and call q.task_done()
 
+    #（1）threading.Timer()主要有2个参数：第一个参数为时间，第二个参数为函数名；
+    #（2）必须在定时器执行函数内部重复构造定时器，因为定时器构造后只执行1次，必须循环调用；
+    #（3）定时器间隔单位是秒，可以是浮点数，如5.5，0.02等；
+    #（4）使用cancel停止定时器的工作；
     def func_timer(self):
+        self.check_fired()
+        self.check_finished()
+        self.check_isalive()
         global timer
         timer = threading.Timer(_interval, self.func_timer)
         timer.start()
-        self.check_fired()
-        self.check_finished()
-        if not self._consumer.isAlive():
-            self._consumer = ConsumeThread(self.run, _work_queue, _out_queue)
-            self._consumer.setDaemon(True)
-            self._consumer.start()
-        if not self._responser.isAlive():
-            self._responser = ResponseThread(self.pull_work_queue)
-            self._responser.setDaemon(True)
-            self._responser.start()
 
     def check_fired(self):
         for item in _dict.items():
@@ -544,6 +541,16 @@ class window(QMainWindow):
                 # ctypes.windll.user32.MessageBoxA(0, msg.encode('gb2312'), u"任务调度结果".encode('gb2312'), MB_OK | MB_ICONINFORMATION | MB_TOPMOST)
                 # ShellExecute(0, 'open', os.path.join(_dirname, "MessageBox.exe"), msg, _dirname, 1)  # 最后一个参数bShow: 1(0)表示前台(后台)运行程序; 传递参数path打开指定文件
                 subprocess.call([os.path.join(_dirname, "MessageBox.exe"), msg], cwd=_dirname, shell=False, stdin=None, stdout=None, stderr=None, timeout=None)
+
+    def check_isalive(self):
+        if not self._consumer.isAlive():
+            self._consumer = ConsumeThread(self.run, _work_queue, _out_queue)
+            self._consumer.setDaemon(True)
+            self._consumer.start()
+        if not self._responser.isAlive():
+            self._responser = ResponseThread(self.pull_work_queue)
+            self._responser.setDaemon(True)
+            self._responser.start()
 
     def push_out_queue(self, message):
         for key in _remote_messages:

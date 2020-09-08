@@ -186,7 +186,7 @@ class window(QMainWindow):
         start.setMenu(self.mu1)
         tbrMain.addAction(start)
         self._et = QAction(QtGui.QIcon(":/images/bell.png"), "00:00:00", self, triggered=self.bell_clicked)
-        self._et.setFont(QtGui.QFont("Microsoft YaHei", 11, QFont.Normal))
+        self._et.setFont(QtGui.QFont("Open Sans", 11, QFont.Normal))
         tbrMain.addAction(self._et)
         tbrMain.addSeparator()
         shutdown = QAction(QtGui.QIcon(":/images/close.png"), "退出", self, triggered=self._ti.quit)

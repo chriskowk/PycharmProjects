@@ -275,6 +275,7 @@ class window(QMainWindow):
         tbrMain.setToolButtonStyle(Qt.ToolButtonTextUnderIcon)
         tbrMain.actionTriggered.connect(self.toolbarpressed)
 
+        self._date = datetime.date
         self.txtMsg = QTextEdit()
         self.txtMsg.setReadOnly(True)
         self.txtMsg.setStyleSheet("color:rgb(10,10,10,255);font-size:14px;font-weight:normal;font-family:Roman times;")
@@ -527,6 +528,10 @@ class window(QMainWindow):
         timer.start()
 
     def check_fired(self):
+        if datetime.date != self._date:
+            self._date = datetime.date
+            self.showStatus(time.strftime("%Y-%m-%d %H:%M:%S"))
+
         for item in _dict.items():
             if item[1].fire_enabled:
                 dt = datetime.datetime.now().time()

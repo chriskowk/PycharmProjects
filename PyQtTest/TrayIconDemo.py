@@ -23,6 +23,7 @@ from win32com import *
 import configparser
 from PyQt5.QtCore import pyqtSlot
 import pika
+from apscheduler.schedulers.background import BackgroundScheduler
 
 import resources_rc
 
@@ -276,12 +277,17 @@ class window(QMainWindow):
         tbrMain.actionTriggered.connect(self.toolbarpressed)
 
         self._date = datetime.date
+        self._minute = datetime.datetime.now().minute
         self.txtMsg = QTextEdit()
         self.txtMsg.setReadOnly(True)
         self.txtMsg.setStyleSheet("color:rgb(10,10,10,255);font-size:14px;font-weight:normal;font-family:Roman times;")
         self.setCentralWidget(self.txtMsg)
         self.status.installEventFilter(self)
         self.ti.show()
+        scheduler = BackgroundScheduler()
+        # 每隔 1秒钟 运行一次 job 方法
+        scheduler.add_job(self.func_timer, 'interval', seconds=1, args=[])
+        scheduler.start()
 
     @pyqtSlot()
     def on_edit_textChanged(self):
@@ -523,11 +529,12 @@ class window(QMainWindow):
         self.check_fired()
         self.check_finished()
         self.check_isalive()
-        global timer
-        timer = threading.Timer(_interval, self.func_timer)
-        timer.start()
 
     def check_fired(self):
+        if  self._minute != datetime.datetime.now().minute:
+            self._minute = datetime.datetime.now().minute
+            self.showStatus("check_fired: %s" % time.strftime('%H:%M:%S'))
+
         if datetime.date != self._date:
             self._date = datetime.date
             self.showStatus(time.strftime("%Y-%m-%d %H:%M:%S"))
@@ -725,5 +732,4 @@ if __name__ == "__main__":
     app.setWindowIcon(QtGui.QIcon(":/images/clock.ico"))
     win = window()
     win.hide()
-    win.func_timer()
     sys.exit(app.exec_())

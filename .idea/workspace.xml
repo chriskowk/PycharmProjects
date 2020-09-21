@@ -51,8 +51,11 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/PyQtTest/TrayIconDemo.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="242">
-              <caret line="17" column="13" selection-start-line="17" selection-start-column="13" selection-end-line="17" selection-end-column="13" />
+            <state relative-caret-position="257">
+              <caret line="540" column="39" selection-start-line="540" selection-start-column="39" selection-end-line="540" selection-end-column="39" />
+              <folding>
+                <element signature="e#23#33#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -95,9 +98,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>dict[key]</find>
-      <find>show_message</find>
-      <find>connection</find>
       <find>proxy</find>
       <find>_basename</find>
       <find>mtime</find>
@@ -125,6 +125,9 @@
       <find>!=</find>
       <find>self._date</find>
       <find>func_timer</find>
+      <find>\r\n</find>
+      <find>\\</find>
+      <find>utf-8</find>
     </findStrings>
     <replaceStrings>
       <replace>QtGui.QIcon(':/images/</replace>
@@ -396,12 +399,12 @@
       <workItem from="1597915920319" duration="81000" />
       <workItem from="1597974862015" duration="7914000" />
       <workItem from="1599531654224" duration="3968000" />
-      <workItem from="1599806793481" duration="7956000" />
+      <workItem from="1599806793481" duration="11764000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="405111000" />
+    <option name="totallyTimeSpent" value="408919000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
@@ -806,8 +809,11 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/PyQtTest/TrayIconDemo.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="242">
-          <caret line="17" column="13" selection-start-line="17" selection-start-column="13" selection-end-line="17" selection-end-column="13" />
+        <state relative-caret-position="257">
+          <caret line="540" column="39" selection-start-line="540" selection-start-column="39" selection-end-line="540" selection-end-column="39" />
+          <folding>
+            <element signature="e#23#33#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

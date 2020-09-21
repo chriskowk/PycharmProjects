@@ -533,7 +533,10 @@ class window(QMainWindow):
     def check_fired(self):
         if  self._minute != datetime.datetime.now().minute:
             self._minute = datetime.datetime.now().minute
-            self.showStatus("check_fired: %s" % time.strftime('%H:%M:%S'))
+            if not os.path.exists('logs'):
+                os.makedirs('logs')
+            with open('logs\\check_fired_%s.log' % time.strftime('%Y-%m-%d'), 'a', encoding='utf-8') as f:
+                f.write('\ncheck_fired: %s' % time.strftime('%H:%M:%S'))
 
         if datetime.date != self._date:
             self._date = datetime.date

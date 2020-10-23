@@ -280,7 +280,7 @@ class window(QMainWindow):
         self._minute = datetime.datetime.now().minute
         self.txtMsg = QTextEdit()
         self.txtMsg.setReadOnly(True)
-        self.txtMsg.setStyleSheet("color:rgb(10,10,10,255);font-size:14px;font-weight:normal;font-family:Roman times;")
+        self.txtMsg.setStyleSheet("color:rgb(10,10,10);font-size:14px;font-weight:normal;font-family:Roman times;")
         self.setCentralWidget(self.txtMsg)
         self.status.installEventFilter(self)
         self.ti.show()

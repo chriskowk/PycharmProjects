@@ -13,16 +13,16 @@ sender = '244587466@qq.com'
 receiver = 'chriskwok@126.com'
 
 def read_excel():
-    # 打开Excel表格
+    # 打开Excel文件
     # 读取群发邮箱，将需要群发的邮箱复制到test的excel列表清单中
-    ExceFileUrl = xlrd.open_workbook(r'../data/email_list.xlsx')
-    # print(ExceFileUrl.sheet_names())
+    excelFileUrl = xlrd.open_workbook(r'F:\GitHub\PycharmProjects\PyQtTest\data\email_list.xlsx')
+    print(excelFileUrl.sheet_names())
     # 获取第一个sheet页面
-    sheet_date = ExceFileUrl.sheet_by_index(0)
-    # print(sheet_date.name,sheet_date.nrows,sheet_date.ncols)
+    sheet1 = excelFileUrl.sheet_by_index(0)
+    print(sheet1.name, sheet1.nrows, sheet1.ncols)
     # 获取第2列的邮箱列表
-    email_data = sheet_date.col_values(1)
-    # print(email_data)
+    email_data = sheet1.col_values(0)
+    print(email_data)
     return email_data
 
 def sender_mail():
@@ -31,7 +31,7 @@ def sender_mail():
     # 设置smtp服务器
     smt_p.connect(host='smtp.qq.com', port=25)
     # 在qq邮箱设置开启SMTP服务并复制授权码
-    password = "bronzepen13"
+    password = "djachxbcdtfwcaef"
     # 进行邮箱登录一次，填写你本人的邮箱
     smt_p.login(sender, password)
     count_num = 1
@@ -41,21 +41,21 @@ def sender_mail():
         try:
             # 邮件设置
             msg = MIMEMultipart()
-            msg['From'] = "brook"
+            msg['From'] = "CHRIS KWOK"
             # 收件人
             msg['To'] = i
-            msg['Cc'] = 'chriskwok@163.com'
+            msg['Cc'] = receiver
             # 主题名称
             msg['subject'] = Header('通知', 'utf-8')
             # 附件 —附加发送excel、word、图片格式，新建文件夹，将以下路径及文件名称替换即可。
             msg.attach(MIMEText('您好,' 'XXX2.0全新升级，XXX1.0版本到2018年10月31号停止所有服务。', 'plain', 'utf-8'))
-            xlsxpart = MIMEApplication(open(r'../data/email_test.xlsx', 'rb').read())
+            xlsxpart = MIMEApplication(open(r'F:\GitHub\PycharmProjects\PyQtTest\data\email_test.xlsx', 'rb').read())
             xlsxpart.add_header('Content-Disposition', 'attachment', filename='1.xlsx')
             msg.attach(xlsxpart)
-            message_docx1 = MIMEText(open(r'../data/email_test.docx', 'rb').read(), 'base64', 'utf8')
-            message_docx1.add_header('crontent-disposition', 'attachment', filename='测试.docx')
+            message_docx1 = MIMEText(open(r'F:\GitHub\PycharmProjects\PyQtTest\data\email_test.docx', 'rb').read(), 'base64', 'utf8')
+            message_docx1.add_header('content-disposition', 'attachment', filename='测试.docx')
             msg.attach(message_docx1)
-            message_image = MIMEText(open(r'../data/email_test.jpg', 'rb').read(), 'base64', 'utf8')
+            message_image = MIMEText(open(r'F:\GitHub\PycharmProjects\PyQtTest\data\email_test.jpg', 'rb').read(), 'base64', 'utf8')
             message_image.add_header('content-disposition', 'attachment', filename='plot2.jpg')
             msg.attach(message_image)
             # 发送邮件

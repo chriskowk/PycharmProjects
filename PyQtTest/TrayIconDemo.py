@@ -60,7 +60,7 @@ class TrayIcon(QSystemTrayIcon):
         mainmenu.addAction(self.showme)
         autorun = QAction("下次自动启动", self, checkable=True)
         ret = False
-        keyNames = ['HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run',
+        keyNames = [r'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Run',
                     r'HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run']
         for item in keyNames:
             if _get_valuenames(item).__contains__(_abspath.upper()):
@@ -105,7 +105,7 @@ class TrayIcon(QSystemTrayIcon):
     def toggleStartup(self, checked):
         remove = not checked
         try:
-            key = RegOpenKey(HKEY_LOCAL_MACHINE, 'Software\\Microsoft\\Windows\\CurrentVersion\\Run', 0, KEY_ALL_ACCESS)
+            key = RegOpenKey(HKEY_LOCAL_MACHINE, r'Software\Microsoft\Windows\CurrentVersion\Run', 0, KEY_ALL_ACCESS)
             if remove:
                 RegDeleteValue(key, _basename)
             else:
@@ -171,7 +171,7 @@ class VERSION:
 
 def _get_version():
     ret = VERSION()
-    path = _get_key_value('HKEY_LOCAL_MACHINE\\SOFTWARE\\JetSun\\3.0', 'ExecutablePath')
+    path = _get_key_value(r'HKEY_LOCAL_MACHINE\SOFTWARE\JetSun\3.0', 'ExecutablePath')
     for item in _dict.items():
         if path.__contains__(item[1].base_path.upper()):
             ret = item[1]; break
@@ -183,7 +183,7 @@ def _get_reg_basepath():
 
 def _get_regfilepath(key=''):
     v = _get_version() if key=='' else _dict[key]
-    ret = "%s\\BatchFiles\\注册表\\%s注册表.reg" % (v.base_path, v.name) if v.base_path != '' else ''
+    ret = r"%s\BatchFiles\注册表\%s注册表.reg" % (v.base_path, v.name) if v.base_path != '' else ''
     return ret
 
 def _get_key_value(fullname, valuename):
@@ -215,7 +215,7 @@ class window(QMainWindow):
         self.mu1 = QMenu()
         for item in _dict.items():
             act = QAction(text=item[1].name, checkable=True, parent=self.mu1)
-            act.setStatusTip("%s\\BatchFiles\\全编译Upload.bat" % item[1].base_path)
+            act.setStatusTip(r"%s\BatchFiles\全编译Upload.bat" % item[1].base_path)
             self.mu1.addAction(act)
             item[1].task = Task(act, True)
         self.mu1.actions()[0].setIcon(QtGui.QIcon(":/images/location.png"))
@@ -234,7 +234,7 @@ class window(QMainWindow):
         self.mu3 = QMenu()
         for item in _dict.items():
             act = QAction(text=item[1].name, checkable=True, parent=self.mu3)
-            act.setStatusTip("%s\\BatchFiles\\TF_GET_MedicalHealth.bat" % item[1].base_path)
+            act.setStatusTip(r"%s\BatchFiles\TF_GET_MedicalHealth.bat" % item[1].base_path)
             self.mu3.addAction(act)
         self.mu3.actions()[0].setIcon(QtGui.QIcon(":/images/location.png"))
         self.mu3.setTearOffEnabled(False)
@@ -381,14 +381,14 @@ class window(QMainWindow):
         if not found:
             bp = _get_reg_basepath()
             if bp != '':
-                oldpath = '"%s\\Lib\\jssvc.exe"' % bp
+                oldpath = r'"%s\Lib\jssvc.exe"' % bp
             self.showStatus("%s: 服务 %s 已卸载，请重新安装！" % (time.strftime('%H:%M:%S'), service))
 
         if oldpath is not None:
             newpath = oldpath
             key = self.get_cur_ver_key()
             if key != '':
-                newpath = '"%s\\Lib\\jssvc.exe"' % _dict[key].base_path
+                newpath = r'"%s\Lib\jssvc.exe"' % _dict[key].base_path
             cmd = '_$RestartLocalService.bat %s %s' % (oldpath, newpath)
             task = Task(QAction(text="本地服务", statusTip=cmd), False, _dirname)
         return task
@@ -400,8 +400,8 @@ class window(QMainWindow):
         workdir = os.path.join(_dict[key].base_path, "BatchFiles")
         r = _get_regfilepath(key)
         if r != '' and os.path.exists(r) and os.path.isfile(r):
-            # subprocess.call(["C:\\Windows\\regedit.exe", "/s", r], shell=False, cwd="C:\\Windows", stdin=None, stdout=None, stderr=None, timeout=None)
-            task1 = Task(QAction(text="导入注册表文件", statusTip="C:\\Windows\\regedit.exe /s %s" % r), False, "C:\\Windows")
+            # subprocess.call([r"C:\Windows\regedit.exe", "/s", r], shell=False, cwd=r"C:\Windows", stdin=None, stdout=None, stderr=None, timeout=None)
+            task1 = Task(QAction(text="导入注册表文件", statusTip=r"C:\Windows\regedit.exe /s %s" % r), False, r"C:\Windows")
 
         # subprocess.call(os.path.join(workdir, "__copy2svcbin.bat"), shell=False, cwd=workdir, stdin=None, stdout=None, stderr=None, timeout=None)
         # subprocess.call(["cmd.exe", "/C", "__copy2svcbin.bat"], shell=False, cwd=workdir, stdin=None, stdout=None, stderr=None, timeout=None)
@@ -535,7 +535,7 @@ class window(QMainWindow):
             self._minute = datetime.datetime.now().minute
             if not os.path.exists('logs'):
                 os.makedirs('logs')
-            with open('logs\\check_fired_%s.log' % time.strftime('%Y-%m-%d'), 'a', encoding='utf-8') as f:
+            with open(r'logs\check_fired_%s.log' % time.strftime('%Y-%m-%d'), 'a', encoding='utf-8') as f:
                 f.write('\ncheck_fired: %s' % time.strftime('%H:%M:%S'))
 
         if datetime.date != self._date:
@@ -556,10 +556,12 @@ class window(QMainWindow):
                 self.push_out_queue(item.id)
                 _tasks_todo.remove(item)
                 msg = u"任务%s已完成" % item.id
-                # MessageBox(0, msg, u"任务调度结果", MB_OK | MB_ICONINFORMATION | MB_TOPMOST | MB_SYSTEMMODAL)
-                # ctypes.windll.user32.MessageBoxA(0, msg.encode('gb2312'), u"任务调度结果".encode('gb2312'), MB_OK | MB_ICONINFORMATION | MB_TOPMOST)
-                # ShellExecute(0, 'open', os.path.join(_dirname, "MessageBox.exe"), msg, _dirname, 1)  # 最后一个参数bShow: 1(0)表示前台(后台)运行程序; 传递参数path打开指定文件
-                subprocess.call([os.path.join(_dirname, "MessageBox.exe"), msg], cwd=_dirname, shell=False, stdin=None, stdout=None, stderr=None, timeout=None)
+                dt = datetime.datetime.now().time()
+                if 9 <= dt.hour <= 18: # 上班期间弹出消息框
+                    # MessageBox(0, msg, u"任务调度结果", MB_OK | MB_ICONINFORMATION | MB_TOPMOST | MB_SYSTEMMODAL)
+                    # ctypes.windll.user32.MessageBoxA(0, msg.encode('gb2312'), u"任务调度结果".encode('gb2312'), MB_OK | MB_ICONINFORMATION | MB_TOPMOST)
+                    # ShellExecute(0, 'open', os.path.join(_dirname, "MessageBox.exe"), msg, _dirname, 1)  # 最后一个参数bShow: 1(0)表示前台(后台)运行程序; 传递参数path打开指定文件
+                    subprocess.call([os.path.join(_dirname, "MessageBox.exe"), msg], cwd=_dirname, shell=False, stdin=None, stdout=None, stderr=None, timeout=None)
 
     def check_isalive(self):
         if not self._consumer.isAlive():

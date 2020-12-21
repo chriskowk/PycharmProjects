@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="ff5e2e34-04e0-44ed-9206-1a7c575d6306" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PyQtTest/TrayIconDemo.py" beforeDir="false" afterPath="$PROJECT_DIR$/PyQtTest/TrayIconDemo.py" afterDir="false" />
-    </list>
+    <list default="true" id="ff5e2e34-04e0-44ed-9206-1a7c575d6306" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -425,12 +422,12 @@
       <workItem from="1608015279671" duration="5056000" />
       <workItem from="1608087087796" duration="5189000" />
       <workItem from="1608170087627" duration="4735000" />
-      <workItem from="1608261357243" duration="2994000" />
+      <workItem from="1608261357243" duration="3017000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="457244000" />
+    <option name="totallyTimeSpent" value="457267000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -443,9 +440,8 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.1748401" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.1748401" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -459,7 +455,7 @@
       <window_info anchor="bottom" id="Version Control" order="8" weight="0.32936078" />
       <window_info anchor="bottom" id="Database Changes" order="9" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="11" visible="true" weight="0.33261105" />
+      <window_info anchor="bottom" id="Terminal" order="11" visible="true" weight="0.33261105" />
       <window_info anchor="bottom" id="Python Console" order="12" weight="0.23293608" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />

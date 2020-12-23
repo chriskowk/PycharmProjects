@@ -587,7 +587,7 @@ class window(QMainWindow):
     def push_specified_queue(self, queue_name, message):
         username = 'chris'
         pwd = '123456'
-        ip_addr = '172.18.99.177'
+        ip_addr = 'localhost'
         # rabbitmq 报错 pika.exceptions.IncompatibleProtocolError: StreamLostError: (‘Transport indicated EOF’,) 产生此报错的原因是我将port写成了15672
         # rabbitmq需要通过端口5672连接 - 而不是15672. 更改端口，转发，一切正常
         port_num = 5672
@@ -606,7 +606,7 @@ class window(QMainWindow):
     def pull_work_queue(self):
         username = 'chris'
         pwd = '123456'
-        ip_addr = '172.18.99.177'
+        ip_addr = 'localhost'
         # rabbitmq 报错 pika.exceptions.IncompatibleProtocolError: StreamLostError: (‘Transport indicated EOF’,) 产生此报错的原因是我将port写成了15672
         # rabbitmq需要通过端口5672连接 - 而不是15672. 更改端口，转发，一切正常
         port_num = 5672

@@ -17,8 +17,8 @@ def main():
     parser.add_argument("path", metavar='PATH', type=str, help='指定目标文件路径(如中间有空格需要用双引号括住)')
     args = parser.parse_args()
     path_ = args.path
-    debug_=args.debug
-    quiet_=args.quiet
+    debug_ = args.debug
+    quiet_ = args.quiet
     # print('the path is %s'%(path_))
     # print('the quiet on is %s'%(quiet_))
 

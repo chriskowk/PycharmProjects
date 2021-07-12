@@ -718,6 +718,7 @@ class ResponseThread(threading.Thread):
 
 
 if __name__ == "__main__":
+    time.sleep(10)  # 强制等待10秒时间
     _tasks_todo = []
     _remote_messages = {}
     _abspath = sys.argv[0]

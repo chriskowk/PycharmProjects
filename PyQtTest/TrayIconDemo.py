@@ -718,12 +718,13 @@ class ResponseThread(threading.Thread):
 
 
 if __name__ == "__main__":
-    # time.sleep(10)  # 强制等待10秒时间
     _tasks_todo = []
     _remote_messages = {}
     _abspath = sys.argv[0]
     _basename = os.path.basename(_abspath)
     _dirname = os.path.dirname(_abspath)
+    os.chdir(_dirname)  # 改变当前运行路径，注意双引号和反斜杠（避免设置随操作系统启动时运行报错“Failed to execute script xxx.exe”问题）
+    print(os.getcwd())  # 查看当前工作目录
     _dict = {}
     _interval = 1
     _conf = configparser.ConfigParser()

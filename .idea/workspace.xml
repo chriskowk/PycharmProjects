@@ -73,8 +73,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/PyQtTest/TrayIconDemo.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="258">
-              <caret line="735" lean-forward="true" selection-start-line="735" selection-end-line="735" />
+            <state relative-caret-position="323">
+              <caret line="725" column="94" selection-start-line="725" selection-start-column="94" selection-end-line="725" selection-end-column="94" />
               <folding>
                 <element signature="e#23#33#0" expanded="true" />
               </folding>
@@ -98,7 +98,7 @@
         <entry file="file://$PROJECT_DIR$/PyQtTest/readme.txt">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="22">
-              <caret line="1" column="71" selection-start-line="1" selection-end-line="1" selection-end-column="83" />
+              <caret line="1" column="79" selection-start-line="1" selection-end-line="1" selection-end-column="83" />
             </state>
           </provider>
         </entry>
@@ -123,7 +123,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>self._status</find>
       <find>self._statusBar</find>
       <find>self.mu1</find>
       <find>self.ti</find>
@@ -135,14 +134,12 @@
       <find>strftime</find>
       <find>Ip</find>
       <find>check_fired</find>
-      <find>!=</find>
       <find>self._date</find>
       <find>\r\n</find>
       <find>utf-8</find>
       <find>setStyleSheet</find>
       <find>sRGB</find>
       <find>messagebox</find>
-      <find>_dirname</find>
       <find>_tasks_todo</find>
       <find>bg.png</find>
       <find>push_out_queue</find>
@@ -153,6 +150,9 @@
       <find>172.18.99.177</find>
       <find>TF_GET_MedicalHealth.bat</find>
       <find>func_timer</find>
+      <find>F:\GitHub\PycharmProjects</find>
+      <find>!=</find>
+      <find>_dirname</find>
     </findStrings>
     <replaceStrings>
       <replace>QtGui.QIcon(':/images/</replace>
@@ -183,13 +183,13 @@
         <option value="$PROJECT_DIR$/PyQtTest/receivemq.py" />
         <option value="$PROJECT_DIR$/PyQtTest/testlayout_main.py" />
         <option value="$PROJECT_DIR$/PyQtTest/ping.py" />
-        <option value="$PROJECT_DIR$/PyQtTest/readme.txt" />
         <option value="$PROJECT_DIR$/PyQtTest/resources_rc.qrc" />
         <option value="$PROJECT_DIR$/PyQtTest/compiler_proxy.py" />
         <option value="$PROJECT_DIR$/PyQtTest/gobang.py" />
         <option value="$PROJECT_DIR$/PyQtTest/sendmail.py" />
         <option value="$PROJECT_DIR$/PyQtTest/xls2xlsx.py" />
         <option value="$PROJECT_DIR$/UITestCase/Common/sfw.py" />
+        <option value="$PROJECT_DIR$/PyQtTest/readme.txt" />
         <option value="$PROJECT_DIR$/PyQtTest/TrayIconDemo.py" />
       </list>
     </option>
@@ -208,7 +208,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -220,6 +219,12 @@
               <item name="PycharmProjects" type="b2602c69:ProjectViewProjectNode" />
               <item name="PycharmProjects" type="462c0819:PsiDirectoryNode" />
               <item name="PyQtTest" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="PycharmProjects" type="b2602c69:ProjectViewProjectNode" />
+              <item name="PycharmProjects" type="462c0819:PsiDirectoryNode" />
+              <item name="PyQtTest" type="462c0819:PsiDirectoryNode" />
+              <item name="images" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="PycharmProjects" type="b2602c69:ProjectViewProjectNode" />
@@ -236,6 +241,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -268,7 +274,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.sendmail">
+  <component name="RunManager" selected="Python.TrayIconDemo">
     <configuration name="TrayIconDemo" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="PycharmProjects" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -388,10 +394,10 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.sendmail" />
-        <item itemvalue="Python.gobang" />
         <item itemvalue="Python.TrayIconDemo" />
         <item itemvalue="Python.compiler_proxy" />
+        <item itemvalue="Python.sendmail" />
+        <item itemvalue="Python.gobang" />
         <item itemvalue="Python.ping" />
       </list>
     </recent_temporary>
@@ -446,12 +452,33 @@
       <workItem from="1609240113116" duration="2971000" />
       <workItem from="1618385388887" duration="1761000" />
       <workItem from="1620622527287" duration="1193000" />
-      <workItem from="1626053790346" duration="479000" />
+      <workItem from="1626053790346" duration="741000" />
+      <workItem from="1626055202878" duration="153000" />
+      <workItem from="1626055568050" duration="906000" />
+      <workItem from="1626078675582" duration="2010000" />
+      <workItem from="1626169218616" duration="592000" />
+      <workItem from="1626170102668" duration="474000" />
+      <workItem from="1626170624881" duration="1501000" />
     </task>
+    <task id="LOCAL-00001" summary="强制等待10秒启动，试图解决自启动报错问题">
+      <created>1626054416046</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1626054416046</updated>
+    </task>
+    <task id="LOCAL-00002" summary="撤销：强制等待10秒启动，试图解决自启动报错问题">
+      <created>1626056454977</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1626056454977</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="467917000" />
+    <option name="totallyTimeSpent" value="473815000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -466,7 +493,7 @@
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.18283582" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.195629" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -480,7 +507,7 @@
       <window_info anchor="bottom" id="Version Control" order="8" weight="0.32936078" />
       <window_info anchor="bottom" id="Database Changes" order="9" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="11" visible="true" weight="0.33261105" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="11" visible="true" weight="0.2708559" />
       <window_info anchor="bottom" id="Python Console" order="12" weight="0.23293608" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -491,6 +518,11 @@
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="强制等待10秒启动，试图解决自启动报错问题" />
+    <MESSAGE value="撤销：强制等待10秒启动，试图解决自启动报错问题" />
+    <option name="LAST_COMMIT_MESSAGE" value="撤销：强制等待10秒启动，试图解决自启动报错问题" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -522,10 +554,10 @@
     <SUITE FILE_PATH="coverage/PycharmProjects$regaccess.coverage" NAME="regaccess Coverage Results" MODIFIED="1595164491235" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/PyQtTest" />
     <SUITE FILE_PATH="coverage/PycharmProjects$sendmq.coverage" NAME="sendmq Coverage Results" MODIFIED="1597216713973" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/PyQtTest" />
     <SUITE FILE_PATH="coverage/PycharmProjects$sendmail.coverage" NAME="sendmail Coverage Results" MODIFIED="1608091139786" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/PyQtTest" />
-    <SUITE FILE_PATH="coverage/PycharmProjects$TrayIconDemo.coverage" NAME="TrayIconDemo Coverage Results" MODIFIED="1600565419834" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/PyQtTest" />
+    <SUITE FILE_PATH="coverage/PycharmProjects$TrayIconDemo.coverage" NAME="TrayIconDemo Coverage Results" MODIFIED="1626226861410" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/PyQtTest" />
     <SUITE FILE_PATH="coverage/PycharmProjects$gobang.coverage" NAME="gobang Coverage Results" MODIFIED="1603943385540" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/PyQtTest" />
     <SUITE FILE_PATH="coverage/PycharmProjects$workarea.coverage" NAME="workarea Coverage Results" MODIFIED="1595234370843" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/PyQtTest" />
-    <SUITE FILE_PATH="coverage/PycharmProjects$compiler_proxy.coverage" NAME="compiler_proxy Coverage Results" MODIFIED="1599550544066" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/PyQtTest" />
+    <SUITE FILE_PATH="coverage/PycharmProjects$compiler_proxy.coverage" NAME="compiler_proxy Coverage Results" MODIFIED="1626170922108" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/PyQtTest" />
     <SUITE FILE_PATH="coverage/PycharmProjects$testlayout_main.coverage" NAME="testlayout_main Coverage Results" MODIFIED="1597719871898" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/PyQtTest" />
     <SUITE FILE_PATH="coverage/PycharmProjects$hello.coverage" NAME="hello Coverage Results" MODIFIED="1597217263619" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/PyQtTest" />
     <SUITE FILE_PATH="coverage/PycharmProjects$receivemq.coverage" NAME="receivemq Coverage Results" MODIFIED="1597202674915" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/PyQtTest" />
@@ -543,9 +575,6 @@
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/PyQtTest/images/schedule.png">
-      <provider selected="true" editor-type-id="images" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/PyQtTest/images/clock.ico">
       <provider selected="true" editor-type-id="images" />
     </entry>
@@ -856,6 +885,20 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$USER_HOME$/.PyCharm2019.1/system/python_stubs/-771540385/builtins.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="195">
+          <caret line="803" column="8" selection-start-line="803" selection-start-column="8" selection-end-line="803" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PyQtTest/trayicondemo.spec">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="440">
+          <caret line="29" column="19" lean-forward="true" selection-start-line="29" selection-start-column="19" selection-end-line="29" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/PyQtTest/receivemq.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="572">
@@ -913,13 +956,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/PyQtTest/readme.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="22">
-          <caret line="1" column="71" selection-start-line="1" selection-end-line="1" selection-end-column="83" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/PyQtTest/ping.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="132">
@@ -927,17 +963,17 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/.PyCharm2019.1/system/python_stubs/-771540385/builtins.py">
+    <entry file="file://$PROJECT_DIR$/PyQtTest/readme.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="803" column="8" selection-start-line="803" selection-start-column="8" selection-end-line="803" selection-end-column="8" />
+        <state relative-caret-position="22">
+          <caret line="1" column="79" selection-start-line="1" selection-end-line="1" selection-end-column="83" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/PyQtTest/TrayIconDemo.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="258">
-          <caret line="735" lean-forward="true" selection-start-line="735" selection-end-line="735" />
+        <state relative-caret-position="323">
+          <caret line="725" column="94" selection-start-line="725" selection-start-column="94" selection-end-line="725" selection-end-column="94" />
           <folding>
             <element signature="e#23#33#0" expanded="true" />
           </folding>

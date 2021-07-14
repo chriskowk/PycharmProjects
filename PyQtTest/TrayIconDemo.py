@@ -728,7 +728,7 @@ if __name__ == "__main__":
     _dict = {}
     _interval = 1
     _conf = configparser.ConfigParser()
-    _conf.read('cfg.ini', encoding='utf-16')
+    _conf.read(os.path.join(_dirname, "cfg.ini"), encoding='utf-16')
     for sec in _conf.sections():
         _dict[sec] = VERSION(_conf.get(sec, 'key'), _conf.get(sec, 'name'), _conf.get(sec, 'base-path'), _conf.get(sec, 'tfs-url'), _conf.get(sec, 'fire-on'))
     print(_dict)

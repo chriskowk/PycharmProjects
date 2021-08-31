@@ -181,8 +181,8 @@ def _get_reg_basepath():
     ret = _get_version().base_path
     return ret
 
-def _get_regfilepath(key=''):
-    v = _get_version() if key=='' else _dict[key]
+def _get_regfilepath(key = ''):
+    v = _get_version() if key == '' else _dict[key]
     ret = r"%s\BatchFiles\注册表\%s注册表.reg" % (v.base_path, v.name) if v.base_path != '' else ''
     return ret
 
@@ -580,7 +580,8 @@ class window(QMainWindow):
                 self.push_specified_queue(key, message)
                 remains = []
                 for item in names:
-                    if item != message: remains.append(item)
+                    if item != message:
+                        remains.append(item)
                 _remote_messages[key] = ','.join(remains)
                 self.showStatus("%s: %s:%s" % (time.strftime('%H:%M:%S'), key, _remote_messages[key]))
 
@@ -596,10 +597,10 @@ class window(QMainWindow):
         channel = connection.channel()
         channel.queue_declare(queue_name, durable=True)
         channel.basic_publish(
-            exchange='',
-            routing_key=queue_name,  # 写明将消息发送给队列balance
-            body=message,  # 要发送的消息
-            properties=pika.BasicProperties(delivery_mode=2, )  # 设置消息持久化(持久化第二步)，将要发送的消息的属性标记为2，表示该消息要持久化
+            exchange = '',
+            routing_key = queue_name,  # 写明将消息发送给队列balance
+            body = message,  # 要发送的消息
+            properties = pika.BasicProperties(delivery_mode=2, )  # 设置消息持久化(持久化第二步)，将要发送的消息的属性标记为2，表示该消息要持久化
         )  # 向消息队列发送一条消息
         connection.close()
 
@@ -608,7 +609,7 @@ class window(QMainWindow):
         pwd = 'guest'
         ip_addr = 'localhost'
         # rabbitmq 报错 pika.exceptions.IncompatibleProtocolError: StreamLostError: (‘Transport indicated EOF’,) 产生此报错的原因是我将port写成了15672
-        # rabbitmq需要通过端口5672连接 - 而不是15672. 更改端口，转发，一切正常
+        # rabbitmq 需要通过端口5672连接 - 而不是15672. 更改端口，转发，一切正常
         port_num = 5672
         credentials = pika.PlainCredentials(username, pwd)
         connection = pika.BlockingConnection(pika.ConnectionParameters(ip_addr, port_num, '/', credentials))
@@ -616,7 +617,7 @@ class window(QMainWindow):
         channel.queue_declare('work_queue', durable=True)
         for message in channel.consume('work_queue', auto_ack=True, inactivity_timeout=1):
             if not message: continue
-            method, properties, body = message
+            method, properties, body = message  # message 是一个三元组<class 'tuple'>:(None, None, None)，分别赋值给(method, properties, body)三个变量
             if body is not None:
                 msg = body.decode('utf-8')
                 self.status.showMessage("%s: %s" % (time.strftime('%H:%M:%S'), msg))

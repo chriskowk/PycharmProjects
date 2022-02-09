@@ -439,10 +439,12 @@ class window(QMainWindow):
 
     # def runCmd(self, cmd, path):
         # 语法：subprocess.Popen(args, bufsize=0, executable=None, stdin=None, stdout=None, stderr=None, preexec_fn=None, close_fds=False, shell=False, cwd=None, env=None, universal_newlines=False, startupinfo=None, creationflags=0)
+        # subprocess.Popen 不会阻止正在执行的线程，这是与subprocess.call的区别。
         # res = subprocess.Popen(cmd, shell=False, cwd=path, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
         # sout, serr = res.communicate() # 该方法和子进程交互，返回一个包含 输出和错误的元组，如果对应参数没有设置的，则无法返回
         # return res.returncode, sout, serr, res.pid # 可获得返回码、输出、错误、进程号；
         # subprocess.check_call(cmd, shell=False, cwd=path, stdin=None, stdout=None, stderr=None, timeout=None)
+        # subprocess.call 会阻止正在执行的线程，直到该命令子进程执行完， timeout参数为等待秒数，时间到则结束子进程并抛出异常（timeout=None则一直等待）
         # subprocess.call(cmd, shell=False, cwd=path, stdin=None, stdout=None, stderr=None, timeout=None)
 
     def run(self, task):
@@ -561,7 +563,8 @@ class window(QMainWindow):
                     # MessageBox(0, msg, u"任务调度结果", MB_OK | MB_ICONINFORMATION | MB_TOPMOST | MB_SYSTEMMODAL)
                     # ctypes.windll.user32.MessageBoxA(0, msg.encode('gb2312'), u"任务调度结果".encode('gb2312'), MB_OK | MB_ICONINFORMATION | MB_TOPMOST)
                     # ShellExecute(0, 'open', os.path.join(_dirname, "MessageBox.exe"), msg, _dirname, 1)  # 最后一个参数bShow: 1(0)表示前台(后台)运行程序; 传递参数path打开指定文件
-                    subprocess.call([os.path.join(_dirname, "MessageBox.exe"), msg], cwd=_dirname, shell=False, stdin=None, stdout=None, stderr=None, timeout=None)
+                    # subprocess.call会阻止正在执行的线程，直到该程序完成 timeout超时秒数结束进程并抛出异常
+                    subprocess.call([os.path.join(_dirname, "MessageBox.exe"), msg], cwd=_dirname, shell=False, stdin=None, stdout=None, stderr=None, timeout=120)
 
     def check_isalive(self):
         if not self._consumer.isAlive():

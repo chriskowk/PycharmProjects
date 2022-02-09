@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ff5e2e34-04e0-44ed-9206-1a7c575d6306" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/PyQtTest/TrayIconDemo.py" beforeDir="false" afterPath="$PROJECT_DIR$/PyQtTest/TrayIconDemo.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -61,8 +60,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/PyQtTest/compiler_proxy.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="6226">
-              <caret line="308" column="58" selection-start-line="308" selection-start-column="58" selection-end-line="308" selection-end-column="58" />
+            <state relative-caret-position="197">
+              <caret line="350" column="12" selection-start-line="350" selection-start-column="4" selection-end-line="350" selection-end-column="12" />
               <folding>
                 <element signature="e#23#33#0" expanded="true" />
               </folding>
@@ -73,8 +72,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/PyQtTest/TrayIconDemo.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="241">
-              <caret line="446" column="98" lean-forward="true" selection-start-line="446" selection-start-column="98" selection-end-line="446" selection-end-column="98" />
+            <state relative-caret-position="175">
+              <caret line="200" column="40" selection-start-line="200" selection-start-column="40" selection-end-line="200" selection-end-column="40" />
               <folding>
                 <element signature="e#23#33#0" expanded="true" />
               </folding>
@@ -132,10 +131,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>setStyleSheet</find>
-      <find>sRGB</find>
-      <find>messagebox</find>
-      <find>bg.png</find>
       <find>../</find>
       <find>receiver</find>
       <find>\\</find>
@@ -162,6 +157,10 @@
       <find>check_closeMessageBox</find>
       <find>_scheduler2</find>
       <find>subprocess.call</find>
+      <find>messagebox.exe</find>
+      <find>get_file_modify_time</find>
+      <find>客户端</find>
+      <find>_abspath</find>
     </findStrings>
     <replaceStrings>
       <replace>QtGui.QIcon(':/images/</replace>
@@ -465,7 +464,7 @@
       <workItem from="1626244049153" duration="2581000" />
       <workItem from="1630375527428" duration="9140000" />
       <workItem from="1639363736760" duration="39000" />
-      <workItem from="1644308769212" duration="8991000" />
+      <workItem from="1644308769212" duration="11548000" />
     </task>
     <task id="LOCAL-00001" summary="强制等待10秒启动，试图解决自启动报错问题">
       <created>1626054416046</created>
@@ -499,7 +498,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="496041000" />
+    <option name="totallyTimeSpent" value="498598000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -955,16 +954,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/PyQtTest/compiler_proxy.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="6226">
-          <caret line="308" column="58" selection-start-line="308" selection-start-column="58" selection-end-line="308" selection-end-column="58" />
-          <folding>
-            <element signature="e#23#33#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/PyQtTest/xls2xlsx.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="154">
@@ -996,10 +985,20 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/PyQtTest/compiler_proxy.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="197">
+          <caret line="350" column="12" selection-start-line="350" selection-start-column="4" selection-end-line="350" selection-end-column="12" />
+          <folding>
+            <element signature="e#23#33#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/PyQtTest/TrayIconDemo.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="241">
-          <caret line="446" column="98" lean-forward="true" selection-start-line="446" selection-start-column="98" selection-end-line="446" selection-end-column="98" />
+        <state relative-caret-position="175">
+          <caret line="200" column="40" selection-start-line="200" selection-start-column="40" selection-end-line="200" selection-end-column="40" />
           <folding>
             <element signature="e#23#33#0" expanded="true" />
           </folding>

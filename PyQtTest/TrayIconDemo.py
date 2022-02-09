@@ -199,7 +199,8 @@ class window(QMainWindow):
     def __init__(self, parent=None):
         super(window, self).__init__(parent)
         self.setWindowFlags(Qt.WindowCloseButtonHint)
-        self.setWindowTitle("作业调度控制器")
+        dt = datetime.datetime.fromtimestamp(os.stat(_abspath).st_mtime)
+        self.setWindowTitle("作业调度控制器 - BuiltOn: %s" % dt.strftime('%Y/%m/%d %H:%M:%S'))
         rect = _get_work_area()
         self.resize(480, 360)
         self.setGeometry(rect.right-self.width()-10, rect.bottom-self.height()-10, self.width(), self.height())

@@ -226,10 +226,12 @@ class window(QMainWindow):
         self.mu2 = QMenu()
         act0 = QAction(icon=QtGui.QIcon(":/images/setup1.png"), text="服务", parent=self.mu2, triggered=self.restart_service)
         act1 = QAction(text="所有配置", parent=self.mu2, triggered=self.restart_all)
-        act2 = QAction(text="调度计划", parent=self.mu2)
+        act2 = QAction(text="配置文件...", parent=self.mu2, triggered=self.edit_configuration)
+        act3 = QAction(text="文件夹(递归)可写...", parent=self.mu2, triggered=self.make_folder_writable)
         self.mu2.addAction(act0)
         self.mu2.addAction(act1)
         self.mu2.addAction(act2)
+        self.mu2.addAction(act3)
         self.mu2.setTearOffEnabled(False)
 
         self.mu3 = QMenu()
@@ -414,6 +416,31 @@ class window(QMainWindow):
         if task1 is not None: self.push_queue(task1)
         if task2 is not None: self.push_queue(task2)
         if task3 is not None: self.push_queue(task3)
+
+    def edit_configuration(self):
+        try_times = 1
+        run_cnt = 0
+        while run_cnt < try_times:
+            try:
+                self.showStatus("%s: 编辑配置文件%s ..." % (time.strftime('%H:%M:%S'), _configuration_file))
+                # subprocess.call(["notepad", os.path.join(_dirname, _configuration_file)], cwd=_dirname, shell=False, stdin=None, stdout=None, stderr=None, timeout=300)
+                ShellExecute(0, 'open', "notepad", os.path.join(_dirname, _configuration_file), _dirname, 1)  # 最后一个参数showCmd: 1(0)表示前台(后台)运行程序
+            except subprocess.TimeoutExpired:
+                self.showStatus("%s: 记事本程序运行超时！" % time.strftime('%H:%M:%S'))
+                continue
+            else:
+                break
+            finally:
+                run_cnt += 1
+
+    # QFileDialog.getExistingDirectory()  返回选中的文件夹路径
+    # QFileDialog.getOpenFileName()  返回选中的文件路径
+    # QFileDialog.getOpenFileNames()  返回选中的多个文件路径
+    # QFileDialog.getSaveFileName()  存储文件
+    def make_folder_writable(self):
+        folder_selected = QFileDialog.getExistingDirectory(self, "选取文件夹", _dirname)
+        if folder_selected != "":
+            ShellExecute(0, 'open', os.path.join(_dirname, "sfw.exe"), folder_selected, _dirname, 1) # win32api.ShellExecute(0, lpVerb, cmd, params, cmdDir, showCmd)
 
     def get_cur_ver_key(self):
         ret = ''
@@ -723,6 +750,7 @@ class ResponseThread(threading.Thread):
 
 
 if __name__ == "__main__":
+    _configuration_file = "cfg.ini";
     _tasks_todo = []
     _remote_messages = {}
     _abspath = sys.argv[0]
@@ -733,7 +761,7 @@ if __name__ == "__main__":
     _dict = {}
     _interval = 1
     _conf = configparser.ConfigParser()
-    _conf.read(os.path.join(_dirname, "cfg.ini"), encoding='utf-16')
+    _conf.read(os.path.join(_dirname, _configuration_file), encoding='utf-16')
     for sec in _conf.sections():
         _dict[sec] = VERSION(_conf.get(sec, 'key'), _conf.get(sec, 'name'), _conf.get(sec, 'base-path'), _conf.get(sec, 'tfs-url'), _conf.get(sec, 'fire-on'))
     print(_dict)

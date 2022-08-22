@@ -137,7 +137,7 @@ class Consumer(threading.Thread):
     def run(self):
         username = 'chris'
         pwd = '123456'
-        ip_addr = '172.18.99.177'
+        ip_addr = '172.18.99.33'
         # rabbitmq 报错 pika.exceptions.IncompatibleProtocolError: StreamLostError: (‘Transport indicated EOF’,)
         # 产生此报错的原因是我将port写成了15672; rabbitmq需要通过端口5672连接 - 而不是15672. 更改端口，转发，一切正常
         port_num = 5672
@@ -281,7 +281,7 @@ class window(QMainWindow):
         _dict[msg].is_running = True
         username = 'chris'
         pwd = '123456'
-        ip_addr = '172.18.99.177'
+        ip_addr = '172.18.99.33'
         # rabbitmq 报错 pika.exceptions.IncompatibleProtocolError: StreamLostError: (‘Transport indicated EOF’,) 产生此报错的原因是我将port写成了15672
         # rabbitmq需要通过端口5672连接 - 而不是15672. 更改端口，转发，一切正常
         port_num = 5672

@@ -1,4 +1,9 @@
-﻿@echo off
+@echo off
+if "%1"=="hide" goto CmdBegin
+
+start mshta vbscript:createobject("wscript.shell").run("""%~0"" hide",0)(window.close)&&exit
+
+:CmdBegin
 
 tasklist | find /i "trayicondemo.exe" 
 if "%errorlevel%"=="1" (goto f) else (goto e)

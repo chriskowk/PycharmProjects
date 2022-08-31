@@ -14,8 +14,8 @@ import threading
 
 class PythonService(win32serviceutil.ServiceFramework):
     _svc_name_ = "PyService"  # 服务名
-    _svc_display_name_ = "Check compiler manager running"  # 服务在windows系统中显示的名称
-    _svc_description_ = "Check compiler process running, if not run it immediately."  # 服务的描述
+    _svc_display_name_ = "Check Compiler Manager Running"  # 服务在windows系统中显示的名称
+    _svc_description_ = "Check compiler process running, otherwise run it immediately."  # 服务的描述
 
     def __init__(self, args):
         win32serviceutil.ServiceFramework.__init__(self, args)

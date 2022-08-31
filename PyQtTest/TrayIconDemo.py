@@ -748,16 +748,51 @@ class ResponseThread(threading.Thread):
         self.__flag.set()  # 将线程从暂停状态恢复, 如何已经暂停的话
         self.__running.clear()  # 设置为False
 
+# WINDOWS系统判断进程是否存在
+def proc_exist(process_name):
+    is_exist = False
+    wmi = win32com.client.GetObject('winmgmts:')
+    processCodeCov = wmi.ExecQuery('select * from Win32_Process where name=\"%s\"' %(process_name))
+    if len(processCodeCov) > 2: # 因为自身启动会启动进程（且进程数为2）
+        is_exist = True
+    if is_exist:
+        log('\"%s\" is running, proc_cnt:%s' %(process_name, len(processCodeCov)))
+    else:
+        log('\"%s\" no such process...' %(process_name))
+    return is_exist
+
+# LINUX系统判断进程是否存在
+def progress_exist(progress_name):
+    try:
+        progress_num = int(os.popen('ps -ef | grep ' + progress_name + ' | grep -v grep | wc -l').read())
+        if progress_num > 2:
+            return {'name': progress_name, 'status': 1}
+        else:
+            return {'name': progress_name, 'status': 0}
+    except Exception as e:
+        log("Unexpected error:" + str(e))
+    return {'name': progress_name, 'status': 0}
+
+def log(msg):
+    now = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
+    logstr = '%s : %s \n' % (now, msg)
+    if not os.path.exists('logs'):
+        os.makedirs('logs')
+    with open(r'logs\check_running_%s.log' % time.strftime('%Y-%m-%d'), 'a', encoding='utf-8') as f:
+        f.write(logstr)
 
 if __name__ == "__main__":
     _configuration_file = "cfg.ini";
     _tasks_todo = []
     _remote_messages = {}
     _abspath = sys.argv[0]
-    _basename = os.path.basename(_abspath)
-    _dirname = os.path.dirname(_abspath)
+    _basename = os.path.basename(_abspath) # 获取文件名
+    _dirname = os.path.dirname(_abspath) # 获取路径名
     os.chdir(_dirname)  # 改变当前运行路径，注意双引号和反斜杠（避免设置随操作系统启动时运行报错“Failed to execute script xxx.exe”问题）
     print(os.getcwd())  # 查看当前工作目录
+    if proc_exist(_basename):
+        sys.exit(1)
+
     _dict = {}
     _interval = 1
     _conf = configparser.ConfigParser()

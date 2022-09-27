@@ -14,10 +14,10 @@ taskkill /f /im w3wp.exe
 
 iisreset /STOP 
 
-"C:\Windows\Microsoft.NET\Framework\v4.0.30319\InstallUtil.exe" /u %1
-pause
+REM "C:\Windows\Microsoft.NET\Framework\v4.0.30319\InstallUtil.exe" /u %1
+REM pause
 
-"C:\Windows\Microsoft.NET\Framework\v4.0.30319\InstallUtil.exe" %2
+REM "C:\Windows\Microsoft.NET\Framework\v4.0.30319\InstallUtil.exe" %2
 iisreset /START 
 pause
 

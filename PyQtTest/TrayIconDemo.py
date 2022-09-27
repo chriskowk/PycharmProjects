@@ -93,12 +93,12 @@ class TrayIcon(QSystemTrayIcon):
             self.parent().toggleVisibility()
 
     def msgClicked(self):
-        self.showMessage("提示", "你点了消息", self.icon)
+        self.showMessage("提示", "你点击了消息", self.icon)
 
     def quit(self):
         # 保险起见，为了完整的退出
         self.setVisible(False)
-        self.parent().exit()
+        # self.parent().exit()
         qApp.quit()
         sys.exit()
 
